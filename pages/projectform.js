@@ -3,7 +3,6 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import ImageUpload from "../components/imageUpload";
 import ProjectTagsInput from "../components/projectTagsInput";
-import HireUsModal from "../components/hireUsModal";
 
 export default function projectform() {
   const [desc, setDesc] = useState("");
@@ -15,7 +14,6 @@ export default function projectform() {
       <Head>
         <title>Project Form</title>
       </Head>
-      {openModal && <HireUsModal />}
       <div className="w-full bg-zinc-400/50 h-10 flex items-center justify-end">
         <Icon
           icon="entypo:cross"
@@ -28,7 +26,6 @@ export default function projectform() {
         </h1>
         <form className="w-5/6 md:w-1/2 flex flex-col">
           <ImageUpload />
-
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">
               Write some description about your project

@@ -5,13 +5,21 @@ export default function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleImageChange = (e) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files).map((file) =>
+    const files = e.target.files;
+
+    if (files) {
+      const filesArray = Array.from(files).map((file) =>
         URL.createObjectURL(file)
       );
 
+      if (selectedFiles.length + filesArray.length > 4) {
+        alert("You are only allowed to upload a maximum of 4 files");
+        return;
+      }
+
       setSelectedFiles((prevImages) => prevImages.concat(filesArray));
-      Array.from(e.target.files).map(
+
+      Array.from(files).map(
         (file) => URL.revokeObjectURL(file) // avoid memory leak
       );
     }
@@ -55,10 +63,14 @@ export default function ImageUpload() {
           <input
             type="file"
             multiple
+            accept="image/*"
             className="hidden"
             onChange={handleImageChange}
           />
         </label>
+        <h3 className="mt-1 text-blue-700/75 text-sm">
+          * (Max four photos of project are allowed upto 5MB)
+        </h3>
       </div>
     </div>
   );

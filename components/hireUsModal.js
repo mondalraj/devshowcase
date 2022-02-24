@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
-function HireUsModal() {
+function HireUsModal({ setModal }) {
+  const modalRef = useRef();
+
+  useEffect(() => {
+    const closeModal = (e) => {
+      if (e.path[0] !== modalRef.current) {
+        setModal(false);
+      }
+    };
+
+    document.body.addEventListener("click", closeModal);
+
+    return () => document.body.removeEventListener("click", closeModal);
+  }, []);
+
   return (
     <div className="bg-black/30 flex fixed z-50 w-full h-full justify-center items-center">
-      <div className="bg-blue-500 md:w-1/3 w-5/6 h-2/5 md:h-1/2 rounded-xl px-5 flex flex-col justify-center items-center">
+      <div
+        ref={modalRef}
+        className="bg-blue-500 md:w-1/3 w-5/6 h-2/5 md:h-1/2 rounded-xl px-5 flex flex-col justify-center items-center"
+      >
         <h1 className="font-bold text-3xl text-white pt-5 pb-2 tracking-wider">
           Get in Touch!
         </h1>
