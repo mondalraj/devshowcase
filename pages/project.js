@@ -6,11 +6,13 @@ import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 import CommentImage from "../components/commentImage";
 import ImageSlider from "../components/imageSlider";
+import HireUsModal from "../components/hireUsModal";
 
 function Project() {
   const [text, setText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
   const onEmojiClick = (emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -25,6 +27,7 @@ function Project() {
       <Head>
         <title>Project</title>
       </Head>
+      {isModal && <HireUsModal setModal={setIsModal} />}
       <div className="w-full bg-zinc-400/50 h-10 flex items-center justify-end">
         <Icon
           icon="entypo:cross"
@@ -50,7 +53,10 @@ function Project() {
             <div className="flex flex-col md:flex-row md:items-center">
               <h2 className="font-medium text-base">Owner Name</h2>
               <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
-              <h2 className="text-blue-500 text-base hover:bg-blue-500 hover:text-white md:p-1 rounded-md cursor-pointer">
+              <h2
+                className="text-blue-500 text-base hover:bg-blue-500 hover:text-white md:p-1 rounded-md cursor-pointer"
+                onClick={() => setIsModal(true)}
+              >
                 Hire Me
               </h2>
             </div>
@@ -143,7 +149,7 @@ function Project() {
                   <div className="flex justify-between items-center mt-4">
                     <Icon
                       icon="fluent:emoji-add-24-regular"
-                      className="text-slate-400 text-3xl cursor-pointer"
+                      className="hidden md:flex text-slate-400 text-3xl cursor-pointer"
                       onClick={() => setIsEmojiPicker(!isEmojiPicker)}
                     />
                     <div className="flex">

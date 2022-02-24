@@ -75,7 +75,7 @@ function profile() {
                     REST API
                   </div>
                 </div>
-                <div className="flex justify-evenly items-center mt-2">
+                <div className="md:hidden flex justify-evenly items-center mt-2">
                   <div className="w-1/2 bg-white text-blue-700 font-semibold text-center p-1 rounded-md tracking-wider">
                     About
                   </div>
@@ -150,11 +150,12 @@ function profile() {
               </div>
             </div>
           </div>
-          <div className="hidden absolute md:flex justify-evenly items-center -right-24 top-1/3 rotate-90 w-1/6">
-            <div className="w-1/2 bg-blue-500 text-center p-2 rounded-md tracking-wider">
+          {/* Set color of button(blue or white) according to what section is visible */}
+          <div className="hidden absolute md:flex justify-evenly items-center -right-20 top-1/3 rotate-90 w-52 cursor-pointer">
+            <div className="w-1/2 bg-blue-500 text-white text-center p-2 rounded-md tracking-wider font-medium">
               About
             </div>
-            <div className="w-1/2 bg-white text-center p-2 rounded-md text-gray-600 tracking-wider">
+            <div className="w-1/2 bg-white text-center p-2 rounded-md text-gray-600 tracking-wider font-medium">
               Experience
             </div>
           </div>

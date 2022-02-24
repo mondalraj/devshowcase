@@ -26,7 +26,6 @@ export default function projectform() {
         </h1>
         <form className="w-5/6 md:w-1/2 flex flex-col">
           <ImageUpload />
-
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">
               Write some description about your project
