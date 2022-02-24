@@ -6,7 +6,7 @@ export default function ImageUpload() {
 
   const handleImageChange = (e) => {
     const files = e.target.files;
-    if (selectedFiles.length > 4) {
+    if (files.length > 4 || selectedFiles.length > 4) {
       alert("You are only allowed to upload a maximum of 4 files");
       return;
     }

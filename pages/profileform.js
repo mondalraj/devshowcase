@@ -6,6 +6,47 @@ import { useState } from "react";
 
 function ProfileForm() {
   const [tags, setTags] = useState([]);
+  const [data, setData] = useState({
+    name: "",
+    date: "",
+    bio: "",
+    location: "",
+    company: "",
+    work: "",
+    school: "",
+    course: "",
+    skills: "",
+  });
+
+  function handle(e) {
+    const newData = { ...data };
+    newData[e.target.id] = e.target.value;
+    setData(newData);
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        name: data.name,
+        date: data.date,
+        bio: data.bio,
+        location: data.location,
+        company: data.company,
+        work: data.work,
+        school: data.school,
+        course: data.course,
+        skills: data.skills,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  }
+
   return (
     <div>
       <Head>
@@ -13,12 +54,20 @@ function ProfileForm() {
       </Head>
       <div className="bg-gray-400 w-full h-full flex flex-col items-center justify-center">
         <div className="md:invisible p-3 md:p-16 flex flex-col">
-          <Image
-            src="/images/avatar.png"
-            width={125}
-            height={118}
-            className="rounded-full"
-          />
+          <label htmlFor="file-input">
+              <Image
+                src="/images/avatar.png"
+                width={125}
+                height={118}
+                className="rounded-full drop-shadow-lg cursor-pointer"
+              />
+            </label>
+            <input
+              id="file-input"
+              type="file"
+              className="hidden"
+              accept="image/*"
+            />
           <button className="font-semibold hover:text-white">
             Add Designation
           </button>
@@ -27,18 +76,26 @@ function ProfileForm() {
       <div className="flex flex-row items-center justify-center md:-mt-24 md:mb-20 lg:w-10/12 mx-auto">
         <div className="flex flex-row shadow-2xl w-full md:w-11/12">
           <div className="hidden bg-white pl-10 pt-28 pb-8 mb-4 md:block flex-col">
-            <Image
-              src="/images/avatar.png"
-              width={125}
-              height={118}
-              className="rounded-full drop-shadow-lg cursor-pointer"
+            <label htmlFor="file-input">
+              <Image
+                src="/images/avatar.png"
+                width={125}
+                height={118}
+                className="rounded-full drop-shadow-lg cursor-pointer"
+              />
+            </label>
+            <input
+              id="file-input"
+              type="file"
+              className="hidden"
+              accept="image/*"
             />
             <button className="font-semibold text-gray-400">
               Add Designation
             </button>
           </div>
           <div className="w-0.5 table-cell bg-gray-100"></div>
-          <form className="bg-white px-8 w-screen">
+          <form className="bg-white px-8 w-screen" onSubmit={(e) => submit(e)}>
             <div className="text-center text-blue-500 text-2xl font-semibold lg:text-4xl mb-7 md:mb-16 mt-6">
               Profile Form
             </div>
@@ -49,55 +106,54 @@ function ProfileForm() {
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
                 <label
                   className="block py-2 font-semibold "
-                  htmlFor="inline-full-name"
+                  htmlFor="full-name"
                 >
                   Name
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.name}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-full-name"
+                  id="name"
                   type="text"
                   placeholder="Your Name"
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-date"
-                >
+                <label className="block py-2 font-semibold " htmlFor="date">
                   Date Of Birth
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.date}
                   className="appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-date"
+                  id="date"
                   type="date"
                   placeholder="Your Birthday"
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-bio"
-                >
+                <label className="block py-2 font-semibold " htmlFor="bio">
                   Bio
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.bio}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-bio"
+                  id="bio"
                   type="text"
                   placeholder="Tell us about yourself"
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-location"
-                >
+                <label className="block py-2 font-semibold " htmlFor="location">
                   Location
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.location}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-location"
+                  id="location"
                   type="text"
                   placeholder="Your Location"
                 />
@@ -106,28 +162,26 @@ function ProfileForm() {
                 Experience
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-company"
-                >
+                <label className="block py-2 font-semibold " htmlFor="company">
                   Company Name
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.company}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-company"
+                  id="company"
                   type="text"
                   placeholder="Your Company"
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-work"
-                >
+                <label className="block py-2 font-semibold" htmlFor="work">
                   Work
                 </label>
                 <textarea
-                  className="bg-gray-200 text-center w-full p-2"
+                  onChange={(e) => handle(e)}
+                  value={data.work}
+                  className="bg-gray-200 text-center w-full p-2 resize-none"
                   id="work"
                   placeholder="Describe your Work"
                 ></textarea>
@@ -136,29 +190,27 @@ function ProfileForm() {
                 Education
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-school"
-                >
+                <label className="block py-2 font-semibold " htmlFor="school">
                   University/School
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.school}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-school"
+                  id="school"
                   type="text"
                   placeholder="Your Uni/School"
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-course"
-                >
+                <label className="block py-2 font-semibold " htmlFor="course">
                   Course
                 </label>
                 <input
+                  onChange={(e) => handle(e)}
+                  value={data.course}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
-                  id="inline-course"
+                  id="course"
                   type="text"
                   placeholder="Your Course"
                 />
@@ -167,10 +219,7 @@ function ProfileForm() {
                 Skills
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2">
-                <label
-                  className="block py-2 font-semibold "
-                  htmlFor="inline-skills"
-                >
+                <label className="block py-2 font-semibold " htmlFor="skills">
                   Technical Skills
                 </label>
                 <ReactTagInput
@@ -180,6 +229,7 @@ function ProfileForm() {
                   editable={true}
                   readOnly={false}
                   removeOnBackspace={true}
+                  value={data.skills}
                   onChange={(newTags) => setTags(newTags)}
                 />
               </div>
