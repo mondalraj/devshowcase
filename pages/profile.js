@@ -2,8 +2,11 @@ import Head from "next/head";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import ProjectItem from "../components/ProjectItem";
+import { useState } from "react";
 
 function profile() {
+  const [isAbout, setIsAbout] = useState(true);
+
   return (
     <div className="profile">
       <Head>
@@ -61,7 +64,7 @@ function profile() {
                 <div className="hidden md:flex text-3xl tracking-wider mb-4 font-semibold">
                   Rajib Mondal
                 </div>
-                <div className="hidden md:flex justify-start items-center flex-wrap gap-1.5 mt-3 mb-5">
+                <div className="hidden md:flex justify-start items-center flex-wrap gap-1.5 my-3">
                   <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
                     Designer
                   </div>
@@ -76,20 +79,59 @@ function profile() {
                   </div>
                 </div>
                 <div className="md:hidden flex justify-evenly items-center mt-2">
-                  <div className="w-1/2 bg-white text-blue-700 font-semibold text-center p-1 rounded-md tracking-wider">
+                  <div
+                    className={
+                      (isAbout ? "bg-white text-blue-700" : "text-gray-600") +
+                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider"
+                    }
+                    onClick={() => setIsAbout(true)}
+                  >
                     About
                   </div>
-                  <div className="w-1/2 text-center p-1 rounded-md text-gray-600 tracking-wider">
+                  <div
+                    className={
+                      (isAbout ? "text-gray-600" : "bg-white text-blue-700") +
+                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider"
+                    }
+                    onClick={() => setIsAbout(false)}
+                  >
                     Experience
                   </div>
                 </div>
-                <div className="my-3">
-                  <div>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Aperiam libero architecto numquam quisquam reiciendis ipsam
-                    ex odio, debitis id magni? Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Nesciunt, quae!
-                  </div>
+
+                <div className="mt-1 mb-3">
+                  {isAbout ? (
+                    <div>
+                      <h1 className="hidden md:block font-medium text-xl">
+                        About Me..
+                      </h1>
+                      <p>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Aperiam libero architecto numquam quisquam
+                        reiciendis ipsam ex odio, debitis id magni? Lorem ipsum
+                        dolor sit amet consectetur adipisicing elit. Nesciunt,
+                        quae!
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <h1 className="hidden md:block font-medium text-xl">
+                        Past Experience
+                      </h1>
+                      <div className="md:ml-5">
+                        <h2 className="text-lg text-neutral-600 underline underline-offset-2">
+                          Company Name
+                        </h2>
+                        <p>
+                          Lorem ipsum dolor sit, amet consectetur adipisicing
+                          elit. Aperiam libero architecto numquam quisquam
+                          reiciendis ipsam ex odio, debitis id magni? Lorem
+                          ipsum dolor sit amet consectetur adipisicing elit.
+                          Nesciunt, quae!
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center">
                     <div className="flex gap-2 cursor-pointer">
                       <Icon icon="mdi:web" className="text-2xl" />
@@ -150,17 +192,33 @@ function profile() {
               </div>
             </div>
           </div>
-          {/* Set color of button(blue or white) according to what section is visible */}
+
           <div className="hidden absolute md:flex justify-evenly items-center -right-20 top-1/3 rotate-90 w-52 cursor-pointer">
-            <div className="w-1/2 bg-blue-500 text-white text-center p-2 rounded-md tracking-wider font-medium">
+            <div
+              className={
+                (isAbout
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-gray-600") +
+                " w-1/2 text-center p-2 rounded-md tracking-wider font-medium"
+              }
+              onClick={() => setIsAbout(true)}
+            >
               About
             </div>
-            <div className="w-1/2 bg-white text-center p-2 rounded-md text-gray-600 tracking-wider font-medium">
+            <div
+              className={
+                (isAbout
+                  ? "bg-white text-gray-600"
+                  : "bg-blue-500 text-white") +
+                " w-1/2 text-center p-2 rounded-md tracking-wider font-medium"
+              }
+              onClick={() => setIsAbout(false)}
+            >
               Experience
             </div>
           </div>
         </div>
-        <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-3 mt-3 px-5 justify-center flex-wrap">
+        <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
           <ProjectItem />
           <ProjectItem />
           <a

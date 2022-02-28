@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { Picker } from "emoji-mart";
@@ -47,7 +46,7 @@ function Project() {
           Project Name
         </h1>
         <div className="p-5 flex justify-between items-center w-full">
-          <CommentImage />
+          <CommentImage size="headerImage" />
           <div className="flex flex-col w-full px-3  md:px-10">
             <h1 className="font-bold text-lg hidden md:block">Project Name</h1>
             <div className="flex flex-col md:flex-row md:items-center">
@@ -71,16 +70,7 @@ function Project() {
           </div>
         </div>
         <div className="w-full md:w-2/3 flex flex-col justify-center">
-          <div>
-            <Image
-              src={
-                "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-              }
-              width={500}
-              height={400}
-            />
-          </div>
-          {/* <ImageSlider /> */}
+          <ImageSlider />
           <div className="flex md:hidden">
             <button className="bg-blue-500 w-1/2 p-3 font-bold text-lg text-white cursor-pointer">
               View Live
@@ -126,7 +116,7 @@ function Project() {
                 Comments (69)
               </h1>
               <div className="flex items-center w-full">
-                <CommentImage />
+                <CommentImage size="commentImage" />
                 <div className="relative flex flex-col w-full ml-3">
                   <div className="flex items-center">
                     <input

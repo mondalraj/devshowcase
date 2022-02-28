@@ -1,40 +1,66 @@
-import React from "react";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
+import Image from "next/image";
 
 function ImageSlider() {
+  const settings = {
+    showArrows: false,
+    showThumbs: false,
+    showStatus: false,
+    infiniteLoop: true,
+    useKeyboardArrows: true,
+    autoPlay: true,
+    stopOnHover: true,
+  };
   return (
-    <div class="bg-red-500 w-full border-5 relative flex items-center">
-      <ul class="flex overflow-x-hidden h-1/2">
-        <li className="shrink-1">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
-            alt="Wild Landscape"
+    <div className="w-full flex items-center">
+      <Carousel {...settings}>
+        <div className="object-contain">
+          <Image
+            src={
+              "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            }
+            width={500}
+            height={400}
           />
-        </li>
-        <li className="snap-center">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
-            alt="Wild Landscape"
+        </div>
+        <div>
+          <Image
+            src={
+              "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            }
+            width={500}
+            height={400}
           />
-        </li>
-        <li className="snap-center">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
-            alt="Wild Landscape"
+        </div>
+        <div>
+          <Image
+            src={
+              "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            }
+            width={500}
+            height={400}
           />
-        </li>
-        <li className="snap-center">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
-            alt="Wild Landscape"
+        </div>
+        <div>
+          <Image
+            src={
+              "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            }
+            width={500}
+            height={400}
           />
-        </li>
-        <li className="snap-center">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
-            alt="Wild Landscape"
+        </div>
+        <div>
+          <Image
+            src={
+              "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+            }
+            width={500}
+            height={400}
           />
-        </li>
-      </ul>
+        </div>
+      </Carousel>
     </div>
   );
 }
