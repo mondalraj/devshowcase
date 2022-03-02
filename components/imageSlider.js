@@ -20,44 +20,44 @@ function ImageSlider() {
             src={
               "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
             }
-            width={500}
-            height={400}
+            width={600}
+            height={540}
           />
         </div>
-        <div>
+        <div className="object-contain">
           <Image
             src={
               "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
             }
-            width={500}
-            height={400}
+            width={600}
+            height={540}
           />
         </div>
-        <div>
+        <div className="object-contain">
           <Image
             src={
               "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
             }
-            width={500}
-            height={400}
+            width={600}
+            height={540}
           />
         </div>
-        <div>
+        <div className="object-contain">
           <Image
             src={
               "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
             }
-            width={500}
-            height={400}
+            width={600}
+            height={540}
           />
         </div>
-        <div>
+        <div className="object-contain">
           <Image
             src={
               "https://images.unsplash.com/photo-1644424235841-bbd3a2c823c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
             }
-            width={500}
-            height={400}
+            width={600}
+            height={540}
           />
         </div>
       </Carousel>
