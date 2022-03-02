@@ -33,11 +33,11 @@ function Project() {
           className="text-neutral-700 mr-3 text-2xl cursor-pointer"
         />
       </div>
-      <div className="absolute top-1/3 -right-32 rotate-90 hidden md:block">
-        <button className="bg-neutral-100/75 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
+      <div className="absolute top-1/3 -right-[8.4rem] rotate-90 hidden md:block">
+        <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
           View Live
         </button>
-        <button className="bg-neutral-100/75 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
+        <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
           View Code
         </button>
       </div>
@@ -47,7 +47,7 @@ function Project() {
         </h1>
         <div className="p-5 flex justify-between items-center w-full">
           <CommentImage size="headerImage" />
-          <div className="flex flex-col w-full px-3  md:px-10">
+          <div className="flex flex-col w-full px-3  md:pl-5 md:pr-10">
             <h1 className="font-bold text-lg hidden md:block">Project Name</h1>
             <div className="flex flex-col md:flex-row md:items-center">
               <h2 className="font-medium text-base">Owner Name</h2>
@@ -69,9 +69,9 @@ function Project() {
             </div>
           </div>
         </div>
-        <div className="w-full md:w-2/3 flex flex-col justify-center">
+        <div className="w-full flex flex-col justify-center items-center">
           <ImageSlider />
-          <div className="flex md:hidden">
+          <div className="flex md:hidden w-full">
             <button className="bg-blue-500 w-1/2 p-3 font-bold text-lg text-white cursor-pointer">
               View Live
             </button>
@@ -79,27 +79,24 @@ function Project() {
               View Code
             </button>
           </div>
-          <div className="m-3 flex flex-col md:m-0">
+          <div className="m-3 flex flex-col md:m-0 items-center">
             <div className="flex justify-start p-1 md:p-1.5 flex-wrap font-medium">
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
+              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md shadow-lg hover:shadow-blue-500 hover:text-white hover:bg-blue-500 hover:-translate-y-1 cursor-none">
                 React Js
               </h2>
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
+              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md shadow-lg hover:shadow-blue-500 hover:text-white hover:bg-blue-500 hover:-translate-y-1 cursor-none">
                 React Js
               </h2>
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
+              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md shadow-lg hover:shadow-blue-500 hover:text-white hover:bg-blue-500 hover:-translate-y-1 cursor-none">
                 React Js
               </h2>
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
+              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md shadow-lg hover:shadow-blue-500 hover:text-white hover:bg-blue-500 hover:-translate-y-1 cursor-none">
                 React Js
               </h2>
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
+              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md shadow-lg hover:shadow-blue-500 hover:text-white hover:bg-blue-500 hover:-translate-y-1 cursor-none">
                 React Js
               </h2>
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
-                React Js
-              </h2>
-              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md">
+              <h2 className="text-blue-500 border-2 border-blue-500 px-3 py-1 ml-2 md:mx-2 my-1 text-base rounded-md shadow-lg hover:shadow-blue-500 hover:text-white hover:bg-blue-500 hover:-translate-y-1 cursor-none">
                 React Js
               </h2>
             </div>
@@ -111,7 +108,7 @@ function Project() {
               perspiciatis recusandae quisquam commodi itaque excepturi vero
               voluptatibus, omnis illum libero?
             </p>
-            <div className="mb-20">
+            <div className="mb-20 w-full">
               <h1 className="py-5 px-2 font-semibold text-2xl">
                 Comments (69)
               </h1>
@@ -143,12 +140,12 @@ function Project() {
                       onClick={() => setIsEmojiPicker(!isEmojiPicker)}
                     />
                     <div className="flex">
-                      <h2 className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md px-2 cursor-pointer">
+                      <button className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer">
                         CANCEL
-                      </h2>
-                      <h2 className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md px-2 cursor-pointer">
+                      </button>
+                      <button className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer">
                         COMMENT
-                      </h2>
+                      </button>
                     </div>
                   </div>
                 </div>
