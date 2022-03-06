@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+const bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
 
 var user = new Schema({
@@ -19,6 +20,18 @@ var user = new Schema({
     default: Date.now
   }
 });
+
+user.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+      const auth = await bcrypt.compare(password, user.password);
+      if (auth) {
+          return user;
+      }
+      throw Error('incorrectPassword');
+  }
+  throw Error('incorrectEmail');
+}
 
 mongoose.models = {};
 

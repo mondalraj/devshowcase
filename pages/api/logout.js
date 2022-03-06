@@ -1,9 +1,9 @@
-import { removeCookies } from 'cookies-next';
+import { setCookies } from 'cookies-next';
 
 const handler = async (req, res) => {
     if (req.method === 'GET') {
   
-        removeCookies('devshowcase_jwt');
+        setCookies('devshowcase_jwt', '', { req, res, maxAge: 1 });
   
         return res.status(200).json({ status: 'success', message: 'User has successfully Logged Out', isLoggedIn: false });
       
