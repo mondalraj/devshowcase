@@ -15,7 +15,7 @@ const createJWT = (id) => {
 const handler = async (req, res) => {
   if (req.method === 'POST') {
 
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
     const emailExist = await User.findOne({ email });
     if (emailExist) {
         return res.status(400).json({ status: 'fail', error: 'emailError', message: 'Email is already registered', isLoggedIn: false });
@@ -24,7 +24,7 @@ const handler = async (req, res) => {
       const salt = await bcrypt.genSalt();
       var passwordhash = await bcrypt.hash(password, salt);
       const user = await User.create({ 
-        name,
+        username,
         email,
         password: passwordhash,
       });
