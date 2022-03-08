@@ -8,6 +8,7 @@
   "dependencies": {
     "@pathofdev/react-tag-input": "^1.0.7",
     "axios": "^0.26.0",
+    "cloudinary": "^1.28.1",
     "emoji-mart": "^3.0.1",
     "next": "latest",
     "react": "^17.0.2",

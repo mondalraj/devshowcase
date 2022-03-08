@@ -16,6 +16,7 @@ function ProjectTagsInput() {
       e.preventDefault();
       setTags((prevState) => [...prevState, trimmedInput]);
       setTagInput("");
+      console.log("run");
     }
   };
 
