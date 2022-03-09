@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function ImageUpload() {
+export default function ImageUpload({ SetFiles }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [acceptedFiles, setAcceptedFiles] = useState([]);
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -19,7 +18,7 @@ export default function ImageUpload() {
       }
 
       setSelectedFiles((prevImages) => prevImages.concat(filesArray));
-      setAcceptedFiles((prevPics) => prevPics.concat(...files));
+      SetFiles((prevPics) => prevPics.concat(...files));
 
       Array.from(files).map(
         (file) => URL.revokeObjectURL(file) // avoid memory leak
@@ -37,36 +36,6 @@ export default function ImageUpload() {
           key={photo}
         />
       );
-    });
-  };
-
-  const getSignature = async () => {
-    const response = await fetch("/api/signature");
-    const data = await response.json();
-    const { timestamp, signature } = data;
-    return { timestamp, signature };
-  };
-
-  const uploadImage = (e) => {
-    e.preventDefault();
-    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
-
-    acceptedFiles.forEach(async (file) => {
-      const { timestamp, signature } = await getSignature();
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("signature", signature);
-      formData.append("timestamp", timestamp);
-      formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
-
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-      console.log(data);
     });
   };
 

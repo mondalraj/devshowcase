@@ -1,8 +1,7 @@
 import { useState } from "react";
 
-function ProjectTagsInput() {
+function ProjectTagsInput({ tags, setTags }) {
   const [tagInput, setTagInput] = useState("");
-  const [tags, setTags] = useState([]);
 
   const handleKeyDown = (e) => {
     const { key } = e;
@@ -13,10 +12,13 @@ function ProjectTagsInput() {
       trimmedInput.length &&
       !tags.includes(trimmedInput)
     ) {
+      setTagInput("");
+      if (tags.length > 6) {
+        alert("Don't allow to add more tags");
+        return;
+      }
       e.preventDefault();
       setTags((prevState) => [...prevState, trimmedInput]);
-      setTagInput("");
-      console.log("run");
     }
   };
 
@@ -38,7 +40,7 @@ function ProjectTagsInput() {
           onKeyDown={handleKeyDown}
           onInput={(e) => setTagInput(e.target.value)}
         />
-        <div className="">
+        <div>
           {tags.map((tag, index) => {
             return (
               <div

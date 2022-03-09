@@ -3,11 +3,28 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import ImageUpload from "../components/imageUpload";
 import ProjectTagsInput from "../components/projectTagsInput";
+import uploadImage from "../utils/Image";
 
 export default function projectform() {
-  const [desc, setDesc] = useState("");
-  const [githubLink, setGithubLink] = useState("");
-  const [liveLink, setLiveLink] = useState("");
+  const [projectData, setProjectData] = useState({
+    desc: "",
+    github: "",
+    live: "",
+  });
+
+  const [acceptedFiles, setAcceptedFiles] = useState([]);
+  const [tags, setTags] = useState([]);
+
+  const handleChange = (e) => {
+    const newData = { ...projectData };
+    newData[e.target.id] = e.target.value;
+    setProjectData(newData);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // const response = uploadImage(e, acceptedFiles);
+  };
 
   return (
     <div>
@@ -24,8 +41,8 @@ export default function projectform() {
         <h1 className="text-4xl my-5 text-blue-500 font-bold">
           Add a new project
         </h1>
-        <form className="w-5/6 md:w-1/2 flex flex-col">
-          <ImageUpload />
+        <form onSubmit={handleSubmit} className="w-5/6 md:w-1/2 flex flex-col">
+          <ImageUpload SetFiles={setAcceptedFiles} />
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">
               Write some description about your project
@@ -34,14 +51,15 @@ export default function projectform() {
               <textarea
                 className="placeholder:italic placeholder:text-slate-400 block bg-gray-200/25 w-full border border-slate-300 rounded-md py-2 px-3 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm md:w-3/4 h-40"
                 placeholder="Write anything..."
+                id="desc"
                 style={{ resize: "none" }}
-                value={desc}
-                onInput={(e) => setDesc(e.target.value)}
+                value={projectData.desc}
+                onInput={(e) => handleChange(e)}
               />
             </div>
           </div>
 
-          <ProjectTagsInput />
+          <ProjectTagsInput setTags={setTags} tags={tags} />
 
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">Project Links</h2>
@@ -58,8 +76,8 @@ export default function projectform() {
                   id="github"
                   className="px-5 py-2 w-3/4 md:w-2/3 rounded-full placeholder:italic placeholder:text-slate-400 block bg-gray-200/25 border border-slate-300 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm"
                   placeholder="Github Link here"
-                  value={githubLink}
-                  onInput={(e) => setGithubLink(e.target.value)}
+                  value={projectData.github}
+                  onInput={(e) => handleChange(e)}
                 />
               </div>
               <div className="flex justify-center items-center my-3 mx-5 w-full">
@@ -74,8 +92,8 @@ export default function projectform() {
                   id="live"
                   className="px-5 py-2 w-3/4 md:w-2/3 rounded-full placeholder:italic placeholder:text-slate-400 block bg-gray-200/25 border border-slate-300 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm"
                   placeholder="Live site Link here"
-                  value={liveLink}
-                  onInput={(e) => setLiveLink(e.target.value)}
+                  value={projectData.live}
+                  onInput={(e) => handleChange(e)}
                 />
               </div>
             </div>
