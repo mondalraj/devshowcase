@@ -7,7 +7,7 @@ import uploadImage from "../utils/Image";
 
 function ProfileForm() {
   const [selectedFile, setSelectedFile] = useState([]);
-  const [acceptedFiles, setAcceptedFiles] = useState([]);
+  const [acceptedFile, setAcceptedFile] = useState([]);
   const [tags, setTags] = useState([]);
   const [data, setData] = useState({
     name: "",
@@ -29,6 +29,7 @@ function ProfileForm() {
 
   function submit(e) {
     e.preventDefault();
+    // const response = uploadImage(e, acceptedFile);
     fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
       body: JSON.stringify({
@@ -59,7 +60,7 @@ function ProfileForm() {
       );
 
       setSelectedFile(filesArray);
-      setAcceptedFiles(files);
+      setAcceptedFile((prevPics) => prevPics.concat(...files));
 
       Array.from(files).map((file) => URL.revokeObjectURL(file));
     }
