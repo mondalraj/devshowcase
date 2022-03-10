@@ -3,8 +3,11 @@ import Image from "next/image";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import { useState } from "react";
+import uploadImage from "../utils/Image";
 
 function ProfileForm() {
+  const [selectedFile, setSelectedFile] = useState([]);
+  const [acceptedFile, setAcceptedFile] = useState([]);
   const [tags, setTags] = useState([]);
   const [data, setData] = useState({
     name: "",
@@ -26,6 +29,7 @@ function ProfileForm() {
 
   function submit(e) {
     e.preventDefault();
+    // const response = uploadImage(e, acceptedFile);
     fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
       body: JSON.stringify({
@@ -47,6 +51,21 @@ function ProfileForm() {
       .then((json) => console.log(json));
   }
 
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+
+    if (files) {
+      const filesArray = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+
+      setSelectedFile(filesArray);
+      setAcceptedFile((prevPics) => prevPics.concat(...files));
+
+      Array.from(files).map((file) => URL.revokeObjectURL(file));
+    }
+  };
+
   return (
     <div>
       <Head>
@@ -55,19 +74,22 @@ function ProfileForm() {
       <div className="bg-gray-400 w-full h-full flex flex-col items-center justify-center">
         <div className="md:invisible p-3 md:p-16 flex flex-col">
           <label htmlFor="file-input">
-              <Image
-                src="/images/avatar.png"
-                width={125}
-                height={118}
-                className="rounded-full drop-shadow-lg cursor-pointer"
-              />
-            </label>
-            <input
-              id="file-input"
-              type="file"
-              className="hidden"
-              accept="image/*"
+            <Image
+              src={
+                !selectedFile.length ? "/images/avatar.png" : selectedFile[0]
+              }
+              width={125}
+              height={118}
+              className="rounded-full drop-shadow-lg cursor-pointer"
             />
+          </label>
+          <input
+            id="file-input"
+            type="file"
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
           <button className="font-semibold hover:text-white">
             Add Designation
           </button>
@@ -78,7 +100,9 @@ function ProfileForm() {
           <div className="hidden bg-white pl-10 pt-28 pb-8 mb-4 md:block flex-col">
             <label htmlFor="file-input">
               <Image
-                src="/images/avatar.png"
+                src={
+                  !selectedFile.length ? "/images/avatar.png" : selectedFile[0]
+                }
                 width={125}
                 height={118}
                 className="rounded-full drop-shadow-lg cursor-pointer"

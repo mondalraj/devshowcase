@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function ImageUpload() {
+export default function ImageUpload({ SetFiles }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleImageChange = (e) => {
@@ -18,6 +18,7 @@ export default function ImageUpload() {
       }
 
       setSelectedFiles((prevImages) => prevImages.concat(filesArray));
+      SetFiles((prevPics) => prevPics.concat(...files));
 
       Array.from(files).map(
         (file) => URL.revokeObjectURL(file) // avoid memory leak
