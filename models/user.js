@@ -5,15 +5,24 @@ var Schema = mongoose.Schema;
 var user = new Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    lowercase: true,
+    unique: true
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    lowercase: true,
+    unique: true
   },
   password: {
     type: String,
     required: true
+  },
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Profile",
   },
   since: {
     type: Date,
@@ -24,11 +33,11 @@ var user = new Schema({
 user.statics.login = async function (email, password) {
   const user = await this.findOne({ email });
   if (user) {
-      const auth = await bcrypt.compare(password, user.password);
-      if (auth) {
-          return user;
-      }
-      throw Error('incorrectPassword');
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error('incorrectPassword');
   }
   throw Error('incorrectEmail');
 }
