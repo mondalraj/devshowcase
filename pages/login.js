@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  async function loginUser(event) {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+      alert(data.message);
+      router.push("/profile");
+    } else {
+      alert(data.message);
+    }
+  }
+
   return (
     <>
       <div className="flex justify-center items-center overflow-hidden min-h-screen bg-gradient-to-l from-[#0ED2F7] to-[#094FFF]">
@@ -11,10 +41,17 @@ export default function Login() {
           <title>Login Page</title>
         </Head>
 
-        <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:w-1/2 shadow-xl rounded-xl">
+        <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl">
           <div className="md:flex flex-row md:justify-between ">
-            <form className="flex flex-col items-center w-full md:w-2/5 p-5 relative">
-              <img src="/images/logo.png" alt="" className="w-3/5 md:w-4/5 mt-3" />
+            <form
+              className="flex flex-col items-center w-full md:w-2/5 p-5 relative"
+              onSubmit={loginUser}
+            >
+              <img
+                src="/images/logo.png"
+                alt=""
+                className="w-3/5 md:w-4/5 mt-3"
+              />
               <h1 className="font-bold text-2xl md:text-xl">
                 Login to your Account
               </h1>
@@ -27,8 +64,10 @@ export default function Login() {
                   />
                   <input
                     type="email"
-                    name=""
-                    id=""
+                    name="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
                     className="ml-5 focus:outline-none"
                   />
@@ -42,8 +81,10 @@ export default function Login() {
                   />
                   <input
                     type="password"
-                    name=""
-                    id=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    id="password"
                     placeholder="Your Password"
                     className="ml-5 focus:outline-none"
                   />
@@ -60,7 +101,7 @@ export default function Login() {
                 <p>Continue with Google</p>
               </button>
               <Link href="/signup">
-                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold rounded-xl w-10/12 md:w-full">
+                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold rounded-xl w-10/12 md:w-full p-3">
                   Not having an account? Sign Up
                 </button>
               </Link>

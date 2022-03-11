@@ -59,7 +59,7 @@ export default function projectform() {
             </div>
           </div>
 
-          <ProjectTagsInput setTags={setTags} tags={tags} />
+          <ProjectTagsInput setTags={setTags} profileFormTags = {false} tags={tags} />
 
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">Project Links</h2>

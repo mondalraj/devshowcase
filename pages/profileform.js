@@ -1,9 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
-import ReactTagInput from "@pathofdev/react-tag-input";
-import "@pathofdev/react-tag-input/build/index.css";
 import { useState } from "react";
-import uploadImage from "../utils/Image";
+import ProjectTagsInput from "../components/projectTagsInput";
 
 function ProfileForm() {
   const [selectedFile, setSelectedFile] = useState([]);
@@ -42,6 +40,7 @@ function ProfileForm() {
         school: data.school,
         course: data.course,
         skills: data.skills,
+        designation: data.designation,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -72,7 +71,7 @@ function ProfileForm() {
         <title>Profile Form</title>
       </Head>
       <div className="bg-gray-400 w-full h-full flex flex-col items-center justify-center">
-        <div className="md:invisible p-3 md:p-16 flex flex-col">
+        <div className="md:invisible p-3 md:p-16 flex flex-col justify-center items-center">
           <label htmlFor="file-input">
             <Image
               src={
@@ -90,14 +89,20 @@ function ProfileForm() {
             accept="image/*"
             onChange={handleImageChange}
           />
-          <button className="font-semibold hover:text-white">
-            Add Designation
-          </button>
+          <input
+            onChange={(e) => handle(e)}
+            value={data.designation}
+            className="appearance-none w-full .placeholder-white::placeholder	py-2 text-white leading-tight focus:outline-none  border-none"
+            id="date"
+            type="text"
+            placeholder="Add Designation"
+            required
+          />
         </div>
       </div>
       <div className="flex flex-row items-center justify-center md:-mt-24 md:mb-20 lg:w-10/12 mx-auto">
         <div className="flex flex-row shadow-2xl w-full md:w-11/12">
-          <div className="hidden bg-white pl-10 pt-28 pb-8 mb-4 md:block flex-col">
+          <div className="hidden bg-white pl-14 pt-28 pb-8 mb-4 md:block flex-col">
             <label htmlFor="file-input">
               <Image
                 src={
@@ -114,9 +119,15 @@ function ProfileForm() {
               className="hidden"
               accept="image/*"
             />
-            <button className="font-semibold text-gray-400">
-              Add Designation
-            </button>
+            <input
+              onChange={(e) => handle(e)}
+              value={data.designation}
+              className="appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none pr-8"
+              id="date"
+              type="text"
+              placeholder="Add Designation"
+              required
+            />
           </div>
           <div className="w-0.5 table-cell bg-gray-100"></div>
           <form className="bg-white px-8 w-screen" onSubmit={(e) => submit(e)}>
@@ -141,6 +152,7 @@ function ProfileForm() {
                   id="name"
                   type="text"
                   placeholder="Your Name"
+                  required
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
@@ -149,11 +161,12 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.date}
+                  value={data.designation}
                   className="appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="date"
                   type="date"
                   placeholder="Your Birthday"
+                  required
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
@@ -167,6 +180,7 @@ function ProfileForm() {
                   id="bio"
                   type="text"
                   placeholder="Tell us about yourself"
+                  required
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
@@ -180,6 +194,7 @@ function ProfileForm() {
                   id="location"
                   type="text"
                   placeholder="Your Location"
+                  required
                 />
               </div>
               <div className="mt-8 text-blue-500 text-lg lg:text-2xl font-semibold mb-5">
@@ -205,7 +220,7 @@ function ProfileForm() {
                 <textarea
                   onChange={(e) => handle(e)}
                   value={data.work}
-                  className="bg-gray-200 text-center w-full p-2 resize-none"
+                  className="bg-gray-100 w-full p-2 resize-none focus:outline-none"
                   id="work"
                   placeholder="Describe your Work"
                 ></textarea>
@@ -224,6 +239,7 @@ function ProfileForm() {
                   id="school"
                   type="text"
                   placeholder="Your Uni/School"
+                  required
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
@@ -237,6 +253,7 @@ function ProfileForm() {
                   id="course"
                   type="text"
                   placeholder="Your Course"
+                  required
                 />
               </div>
               <div className="mt-8 text-blue-500 text-lg lg:text-2xl font-semibold mb-5">
@@ -246,16 +263,7 @@ function ProfileForm() {
                 <label className="block py-2 font-semibold " htmlFor="skills">
                   Technical Skills
                 </label>
-                <ReactTagInput
-                  tags={tags}
-                  placeholder="Your Skills"
-                  maxTags={5}
-                  editable={true}
-                  readOnly={false}
-                  removeOnBackspace={true}
-                  value={data.skills}
-                  onChange={(newTags) => setTags(newTags)}
-                />
+                <ProjectTagsInput setTags={setTags} profileFormTags = {true} tags={tags} />
               </div>
             </div>
             <div className="flex md:justify-center justify-end items-center mb-5 md:mr-20">
