@@ -32,7 +32,7 @@ const handler = async (req, res) => {
       const token = createJWT(user._id);
       setCookies('devshowcase_jwt', token, { req, res, maxAge: 60 * 60 * 24 * 7 });
 
-      return res.status(200).json({ status: 'success', message: 'User has successfully Logged In', isLoggedIn: true, data: user });
+      return res.status(200).json({ status: 'success', message: 'User has successfully registered', isLoggedIn: true, data: user });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

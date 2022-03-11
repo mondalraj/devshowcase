@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 
 export default function Signup() {
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  async function registerUser(event) {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:3000/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+      alert(data.message);
+      router.push("/profileform");
+    } else {
+      alert(data.message);
+    }
+
+    console.log(data);
+  }
+
   return (
     <>
       <div className="flex justify-center items-center overflow-hidden min-h-screen bg-gradient-to-l from-[#0ED2F7] to-[#094FFF]">
@@ -11,7 +46,7 @@ export default function Signup() {
           <title>Signup Page</title>
         </Head>
 
-        <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:w-1/2 shadow-xl rounded-xl">
+        <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl">
           <div className="md:flex flex-row md:justify-between ">
             <div className="hidden md:block w-3/5 ">
               <img
@@ -20,7 +55,7 @@ export default function Signup() {
                 alt=""
               />
             </div>
-            <form className="flex flex-col items-center w-full md:w-2/5 p-5 relative">
+            <form className="flex flex-col items-center w-full md:w-2/5 p-5 relative" onSubmit={registerUser}>
               <img
                 src="/images/logo.png"
                 alt=""
@@ -38,8 +73,9 @@ export default function Signup() {
                   />
                   <input
                     type="email"
-                    name=""
-                    id=""
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
                     placeholder="Your Email"
                     className="ml-5 focus:outline-none"
                   />
@@ -53,9 +89,11 @@ export default function Signup() {
                   />
                   <input
                     type="text"
-                    name=""
-                    id=""
-                    placeholder="Your Name"
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
+                    name="username"
+                    id="username"
+                    placeholder="Your Username"
                     className="ml-5 focus:outline-none"
                   />
                 </div>
@@ -68,8 +106,10 @@ export default function Signup() {
                   />
                   <input
                     type="password"
-                    name=""
-                    id=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    id="password"
                     placeholder="Create Password"
                     className="ml-5 focus:outline-none"
                   />
@@ -91,7 +131,7 @@ export default function Signup() {
                 <p>Continue with Google</p>
               </button>
               <Link href="/login">
-                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold w-10/12 rounded-xl md:w-full rounded-br-xl">
+                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold w-10/12 rounded-xl md:w-full rounded-br-xl p-2">
                   Already having an account? Log In
                 </button>
               </Link>
