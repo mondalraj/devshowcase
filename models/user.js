@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-const bcrypt = require('bcrypt');
+import mongoose from "mongoose";
+const bcrypt = require("bcrypt");
 var Schema = mongoose.Schema;
 
 var user = new Schema({
@@ -7,27 +7,22 @@ var user = new Schema({
     type: String,
     required: true,
     lowercase: true,
-    unique: true
+    unique: true,
   },
   email: {
     type: String,
     required: true,
     lowercase: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
-  },
-  profile: {
-    type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "Profile",
   },
   since: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 user.statics.login = async function (email, password) {
@@ -37,13 +32,13 @@ user.statics.login = async function (email, password) {
     if (auth) {
       return user;
     }
-    throw Error('incorrectPassword');
+    throw Error("incorrectPassword");
   }
-  throw Error('incorrectEmail');
-}
+  throw Error("incorrectEmail");
+};
 
 mongoose.models = {};
 
-var User = mongoose.model('User', user);
+var User = mongoose.model("User", user);
 
 export default User;
