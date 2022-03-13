@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 import ProjectTagsInput from "../components/projectTagsInput";
+import uploadImage from "../utils/Image";
 
 function ProfileForm() {
   const [selectedFile, setSelectedFile] = useState([]);
@@ -27,7 +28,7 @@ function ProfileForm() {
 
   function submit(e) {
     e.preventDefault();
-    // const response = uploadImage(e, acceptedFile);
+    // const response = await uploadImage(e, acceptedFile);
     fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
       body: JSON.stringify({
@@ -92,7 +93,8 @@ function ProfileForm() {
           <input
             onChange={(e) => handle(e)}
             value={data.designation}
-            className="appearance-none w-full .placeholder-white::placeholder	py-2 text-white leading-tight focus:outline-none  border-none"
+            // .placeholder-black::placeholder
+            className="bg-inherit appearance-none w-full placeholder:text-white text-center	py-2 text-black leading-tight focus:outline-none border-none font-semibold"
             id="date"
             type="text"
             placeholder="Add Designation"
@@ -102,27 +104,31 @@ function ProfileForm() {
       </div>
       <div className="flex flex-row items-center justify-center md:-mt-24 md:mb-20 lg:w-10/12 mx-auto">
         <div className="flex flex-row shadow-2xl w-full md:w-11/12">
-          <div className="hidden bg-white pl-14 pt-28 pb-8 mb-4 md:block flex-col">
-            <label htmlFor="file-input">
-              <Image
-                src={
-                  !selectedFile.length ? "/images/avatar.png" : selectedFile[0]
-                }
-                width={125}
-                height={118}
-                className="rounded-full drop-shadow-lg cursor-pointer"
+          <div className="hidden bg-white px-14 pt-28 pb-8 mb-4 md:block md:w-1/3 flex-col">
+            <div className="flex justify-center">
+              <label htmlFor="file-input">
+                <Image
+                  src={
+                    !selectedFile.length
+                      ? "/images/avatar.png"
+                      : selectedFile[0]
+                  }
+                  width={125}
+                  height={118}
+                  className="rounded-full drop-shadow-lg cursor-pointer ml-2"
+                />
+              </label>
+              <input
+                id="file-input"
+                type="file"
+                className="hidden"
+                accept="image/*"
               />
-            </label>
-            <input
-              id="file-input"
-              type="file"
-              className="hidden"
-              accept="image/*"
-            />
+            </div>
             <input
               onChange={(e) => handle(e)}
               value={data.designation}
-              className="appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none pr-8"
+              className="appearance-none text-center w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none font-semibold"
               id="date"
               type="text"
               placeholder="Add Designation"
@@ -238,7 +244,7 @@ function ProfileForm() {
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="school"
                   type="text"
-                  placeholder="Your Uni/School"
+                  placeholder="Your University/School"
                   required
                 />
               </div>
@@ -263,7 +269,11 @@ function ProfileForm() {
                 <label className="block py-2 font-semibold " htmlFor="skills">
                   Technical Skills
                 </label>
-                <ProjectTagsInput setTags={setTags} profileFormTags = {true} tags={tags} />
+                <ProjectTagsInput
+                  setTags={setTags}
+                  profileFormTags={true}
+                  tags={tags}
+                />
               </div>
             </div>
             <div className="flex md:justify-center justify-end items-center mb-5 md:mr-20">

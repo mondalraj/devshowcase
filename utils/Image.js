@@ -25,7 +25,7 @@ const uploadImage = (e, acceptedFiles) => {
 
     const data = await response.json();
     try {
-      responseData.push(data);
+      responseData.push(data.public_id);
     } catch (err) {
       console.error(err);
     }
