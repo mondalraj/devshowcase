@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
+import Particles from "react-tsparticles";
 import ProjectTagsInput from "../components/projectTagsInput";
 
 function ProfileForm() {
@@ -70,7 +71,9 @@ function ProfileForm() {
       <Head>
         <title>Profile Form</title>
       </Head>
+     
       <div className="bg-gray-400 w-full h-full flex flex-col items-center justify-center">
+      <Particles />
         <div className="md:invisible p-3 md:p-16 flex flex-col justify-center items-center">
           <label htmlFor="file-input">
             <Image
