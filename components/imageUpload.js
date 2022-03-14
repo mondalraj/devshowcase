@@ -1,3 +1,4 @@
+import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -26,15 +27,22 @@ export default function ImageUpload({ SetFiles }) {
     }
   };
 
+  const removePics = (index) => {
+    setSelectedFiles(selectedFiles.filter((element, i) => i !== index));
+  };
+
   const renderPhotos = (source) => {
-    return source.map((photo) => {
+    return source.map((photo, index) => {
+      console.log(index);
       return (
-        <img
-          src={photo}
-          alt=""
-          className="w-48 h-32 md:w-60 md:h-40 object-contain p-1"
-          key={photo}
-        />
+        <div className="relative flex justify-center" key={index}>
+          <img src={photo} alt="" className="w-44 h-36 md:w-56 md:h-44 p-2" />
+          <Icon
+            icon="entypo:cross"
+            className="text-neutral-700 text-xl cursor-pointer absolute top-0 right-0"
+            onClick={() => removePics(index)}
+          />
+        </div>
       );
     });
   };
@@ -67,6 +75,7 @@ export default function ImageUpload({ SetFiles }) {
             accept="image/*"
             className="hidden"
             onChange={handleImageChange}
+            required
           />
         </label>
         <h3 className="mt-1 text-blue-700/75 text-sm">
