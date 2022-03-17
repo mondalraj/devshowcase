@@ -21,9 +21,35 @@ export default function projectform() {
     setProjectData(newData);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // const response = uploadImage(e, acceptedFiles);
+    try {
+      const imagesArray = await uploadImage(e, acceptedFiles);
+      const projectInterval = setInterval(async () => {
+        if (imagesArray.length == acceptedFiles.length) {
+          const res = await fetch("/api/projects", {
+            method: "POST",
+            body: JSON.stringify({
+              images: imagesArray,
+              description: projectData.desc,
+              tags: tags,
+              github_link: projectData.github,
+              live_link: projectData.live,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          });
+
+          const data = await res.json();
+          console.log(data);
+          clearInterval(projectInterval);
+        }
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+      clearInterval(projectInterval);
+    }
   };
 
   return (
@@ -42,7 +68,7 @@ export default function projectform() {
           Add a new project
         </h1>
         <form onSubmit={handleSubmit} className="w-5/6 md:w-1/2 flex flex-col">
-          <ImageUpload SetFiles={setAcceptedFiles} />
+          <ImageUpload SetFiles={setAcceptedFiles} filesArray={acceptedFiles} />
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">
               Write some description about your project
