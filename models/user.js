@@ -19,6 +19,11 @@ var user = new Schema({
     type: String,
     required: true,
   },
+  profile_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    // required: true,
+    ref: "Profile",
+  },
   since: {
     type: Date,
     default: Date.now,

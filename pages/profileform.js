@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
-import Particles from "react-tsparticles";
+import ParticleBackground from "../components/particleBackground";
 import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
 
@@ -72,9 +72,11 @@ function ProfileForm() {
       <Head>
         <title>Profile Form</title>
       </Head>
-     
-      <div className="bg-gray-400 w-full h-full flex flex-col items-center justify-center">
-      <Particles />
+
+      <div className="bg-gray-300 w-full h-full flex flex-col items-center justify-center">
+        <div className="md:h-24 h-10 w-full">
+          <ParticleBackground />
+        </div>
         <div className="md:invisible p-3 md:p-16 flex flex-col justify-center items-center">
           <label htmlFor="file-input">
             <Image
@@ -97,7 +99,7 @@ function ProfileForm() {
             onChange={(e) => handle(e)}
             value={data.designation}
             // .placeholder-black::placeholder
-            className="bg-inherit appearance-none w-full placeholder:text-white text-center	py-2 text-black leading-tight focus:outline-none border-none font-semibold"
+            className="bg-inherit appearance-none w-full placeholder:text-black text-center	py-2 text-black leading-tight focus:outline-none border-none font-bold"
             id="date"
             type="text"
             placeholder="Add Designation"
