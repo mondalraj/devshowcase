@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const profile = new mongoose.Schema(
+const profileSchema = new mongoose.Schema(
   {
     image: {
       type: String,
@@ -53,5 +53,5 @@ const profile = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Profile = mongoose.model("Profile", profile);
-module.exports = Profile;
+module.exports =
+  mongoose.models.Profile || mongoose.model("Profile", profileSchema);

@@ -5,7 +5,6 @@ import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
 
 function ProfileForm() {
-  const [selectedFile, setSelectedFile] = useState([]);
   const [acceptedFile, setAcceptedFile] = useState([]);
   const [tags, setTags] = useState([]);
   const [data, setData] = useState({
@@ -28,6 +27,7 @@ function ProfileForm() {
 
   function submit(e) {
     e.preventDefault();
+    console.log(acceptedFile);
     // const response = await uploadImage(e, acceptedFile);
     fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
@@ -55,14 +55,8 @@ function ProfileForm() {
     const files = e.target.files;
 
     if (files) {
-      const filesArray = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-
-      setSelectedFile(filesArray);
+      setAcceptedFile([]);
       setAcceptedFile((prevPics) => prevPics.concat(...files));
-
-      Array.from(files).map((file) => URL.revokeObjectURL(file));
     }
   };
 
@@ -76,7 +70,9 @@ function ProfileForm() {
           <label htmlFor="file-input">
             <Image
               src={
-                !selectedFile.length ? "/images/avatar.png" : selectedFile[0]
+                !acceptedFile.length
+                  ? "/images/avatar.png"
+                  : URL.createObjectURL(acceptedFile[0])
               }
               width={125}
               height={118}
@@ -93,7 +89,6 @@ function ProfileForm() {
           <input
             onChange={(e) => handle(e)}
             value={data.designation}
-            // .placeholder-black::placeholder
             className="bg-inherit appearance-none w-full placeholder:text-white text-center	py-2 text-black leading-tight focus:outline-none border-none font-semibold"
             id="date"
             type="text"
@@ -109,9 +104,9 @@ function ProfileForm() {
               <label htmlFor="file-input">
                 <Image
                   src={
-                    !selectedFile.length
+                    !acceptedFile.length
                       ? "/images/avatar.png"
-                      : selectedFile[0]
+                      : URL.createObjectURL(acceptedFile[0])
                   }
                   width={125}
                   height={118}

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const comment = new mongoose.Schema({
+const commentSchema = new mongoose.Schema({
   profile_id: {
     type: mongoose.Schema.Types.ObjectId,
     // required: true,
@@ -17,5 +17,5 @@ const comment = new mongoose.Schema({
   },
 });
 
-const Comment = mongoose.model("Comment", comment);
-module.exports = Comment;
+module.exports =
+  mongoose.models.Comment || mongoose.model("Comment", commentSchema);
