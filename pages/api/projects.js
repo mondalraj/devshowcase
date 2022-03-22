@@ -4,15 +4,15 @@ import Project from "../../models/project";
 const handler = async (req, res) => {
   if (req.method === "POST") {
     const { images, description, tags, github_link, live_link } = req.body;
+    const new_project = new Project({
+      description,
+      images,
+      tags,
+      github_link,
+      live_link,
+    });
     try {
-      await Project.create({
-        description,
-        images,
-        tags,
-        github_link,
-        live_link,
-      });
-
+      await new_project.save();
       return res
         .status(201)
         .json({ status: "success", message: "Project has successfully added" });

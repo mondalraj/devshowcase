@@ -23,9 +23,10 @@ export default function projectform() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let projectInterval;
     try {
       const imagesArray = await uploadImage(e, acceptedFiles);
-      const projectInterval = setInterval(async () => {
+      projectInterval = setInterval(async () => {
         if (imagesArray.length == acceptedFiles.length) {
           const res = await fetch("/api/projects", {
             method: "POST",
@@ -41,8 +42,6 @@ export default function projectform() {
             },
           });
 
-          const data = await res.json();
-          console.log(data);
           clearInterval(projectInterval);
         }
       }, 1000);
