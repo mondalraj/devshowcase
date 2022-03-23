@@ -65,7 +65,7 @@ export default function Signup() {
                 Create a new Account
               </h1>
               <div className="p-4 m-6 text-center space-y-5">
-                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 space-x-9">
+                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1">
                   <Icon
                     icon="cil:send"
                     color="#ccc"
@@ -77,11 +77,11 @@ export default function Signup() {
                     onChange={(e) => setEmail(e.target.value)}
                     name="email"
                     placeholder="Your Email"
-                    className="ml-5 focus:outline-none"
+                    className="md:ml-5 focus:outline-none"
                   />
                 </div>
 
-                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 space-x-9">
+                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1">
                   <Icon
                     icon="ic:baseline-account-circle"
                     color="#3770ff"
@@ -94,11 +94,11 @@ export default function Signup() {
                     name="username"
                     id="username"
                     placeholder="Your Username"
-                    className="ml-5 focus:outline-none"
+                    className="md:ml-5 focus:outline-none"
                   />
                 </div>
 
-                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 space-x-9">
+                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1">
                   <Icon
                     icon="bx:lock-alt"
                     color="#ccc"
@@ -111,7 +111,7 @@ export default function Signup() {
                     name="password"
                     id="password"
                     placeholder="Create Password"
-                    className="ml-5 focus:outline-none"
+                    className="md:ml-5 focus:outline-none"
                   />
                 </div>
                 <p className="text-[#8C8C8C] text-md md:text-xs md:font-semibold">

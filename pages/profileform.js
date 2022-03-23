@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
+import ParticleBackground from "../components/particleBackground";
 import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
 
@@ -24,12 +25,16 @@ function ProfileForm() {
     newData[e.target.id] = e.target.value;
     setData(newData);
   }
-
-  function submit(e) {
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+  async function submit(e) {
     e.preventDefault();
     console.log(acceptedFile);
-    // const response = await uploadImage(e, acceptedFile);
-    fetch("https://jsonplaceholder.typicode.com/posts", {
+    const imagesArray = await uploadImage(e, acceptedFile);
+    await sleep(1000);
+    await fetch("/api/profile", {
       method: "POST",
       body: JSON.stringify({
         name: data.name,
@@ -40,15 +45,22 @@ function ProfileForm() {
         work: data.work,
         school: data.school,
         course: data.course,
-        skills: data.skills,
+        tags: tags,
         designation: data.designation,
+        images: imagesArray[0],
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => response.json())
-      .then((json) => console.log(json));
+      .then((data) => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert(data.message);
+        }
+      });
   }
 
   const handleImageChange = (e) => {
@@ -65,7 +77,11 @@ function ProfileForm() {
       <Head>
         <title>Profile Form</title>
       </Head>
-      <div className="bg-gray-400 w-full h-full flex flex-col items-center justify-center">
+
+      <div className="bg-gray-300 w-full h-full flex flex-col items-center justify-center">
+        <div className="md:h-24 h-10 w-full">
+          <ParticleBackground />
+        </div>
         <div className="md:invisible p-3 md:p-16 flex flex-col justify-center items-center">
           <label htmlFor="file-input">
             <Image
@@ -90,7 +106,7 @@ function ProfileForm() {
             onChange={(e) => handle(e)}
             value={data.designation}
             className="bg-inherit appearance-none w-full placeholder:text-white text-center	py-2 text-black leading-tight focus:outline-none border-none font-semibold"
-            id="date"
+            id="designation"
             type="text"
             placeholder="Add Designation"
             required
@@ -124,7 +140,7 @@ function ProfileForm() {
               onChange={(e) => handle(e)}
               value={data.designation}
               className="appearance-none text-center w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none font-semibold"
-              id="date"
+              id="designation"
               type="text"
               placeholder="Add Designation"
               required
@@ -162,7 +178,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.designation}
+                  value={data.date}
                   className="appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="date"
                   type="date"
