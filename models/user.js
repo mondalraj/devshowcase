@@ -1,8 +1,7 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-var Schema = mongoose.Schema;
 
-var user = new Schema({
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -42,8 +41,8 @@ user.statics.login = async function (email, password) {
   throw Error("incorrectEmail");
 };
 
-mongoose.models = {};
+// mongoose.models = {};
+// var User = mongoose.model("User", user);
+// export default User;
 
-var User = mongoose.model("User", user);
-
-export default User;
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);
