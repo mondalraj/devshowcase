@@ -5,7 +5,7 @@ export default function ParticleBackground() {
   return (
     <>
       <Particles
-      className="h-96 w-full "
+        className="h-96 w-full "
         options={{
           backgroundMode: {
             enable: true,

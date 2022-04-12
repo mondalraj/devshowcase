@@ -21,34 +21,51 @@ export default function projectform() {
     setProjectData(newData);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let projectInterval;
-    try {
-      const imagesArray = await uploadImage(e, acceptedFiles);
-      projectInterval = setInterval(async () => {
-        if (imagesArray.length == acceptedFiles.length) {
-          const res = await fetch("/api/projects", {
-            method: "POST",
-            body: JSON.stringify({
-              images: imagesArray,
-              description: projectData.desc,
-              tags: tags,
-              github_link: projectData.github,
-              live_link: projectData.live,
-            }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          });
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   let projectInterval;
+  //   try {
+  //     const imagesArray = await uploadImage(e, acceptedFiles);
+  //     projectInterval = setInterval(async () => {
+  //       if (imagesArray.length == acceptedFiles.length) {
+  //         const res = await fetch("/api/projects", {
+  //           method: "POST",
+  //           body: JSON.stringify({
+  //             images: imagesArray,
+  //             description: projectData.desc,
+  //             tags: tags,
+  //             github_link: projectData.github,
+  //             live_link: projectData.live,
+  //           }),
+  //           headers: {
+  //             "Content-type": "application/json; charset=UTF-8",
+  //           },
+  //         });
 
-          clearInterval(projectInterval);
-        }
-      }, 1000);
-    } catch (error) {
-      console.error(error);
-      clearInterval(projectInterval);
-    }
+  //         clearInterval(projectInterval);
+  //       }
+  //     }, 1000);
+  //   } catch (error) {
+  //     console.error(error);
+  //     clearInterval(projectInterval);
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
+    const imagesArray = await uploadImage(e, acceptedFiles);
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify({
+        images: imagesArray,
+        description: projectData.desc,
+        tags: tags,
+        github_link: projectData.github,
+        live_link: projectData.live,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
   };
 
   return (
