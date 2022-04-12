@@ -3,20 +3,32 @@ import Profile from "../../models/profile";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    const { name, date, bio, location, company, work, school, course, tags, designation, images } = req.body;
+    const {
+      name,
+      date,
+      bio,
+      location,
+      company,
+      work,
+      school,
+      course,
+      tags,
+      designation,
+      images,
+    } = req.body;
     const profile = new Profile({
-        name: name,
-        date_of_birth: date,
-        bio: bio,
-        location: location,
-        company_name: company,
-        work_description:work,
-        university_name: school,
-        course_name: course,
-        skills: tags,
-        designation: designation,
-        image: images,
-      });
+      name: name,
+      date_of_birth: date,
+      bio: bio,
+      location: location,
+      company_name: company,
+      work_description: work,
+      university_name: school,
+      course_name: course,
+      skills: tags,
+      designation: designation,
+      image: images,
+    });
     try {
       await profile.save();
       return res
