@@ -16,6 +16,7 @@ const handler = async (req, res) => {
         skills: tags,
         designation: designation,
         image: images,
+        user_id: req.user,
       });
     try {
       await profile.save();

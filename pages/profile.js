@@ -7,6 +7,24 @@ import { useState } from "react";
 function profile() {
   const [isAbout, setIsAbout] = useState(true);
 
+  function logout() {
+    fetch("/api/logout", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert(data.message);
+          window.location = "http://localhost:3000/login";
+        }
+      });
+  }
+
   return (
     <div className="profile">
       <Head>
@@ -20,7 +38,9 @@ function profile() {
             className=" logo w-44 flex justify-between items-center mt-5"
           />
           <div className="flex gap-2 items-end">
-            <h1 className="hidden sm:block text-lg">Logout</h1>
+            <button className="hidden sm:block text-lg" onClick={() => logout()}>
+              Logout
+            </button>
             <Icon icon="icons8:shutdown" className="text-2xl" />
           </div>
         </div>

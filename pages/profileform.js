@@ -59,6 +59,8 @@ function ProfileForm() {
           alert(data.error);
         } else {
           alert(data.message);
+          window.location = "http://localhost:3000/profile";
+
         }
       });
   }
