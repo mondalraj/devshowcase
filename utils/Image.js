@@ -8,9 +8,8 @@ const uploadImage = async (e, acceptedFiles) => {
   e.preventDefault();
   const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
 
-  const imgArray = [];
   const { timestamp, signature } = await getSignature();
-  acceptedFiles.forEach(async (file) => {
+  const promises = acceptedFiles.map(async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("signature", signature);
@@ -23,12 +22,14 @@ const uploadImage = async (e, acceptedFiles) => {
         body: formData,
       });
 
-      const data = await response.json();
-      imgArray.push(data.public_id);
+      return response.json();
     } catch (err) {
       console.error(err);
     }
   });
+
+  const tempArray = await Promise.all(promises);
+  const imgArray = tempArray.map((image) => image.public_id);
 
   return imgArray;
 };

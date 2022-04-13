@@ -26,14 +26,14 @@ function ProfileForm() {
     setData(newData);
   }
   function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  
+
   async function submit(e) {
     e.preventDefault();
-    console.log(acceptedFile);
+    // console.log(acceptedFile);
     const imagesArray = await uploadImage(e, acceptedFile);
-    await sleep(1000);
+    // await sleep(1000);
     await fetch("/api/profile", {
       method: "POST",
       body: JSON.stringify({
