@@ -12,12 +12,7 @@ const handler = async (req, res) => {
             const user_id = jwt.verify(token, process.env.JWT_SECRET_KEY);
             const user = await User.findOne({ _id: user_id.id });
             
-            res.status(201).json({ status: "success", user: {
-              id: user._id,
-              username: user.username,
-              email: user.email,
-              profile_id: user.profile_id
-            }, message: 'User is logged in' });
+            res.status(201).json({ status: "success", user: user, message: 'User is logged in' });
         } catch {
             res.status(201).json({ status: "fail", message: 'User not Authorized' });
         }

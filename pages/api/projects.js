@@ -20,7 +20,13 @@ const handler = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
   } else {
-    res.status(422).json({ message: "req_method_not_supported" });
+    const {project_id} = req.body;
+    try{
+      const project = await Project.findOne({ _id: project_id });
+      res.status(201).json({ status: "success", project: project });
+    } catch{
+      res.status(201).json({ status: "fail", message: 'Project Not found' });
+    }
   }
 };
 

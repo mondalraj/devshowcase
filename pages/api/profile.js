@@ -38,7 +38,13 @@ const handler = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
   } else {
-    res.status(422).json({ message: "req_method_not_supported" });
+    const {profile_id} = req.body;
+    try{
+      const profile = await Profile.findOne({ _id: profile_id });
+      res.status(201).json({ status: "success", user: profile });
+    } catch{
+      res.status(201).json({ status: "fail", message: 'User Profile Not found' });
+    }
   }
 };
 

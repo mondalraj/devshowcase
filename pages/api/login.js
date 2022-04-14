@@ -23,7 +23,7 @@ const handler = async (req, res) => {
             const user = await User.login(email, password);
             const token = createJWT(user._id);
             setCookies('devshowcase_jwt', token, { req, res, maxAge: 60 * 60 * 24 * 7 });
-            res.status(201).json({ status: 'success', message: 'User has successfully Logged In', isLoggedIn: true });
+            res.status(201).json({ status: 'success', message: 'User has successfully Logged In', isLoggedIn: true, user: user });
         } catch (err) {
             if (err.message === 'incorrectPassword') {
                 res.status(400).json({ status: 'fail', error: 'passwordError', message: 'Your Password is incorrect', isLoggedIn: false })
