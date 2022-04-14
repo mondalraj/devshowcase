@@ -25,8 +25,15 @@ const projectSchema = new mongoose.Schema({
   },
   profile_id: {
     type: mongoose.Schema.Types.ObjectId,
+    required: true,
     ref: "Profile",
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment"
+    },
+  ],
 });
 
 module.exports =

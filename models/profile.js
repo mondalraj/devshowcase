@@ -33,11 +33,11 @@ const profileSchema = new mongoose.Schema(
     },
     university_name: {
       type: String,
-      required: true,
+      // required: true,
     },
     course_name: {
       type: String,
-      required: true,
+      // required: true,
     },
     skills: [
       {
@@ -45,8 +45,15 @@ const profileSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    projects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project"
+      },
+    ],
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: "User",
     },
   },
