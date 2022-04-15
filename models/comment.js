@@ -1,15 +1,13 @@
 const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
-  profile_id: {
+  user_id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Profile",
+    // required: true,
   },
   project_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "Project",
   },
   content: {
     type: String,

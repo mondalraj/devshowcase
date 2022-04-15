@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const projectSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,
@@ -26,12 +30,10 @@ const projectSchema = new mongoose.Schema({
   profile_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "Profile",
   },
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment"
     },
   ],
 });

@@ -1,21 +1,32 @@
 import connectDB from "../../middleware/mongodb";
+import Profile from "../../models/profile";
 import Project from "../../models/project";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    const { images, description, tags, github_link, live_link } = req.body;
+    const { name, images, description, tags, github_link, live_link, profile_id } = req.body;
     const new_project = new Project({
+      name,
       description,
       images,
       tags,
       github_link,
       live_link,
+      profile_id
     });
     try {
-      await new_project.save();
+      const newProject = await new_project.save();
+      const userProfile = await Profile.findByIdAndUpdate({ _id: profile_id }, {
+        $push: {
+          projects: newProject._id
+        }
+      }, {
+        new: true,
+        useFindAndModify: false
+      });
       return res
         .status(201)
-        .json({ status: "success", message: "Project has successfully added" });
+        .json({ status: "success", message: "Project has successfully added", project: newProject, userProfile: userProfile });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

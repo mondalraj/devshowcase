@@ -14,7 +14,7 @@ const profileSchema = new mongoose.Schema(
       required: true,
     },
     date_of_birth: {
-      type: Date,
+      type: String,
       required: true,
     },
     bio: {
@@ -48,13 +48,11 @@ const profileSchema = new mongoose.Schema(
     projects: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Project"
       },
     ],
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
     },
   },
   { timestamps: true }

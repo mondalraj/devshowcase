@@ -1,9 +1,11 @@
 import connectDB from "../../middleware/mongodb";
+import User from '../../models/user';
 import Profile from "../../models/profile";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
     const {
+      user_id,
       name,
       date,
       bio,
@@ -17,7 +19,9 @@ const handler = async (req, res) => {
       images,
     } = req.body;
     const profile = new Profile({
+      image: images,
       name: name,
+      designation: designation,
       date_of_birth: date,
       bio: bio,
       location: location,
@@ -26,23 +30,30 @@ const handler = async (req, res) => {
       university_name: school,
       course_name: course,
       skills: tags,
-      designation: designation,
-      image: images,
+      user_id: user_id
     });
     try {
-      await profile.save();
+      const userProfile = await profile.save();
+      const user = await User.findByIdAndUpdate({ _id: user_id }, {
+        $set: {
+          profile_id: userProfile._id
+        }
+      }, {
+        new: true,
+        useFindAndModify: false
+      });
       return res
         .status(201)
-        .json({ status: "success", message: "Profile Created Successfully" });
+        .json({ status: "success", message: "Profile Created Successfully", user: user, userProfile: userProfile });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   } else {
-    const {profile_id} = req.body;
-    try{
+    const { profile_id } = req.body;
+    try {
       const profile = await Profile.findOne({ _id: profile_id });
       res.status(201).json({ status: "success", user: profile });
-    } catch{
+    } catch {
       res.status(201).json({ status: "fail", message: 'User Profile Not found' });
     }
   }
