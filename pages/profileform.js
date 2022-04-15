@@ -1,13 +1,15 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ParticleBackground from "../components/particleBackground";
 import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
+import { useRouter } from "next/router";
 
 function ProfileForm() {
   const [acceptedFile, setAcceptedFile] = useState([]);
   const [tags, setTags] = useState([]);
+  const [userId, setUserId] = useState("");
   const [data, setData] = useState({
     name: "",
     date: "",
@@ -19,6 +21,26 @@ function ProfileForm() {
     course: "",
     skills: "",
   });
+  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          router.push("/login");
+        } else if (data.user.profile_id) {
+          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
+        } else {
+          setUserId(data.user._id);
+        }
+      });
+  }, []);
 
   function handle(e) {
     const newData = { ...data };
@@ -48,6 +70,7 @@ function ProfileForm() {
         tags: tags,
         designation: data.designation,
         images: imagesArray[0],
+        user_id: userId,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -59,8 +82,7 @@ function ProfileForm() {
           alert(data.error);
         } else {
           alert(data.message);
-          window.location = "http://localhost:3000/profile";
-
+          router.push(`/profile/${data.userProfile._id}`);
         }
       });
   }

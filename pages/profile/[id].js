@@ -1,12 +1,40 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
-import ProjectItem from "../components/ProjectItem";
-import { useState } from "react";
+import ProjectItem from "../../components/ProjectItem";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 function profile() {
   const [isAbout, setIsAbout] = useState(true);
+  const [userData, setUserData] = useState({});
+  const [image, setImage] = useState(false)
+  const router = useRouter();
 
+  useEffect(() => {
+    (async () => {
+      if (!router.isReady) return;
+      const { id } = router.query;
+
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          profile_id: id,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await res.json();
+      if (data.status == "fail") {
+        router.push("/404");
+      } else {
+        setUserData(data.user);
+      }
+    })();
+  }, [router.isReady]);
+  var skillArray = userData.skills;
+  console.log(skillArray);
   function logout() {
     fetch("/api/logout", {
       method: "GET",
@@ -20,7 +48,7 @@ function profile() {
           alert(data.error);
         } else {
           alert(data.message);
-          window.location = "http://localhost:3000/login";
+          router.push("/login");
         }
       });
   }
@@ -32,13 +60,18 @@ function profile() {
       </Head>
       <div className="profile_container">
         <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
-          <img
-            src="images/logo.png"
-            alt=""
-            className=" logo w-44 flex justify-between items-center mt-5"
-          />
+          <a href="/">
+            <img
+              src="../images/logo.png"
+              alt=""
+              className=" logo w-44 flex justify-between items-center mt-5"
+            />
+          </a>
           <div className="flex gap-2 items-end">
-            <button className="hidden sm:block text-lg" onClick={() => logout()}>
+            <button
+              className="hidden sm:block text-lg"
+              onClick={() => logout()}
+            >
               Logout
             </button>
             <Icon icon="icons8:shutdown" className="text-2xl" />
@@ -48,23 +81,23 @@ function profile() {
           <div className="profile_mainSection max-w-screen-xl mx-auto w-full  h-auto p-5 md:py-10 md:flex justify-evenly items-start gap-8">
             <div className="profile_details flex justify-evenly items-center md:flex-col gap-2">
               <img
-                src="https://www.whatsappimages.in/wp-content/uploads/2021/04/Sad-Whatsapp-Dp-Profile-Photo-HD-Download.jpg"
+                src={image ? `https://res.cloudinary.com/devshowcase/image/upload/${userData.image}` : "../images/avatar.png"}
                 alt=""
                 className="rounded-full w-28 md:w-48"
               />
               <div className="flex flex-col w-full">
                 <div className="text-xl font-semibold md:hidden">
-                  Rajib Mondal
+                  {userData.name}
                 </div>
                 <div className="tracking-wide md:font-semibold">
-                  Co-Founder at devshowcase
+                  {userData.designation}
                 </div>
                 <div className="hidden md:flex my-1 gap-1 items-center">
                   <Icon
                     icon="majesticons:map-marker-area-line"
                     className="text-xl"
                   />
-                  New Delhi, India
+                  {userData.location}
                 </div>
                 <div className="flex gap-6 mt-2 md:hidden">
                   <Icon
@@ -82,21 +115,14 @@ function profile() {
             <div className="md:w-3/5">
               <div className="profile_description">
                 <div className="hidden md:flex text-3xl tracking-wider mb-4 font-semibold">
-                  Rajib Mondal
+                  {userData.name}
                 </div>
                 <div className="hidden md:flex justify-start items-center flex-wrap gap-1.5 my-3">
-                  <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
-                    Designer
-                  </div>
-                  <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
-                    Web Developer
-                  </div>
-                  <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
-                    React js
-                  </div>
-                  <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
-                    REST API
-                  </div>
+                  {skillArray?.map((skills) => (
+                    <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
+                      {skills}
+                    </div>
+                  ))}
                 </div>
                 <div className="md:hidden flex justify-evenly items-center mt-2">
                   <div
@@ -122,16 +148,7 @@ function profile() {
                 <div className="mt-1 mb-3">
                   {isAbout ? (
                     <div>
-                      <h1 className="hidden md:block font-medium text-xl">
-                        About Me..
-                      </h1>
-                      <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Aperiam libero architecto numquam quisquam
-                        reiciendis ipsam ex odio, debitis id magni? Lorem ipsum
-                        dolor sit amet consectetur adipisicing elit. Nesciunt,
-                        quae!
-                      </p>
+                      <p>{userData.bio}</p>
                     </div>
                   ) : (
                     <div>
@@ -140,15 +157,9 @@ function profile() {
                       </h1>
                       <div className="md:ml-5">
                         <h2 className="text-lg text-neutral-600 underline underline-offset-2">
-                          Company Name
+                          {userData.company_name}
                         </h2>
-                        <p>
-                          Lorem ipsum dolor sit, amet consectetur adipisicing
-                          elit. Aperiam libero architecto numquam quisquam
-                          reiciendis ipsam ex odio, debitis id magni? Lorem
-                          ipsum dolor sit amet consectetur adipisicing elit.
-                          Nesciunt, quae!
-                        </p>
+                        <p>{userData.work_description}</p>
                       </div>
                     </div>
                   )}
@@ -176,18 +187,11 @@ function profile() {
                   </div>
 
                   <div className="flex md:hidden justify-start items-center flex-wrap gap-1 mt-4">
-                    <div className="bg-blue-600 rounded-xl px-3 py-0.5 text-white tracking-wider">
-                      Designer
-                    </div>
-                    <div className="bg-blue-600 rounded-xl px-3 py-0.5 text-white tracking-wider">
-                      Web Developer
-                    </div>
-                    <div className="bg-blue-600 rounded-xl px-3 py-0.5 text-white tracking-wider">
-                      React js
-                    </div>
-                    <div className="bg-blue-600 rounded-xl px-3 py-0.5 text-white tracking-wider">
-                      REST API
-                    </div>
+                    {skillArray?.map((skills) => (
+                      <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
+                        {skills}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

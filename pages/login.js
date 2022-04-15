@@ -27,8 +27,7 @@ export default function Login() {
     const data = await response.json();
 
     if (data.status === "success") {
-      alert(data.message);
-      router.push("/profile");
+      router.push(`/profile/${data.user.profile_id}`)
     } else {
       alert(data.message);
     }
