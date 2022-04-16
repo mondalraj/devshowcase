@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 function profile() {
   const [isAbout, setIsAbout] = useState(true);
   const [userData, setUserData] = useState({});
-  const [image, setImage] = useState(false)
+  const [image, setImage] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,10 +31,14 @@ function profile() {
       } else {
         setUserData(data.user);
       }
+      if (data.user.image) {
+        setImage(true);
+      }
     })();
   }, [router.isReady]);
+
   var skillArray = userData.skills;
-  console.log(skillArray);
+
   function logout() {
     fetch("/api/logout", {
       method: "GET",
@@ -81,7 +85,11 @@ function profile() {
           <div className="profile_mainSection max-w-screen-xl mx-auto w-full  h-auto p-5 md:py-10 md:flex justify-evenly items-start gap-8">
             <div className="profile_details flex justify-evenly items-center md:flex-col gap-2">
               <img
-                src={image ? `https://res.cloudinary.com/devshowcase/image/upload/${userData.image}` : "../images/avatar.png"}
+                src={
+                  image
+                    ? `https://res.cloudinary.com/devshowcase/image/upload/${userData.image}`
+                    : "../images/avatar.png"
+                }
                 alt=""
                 className="rounded-full w-28 md:w-48"
               />
@@ -118,8 +126,11 @@ function profile() {
                   {userData.name}
                 </div>
                 <div className="hidden md:flex justify-start items-center flex-wrap gap-1.5 my-3">
-                  {skillArray?.map((skills) => (
-                    <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
+                  {skillArray?.map((skills, id) => (
+                    <div
+                      className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider"
+                      key={id}
+                    >
                       {skills}
                     </div>
                   ))}
@@ -187,8 +198,11 @@ function profile() {
                   </div>
 
                   <div className="flex md:hidden justify-start items-center flex-wrap gap-1 mt-4">
-                    {skillArray?.map((skills) => (
-                      <div className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider">
+                    {skillArray?.map((skills, id) => (
+                      <div
+                        className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider"
+                        key={id}
+                      >
                         {skills}
                       </div>
                     ))}
