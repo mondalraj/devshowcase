@@ -48,6 +48,7 @@ const profileSchema = new mongoose.Schema(
     projects: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
       },
     ],
     user_id: {

@@ -1,5 +1,5 @@
 import connectDB from "../../middleware/mongodb";
-import User from '../../models/user';
+import User from "../../models/user";
 import Profile from "../../models/profile";
 
 const handler = async (req, res) => {
@@ -30,31 +30,42 @@ const handler = async (req, res) => {
       university_name: school,
       course_name: course,
       skills: tags,
-      user_id: user_id
+      user_id: user_id,
     });
     try {
       const userProfile = await profile.save();
-      const user = await User.findByIdAndUpdate({ _id: user_id }, {
-        $set: {
-          profile_id: userProfile._id
+      const user = await User.findByIdAndUpdate(
+        { _id: user_id },
+        {
+          $set: {
+            profile_id: userProfile._id,
+          },
+        },
+        {
+          new: true,
+          useFindAndModify: false,
         }
-      }, {
-        new: true,
-        useFindAndModify: false
+      );
+      return res.status(201).json({
+        status: "success",
+        message: "Profile Created Successfully",
+        user: user,
+        userProfile: userProfile,
       });
-      return res
-        .status(201)
-        .json({ status: "success", message: "Profile Created Successfully", user: user, userProfile: userProfile });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   } else {
-    const { profile_id } = req.body;
+    const { profile_id } = req.headers;
     try {
-      const profile = await Profile.findOne({ _id: profile_id });
+      const profile = await Profile.findOne({ _id: profile_id }).populate(
+        "projects"
+      );
       res.status(201).json({ status: "success", user: profile });
     } catch {
-      res.status(201).json({ status: "fail", message: 'User Profile Not found' });
+      res
+        .status(201)
+        .json({ status: "fail", message: "User Profile Not found" });
     }
   }
 };
