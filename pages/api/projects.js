@@ -4,7 +4,15 @@ import Project from "../../models/project";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    const { name, images, description, tags, github_link, live_link, profile_id } = req.body;
+    const {
+      name,
+      images,
+      description,
+      tags,
+      github_link,
+      live_link,
+      profile_id,
+    } = req.body;
     const new_project = new Project({
       name,
       description,
@@ -12,31 +20,40 @@ const handler = async (req, res) => {
       tags,
       github_link,
       live_link,
-      profile_id
+      profile_id,
     });
     try {
       const newProject = await new_project.save();
-      const userProfile = await Profile.findByIdAndUpdate({ _id: profile_id }, {
-        $push: {
-          projects: newProject._id
+      const userProfile = await Profile.findByIdAndUpdate(
+        { _id: profile_id },
+        {
+          $push: {
+            projects: newProject._id,
+          },
+        },
+        {
+          new: true,
+          useFindAndModify: false,
         }
-      }, {
-        new: true,
-        useFindAndModify: false
+      );
+      return res.status(201).json({
+        status: "success",
+        message: "Project has successfully added",
+        project: newProject,
+        userProfile: userProfile,
       });
-      return res
-        .status(201)
-        .json({ status: "success", message: "Project has successfully added", project: newProject, userProfile: userProfile });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   } else {
-    const {project_id} = req.body;
-    try{
-      const project = await Project.findOne({ _id: project_id });
+    const { project_id } = req.headers;
+    try {
+      const project = await Project.findOne({ _id: project_id }).populate(
+        "profile_id"
+      );
       res.status(201).json({ status: "success", project: project });
-    } catch{
-      res.status(201).json({ status: "fail", message: 'Project Not found' });
+    } catch {
+      res.status(201).json({ status: "fail", message: "Project Not found" });
     }
   }
 };
