@@ -29,6 +29,7 @@ const projectSchema = new mongoose.Schema({
   },
   profile_id: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "Profile",
     required: true,
   },
   comments: [
