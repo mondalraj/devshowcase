@@ -1,12 +1,14 @@
 import Head from "next/head";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageUpload from "../components/imageUpload";
 import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
+import { useRouter } from "next/router";
 
 export default function projectform() {
   const [projectData, setProjectData] = useState({
+    projectName: "",
     desc: "",
     github: "",
     live: "",
@@ -14,6 +16,28 @@ export default function projectform() {
 
   const [acceptedFiles, setAcceptedFiles] = useState([]);
   const [tags, setTags] = useState([]);
+  // const [profileId, setProfileId] = useState("");
+  const router = useRouter();
+
+  useEffect(async () => {
+    if (!router.isReady) return;
+
+    const response = await fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+
+    const data = await response.json();
+    const id = router.query.referer;
+
+    if (data.status == "fail" || id == undefined) {
+      router.push("/login");
+    } else if (id.toString() !== data.user.profile_id) {
+      router.back();
+    }
+  }, [router.isReady]);
 
   const handleChange = (e) => {
     const newData = { ...projectData };
@@ -21,51 +45,31 @@ export default function projectform() {
     setProjectData(newData);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   let projectInterval;
-  //   try {
-  //     const imagesArray = await uploadImage(e, acceptedFiles);
-  //     projectInterval = setInterval(async () => {
-  //       if (imagesArray.length == acceptedFiles.length) {
-  //         const res = await fetch("/api/projects", {
-  //           method: "POST",
-  //           body: JSON.stringify({
-  //             images: imagesArray,
-  //             description: projectData.desc,
-  //             tags: tags,
-  //             github_link: projectData.github,
-  //             live_link: projectData.live,
-  //           }),
-  //           headers: {
-  //             "Content-type": "application/json; charset=UTF-8",
-  //           },
-  //         });
-
-  //         clearInterval(projectInterval);
-  //       }
-  //     }, 1000);
-  //   } catch (error) {
-  //     console.error(error);
-  //     clearInterval(projectInterval);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     const imagesArray = await uploadImage(e, acceptedFiles);
     const res = await fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify({
+        name: projectName,
         images: imagesArray,
         description: projectData.desc,
         tags: tags,
         github_link: projectData.github,
         live_link: projectData.live,
+        profile_id: profileId,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
+
+    const data = await res.json();
+
+    if (data.error) {
+      alert(data.error);
+    } else {
+      router.push(`/project/${data.project._id}`);
+    }
   };
 
   return (
@@ -77,6 +81,7 @@ export default function projectform() {
         <Icon
           icon="entypo:cross"
           className="text-neutral-700 mr-3 text-2xl cursor-pointer"
+          onClick={() => router.back()}
         />
       </div>
       <div className="flex flex-col justify-center items-center">
@@ -85,6 +90,19 @@ export default function projectform() {
         </h1>
         <form onSubmit={handleSubmit} className="w-5/6 md:w-1/2 flex flex-col">
           <ImageUpload SetFiles={setAcceptedFiles} filesArray={acceptedFiles} />
+          <div className="mb-5 w-full">
+            <h2 className="text-2xl font-medium px-3 mb-5">Project Name</h2>
+            <div className="flex items-center justify-center my-3 mx-5">
+              <input
+                type={"text"}
+                className="placeholder:italic placeholder:text-slate-400 block bg-gray-200/25 w-full border border-slate-300 rounded-md p-3 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm md:w-3/4"
+                placeholder="Enter name of project"
+                id="projectName"
+                value={projectData.projectName}
+                onInput={(e) => handleChange(e)}
+              />
+            </div>
+          </div>
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">
               Write some description about your project
