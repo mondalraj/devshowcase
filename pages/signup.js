@@ -3,13 +3,30 @@ import Head from "next/head";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
+import { useEffect } from "react";
 
 export default function Signup() {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          router.push("/signup");
+        } else if (data.user.profile_id) {
+          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
+        }
+      });
+  }, []);
 
   async function registerUser(event) {
     event.preventDefault();
@@ -55,7 +72,10 @@ export default function Signup() {
                 alt=""
               />
             </div>
-            <form className="flex flex-col items-center w-full md:w-2/5 p-5 relative" onSubmit={registerUser}>
+            <form
+              className="flex flex-col items-center w-full md:w-2/5 p-5 relative"
+              onSubmit={registerUser}
+            >
               <img
                 src="/images/logo.png"
                 alt=""
