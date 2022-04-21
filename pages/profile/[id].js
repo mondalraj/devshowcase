@@ -17,12 +17,10 @@ function profile() {
       const { id } = router.query;
 
       const res = await fetch("/api/profile", {
-        method: "PUT",
-        body: JSON.stringify({
-          profile_id: id,
-        }),
+        method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
+          profile_id: id,
         },
       });
       const data = await res.json();
@@ -38,6 +36,7 @@ function profile() {
   }, [router.isReady]);
 
   var skillArray = userData.skills;
+  var projectsArray = userData.projects;
 
   function logout() {
     fetch("/api/logout", {
@@ -120,9 +119,9 @@ function profile() {
                 </div>
               </div>
             </div>
-            <div className="md:w-3/5">
+            <div className="md:w-3/5 mt-4">
               <div className="profile_description">
-                <div className="hidden md:flex text-3xl tracking-wider mb-4 font-semibold">
+                <div className="hidden md:flex text-3xl tracking-wider mb-4 font-bold">
                   {userData.name}
                 </div>
                 <div className="hidden md:flex justify-start items-center flex-wrap gap-1.5 my-3">
@@ -256,20 +255,36 @@ function profile() {
             </div>
           </div>
         </div>
-        <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
-          <ProjectItem />
-          <ProjectItem />
-          <a
-            href="/projectform"
-            className="hidden hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-80 h-72 mt-2.5 md:flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
-          >
-            <Icon
-              icon="carbon:add"
-              className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
-            />
-            New project
-          </a>
-        </div>
+        {projectsArray != 0 ? (
+          <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
+            {projectsArray?.map((project_id, index) => {
+              return <ProjectItem id={project_id} key={index} />;
+            })}
+            <a
+              href={`/projectform?referer=${userData._id}`}
+              className="hidden hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-80 h-72 mt-2.5 md:flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
+            >
+              <Icon
+                icon="carbon:add"
+                className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
+              />
+              New project
+            </a>
+          </div>
+        ) : (
+          <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
+            <a
+              href={`/projectform?referer=${userData._id}`}
+              className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full h-72 mt-2.5 flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
+            >
+              <Icon
+                icon="carbon:add"
+                className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
+              />
+              New project
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

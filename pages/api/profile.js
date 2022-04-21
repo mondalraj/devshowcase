@@ -58,9 +58,7 @@ const handler = async (req, res) => {
   } else {
     const { profile_id } = req.headers;
     try {
-      const profile = await Profile.findOne({ _id: profile_id }).populate(
-        "projects"
-      );
+      const profile = await Profile.findOne({ _id: profile_id })
       res.status(201).json({ status: "success", user: profile });
     } catch {
       res
