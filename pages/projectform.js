@@ -16,7 +16,7 @@ export default function projectform() {
 
   const [acceptedFiles, setAcceptedFiles] = useState([]);
   const [tags, setTags] = useState([]);
-  // const [profileId, setProfileId] = useState("");
+  const [profileId, setProfileId] = useState("");
   const router = useRouter();
 
   useEffect(async () => {
@@ -32,6 +32,8 @@ export default function projectform() {
     const data = await response.json();
     const id = router.query.referer;
 
+    if (data) setProfileId(data.user.profile_id);
+
     if (data.status == "fail" || id == undefined) {
       router.push("/login");
     } else if (id.toString() !== data.user.profile_id) {
@@ -46,11 +48,12 @@ export default function projectform() {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const imagesArray = await uploadImage(e, acceptedFiles);
     const res = await fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify({
-        name: projectName,
+        name: projectData.projectName,
         images: imagesArray,
         description: projectData.desc,
         tags: tags,

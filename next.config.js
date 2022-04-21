@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    domains: ["images.unsplash.com", "res.cloudinary.com"],
+    domains: ["res.cloudinary.com"],
   },
   env: {},
 };

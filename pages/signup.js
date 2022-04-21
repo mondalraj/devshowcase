@@ -24,6 +24,8 @@ export default function Signup() {
           router.push("/signup");
         } else if (data.user.profile_id) {
           router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
+        } else {
+          router.push("/profileform");
         }
       });
   }, []);
@@ -52,8 +54,6 @@ export default function Signup() {
     } else {
       alert(data.message);
     }
-
-    console.log(data);
   }
 
   return (

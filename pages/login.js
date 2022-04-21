@@ -24,7 +24,7 @@ export default function Login() {
         } else if (data.user.profile_id) {
           router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
         } else {
-          router.back();
+          router.push("/profileform");
         }
       });
   }, []);

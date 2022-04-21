@@ -47,20 +47,22 @@ function Project() {
       setProjectData(data.project);
     }
 
-    const profileRes = await fetch("/api/profile", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        profile_id: data.profile_id,
-      },
-    });
+    if (data) {
+      const profileRes = await fetch("/api/profile", {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          profile_id: data.project.profile_id,
+        },
+      });
 
-    const profileData = await profileRes.json();
+      const profileData = await profileRes.json();
 
-    if (profileData.status == "fail") {
-      router.push("/404");
-    } else {
-      setProfileData(profileData.user);
+      if (profileData.status == "fail") {
+        router.push("/404");
+      } else {
+        setProfileData(profileData.user);
+      }
     }
   }, [router.isReady]);
 
@@ -76,6 +78,7 @@ function Project() {
         <Icon
           icon="entypo:cross"
           className="text-neutral-700 mr-3 text-2xl cursor-pointer"
+          onClick={() => router.back()}
         />
       </div>
       <div className="absolute top-1/3 -right-[8.4rem] rotate-90 hidden md:block">
