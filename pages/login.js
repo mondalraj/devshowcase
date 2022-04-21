@@ -3,11 +3,31 @@ import Head from "next/head";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          router.push("/login");
+        } else if (data.user.profile_id) {
+          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
+        } else {
+          router.back();
+        }
+      });
+  }, []);
 
   async function loginUser(event) {
     event.preventDefault();
@@ -27,7 +47,7 @@ export default function Login() {
     const data = await response.json();
 
     if (data.status === "success") {
-      router.push(`/profile/${data.user.profile_id}`)
+      router.push(`/profile/${data.user.profile_id}`);
     } else {
       alert(data.message);
     }
