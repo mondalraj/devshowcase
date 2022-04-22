@@ -51,7 +51,7 @@ function profile() {
       } else {
         setUserData(data.user);
       }
-      if (data.user.image) {
+      if (data.status != "fail" && data.user.image) {
         setImage(true);
       }
     })();
