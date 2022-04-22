@@ -41,13 +41,15 @@ function Project() {
 
     const data = await res.json();
 
+    console.log(data);
+
     if (data.status == "fail") {
       router.push("/404");
     } else {
       setProjectData(data.project);
     }
 
-    if (data) {
+    if (data.status != "fail") {
       const profileRes = await fetch("/api/profile", {
         method: "GET",
         headers: {
@@ -83,22 +85,18 @@ function Project() {
       </div>
       <div className="absolute top-1/3 -right-[8.4rem] rotate-90 hidden md:block">
         <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
-          <a
-            href={projectData.live_link == null ? "" : projectData.live_link}
-            target="_blank"
-          >
-            View Live
-          </a>
+          {projectData.live_link != null && (
+            <a href={projectData.live_link} target="_blank">
+              View Live
+            </a>
+          )}
         </button>
         <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
-          <a
-            href={
-              projectData.github_link == null ? "" : projectData.github_link
-            }
-            target="_blank"
-          >
-            View Code
-          </a>
+          {projectData.github_link != null && (
+            <a href={projectData.github_link} target="_blank">
+              View Code
+            </a>
+          )}
         </button>
       </div>
       <div className="w-full md:w-1/2 h-full flex flex-col justify-center items-center m-auto">
@@ -135,24 +133,18 @@ function Project() {
           <ImageSlider images={projectData.images} />
           <div className="flex md:hidden w-full">
             <button className="bg-blue-500 w-1/2 p-3 font-bold text-lg text-white cursor-pointer">
-              <a
-                href={
-                  projectData.live_link == null ? "" : projectData.live_link
-                }
-                target="_blank"
-              >
-                View Live
-              </a>
+              {projectData.live_link != null && (
+                <a href={projectData.live_link} target="_blank">
+                  View Live
+                </a>
+              )}
             </button>
             <button className="bg-zinc-200 w-1/2 p-3 font-bold text-lg text-slate-500 cursor-pointer">
-              <a
-                href={
-                  projectData.github_link == null ? "" : projectData.github_link
-                }
-                target="_blank"
-              >
-                View Code
-              </a>
+              {projectData.github_link != null && (
+                <a href={projectData.github_link} target="_blank">
+                  View Code
+                </a>
+              )}
             </button>
           </div>
           <div className="m-3 flex flex-col md:m-0 items-center">

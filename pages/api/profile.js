@@ -58,11 +58,13 @@ const handler = async (req, res) => {
   } else {
     const { profile_id } = req.headers;
     try {
-      const profile = await Profile.findOne({ _id: profile_id })
-      res.status(201).json({ status: "success", user: profile });
+      const profile = await Profile.findOne({ _id: profile_id });
+      if (profile != null)
+        res.status(201).json({ status: "success", user: profile });
+      else throw new Error("User Profile Not found");
     } catch {
       res
-        .status(201)
+        .status(404)
         .json({ status: "fail", message: "User Profile Not found" });
     }
   }

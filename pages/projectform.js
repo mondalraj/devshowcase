@@ -22,6 +22,11 @@ export default function projectform() {
   useEffect(async () => {
     if (!router.isReady) return;
 
+    if (router.query == undefined || router.query.referer == undefined) {
+      router.push("/404");
+      return;
+    }
+
     const response = await fetch("/api/getUser", {
       method: "GET",
       headers: {
@@ -32,7 +37,9 @@ export default function projectform() {
     const data = await response.json();
     const id = router.query.referer;
 
-    if (data) setProfileId(data.user.profile_id);
+    console.log(data);
+
+    if (data.status != "fail") setProfileId(data.user.profile_id);
 
     if (data.status == "fail" || id == undefined) {
       router.push("/login");
