@@ -40,6 +40,7 @@ function HireUsModal({ setModal }) {
               className="bg-gray-200/25 focus:outline-none border-2 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Type your email..."
               required
+              autoFocus
             />
           </div>
           <div className="pb-2 px-5">
