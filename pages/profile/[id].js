@@ -9,7 +9,29 @@ function profile() {
   const [isAbout, setIsAbout] = useState(true);
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { id } = router.query;
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          setIsLoggedIn(false);
+        } else if (id === data.user.profile_id) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      });
+  }, [router.isReady]);
 
   useEffect(() => {
     (async () => {
@@ -70,15 +92,17 @@ function profile() {
               className=" logo w-44 flex justify-between items-center mt-5"
             />
           </a>
-          <div className="flex gap-2 items-end">
-            <button
-              className="hidden sm:block text-lg"
-              onClick={() => logout()}
-            >
-              Logout
-            </button>
-            <Icon icon="icons8:shutdown" className="text-2xl" />
-          </div>
+          {isLoggedIn == true ? (
+            <div className="flex gap-2 items-end">
+              <button
+                className="hidden sm:block text-lg"
+                onClick={() => logout()}
+              >
+                Logout
+              </button>
+              <Icon icon="icons8:shutdown" className="text-2xl" />
+            </div>
+          ) : null}
         </div>
         <div className="bg-gray-200 relative">
           <div className="profile_mainSection max-w-screen-xl mx-auto w-full  h-auto p-5 md:py-10 md:flex justify-evenly items-start gap-8">
@@ -216,16 +240,18 @@ function profile() {
                   <Icon icon="entypo:mail" className="text-2xl text-blue-500" />
                   Send Message
                 </a>
-                <a
-                  href=""
-                  className="md:hidden w-1/2 rounded-md bg-white p-2 flex items-center justify-center gap-1"
-                >
-                  <Icon
-                    icon="carbon:add-filled"
-                    className="text-2xl text-blue-500"
-                  />
-                  Add Project
-                </a>
+                {isLoggedIn ? (
+                  <a
+                    href=""
+                    className="md:hidden w-1/2 rounded-md bg-white p-2 flex items-center justify-center gap-1"
+                  >
+                    <Icon
+                      icon="carbon:add-filled"
+                      className="text-2xl text-blue-500"
+                    />
+                    Add Project
+                  </a>
+                ) : null}
               </div>
             </div>
           </div>
@@ -260,29 +286,33 @@ function profile() {
             {projectsArray?.map((project_id, index) => {
               return <ProjectItem id={project_id} key={index} />;
             })}
-            <a
-              href={`/projectform?referer=${userData._id}`}
-              className="hidden hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-80 h-72 mt-2.5 md:flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
-            >
-              <Icon
-                icon="carbon:add"
-                className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
-              />
-              New project
-            </a>
+            {isLoggedIn ? (
+              <a
+                href={`/projectform?referer=${userData._id}`}
+                className="hidden hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-80 h-72 mt-2.5 md:flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
+              >
+                <Icon
+                  icon="carbon:add"
+                  className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
+                />
+                New project
+              </a>
+            ) : null}
           </div>
         ) : (
           <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
-            <a
-              href={`/projectform?referer=${userData._id}`}
-              className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full h-72 mt-2.5 flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
-            >
-              <Icon
-                icon="carbon:add"
-                className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
-              />
-              New project
-            </a>
+            {isLoggedIn ? (
+              <a
+                href={`/projectform?referer=${userData._id}`}
+                className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full h-72 mt-2.5 flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
+              >
+                <Icon
+                  icon="carbon:add"
+                  className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
+                />
+                New project
+              </a>
+            ) : null}
           </div>
         )}
       </div>
