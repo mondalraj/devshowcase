@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
+import Clipboard from "../../components/clipboard";
 import CommentImage from "../../components/commentImage";
 import ImageSlider from "../../components/imageSlider";
 import HireUsModal from "../../components/hireUsModal";
@@ -84,20 +85,20 @@ function Project() {
         />
       </div>
       <div className="absolute top-1/3 -right-[8.4rem] rotate-90 hidden md:block">
-        <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
-          {projectData.live_link != null && (
+        {projectData.live_link != "" && (
+          <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
             <a href={projectData.live_link} target="_blank">
               View Live
             </a>
-          )}
-        </button>
-        <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
-          {projectData.github_link != null && (
+          </button>
+        )}
+        {projectData.github_link != "" && (
+          <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
             <a href={projectData.github_link} target="_blank">
               View Code
             </a>
-          )}
-        </button>
+          </button>
+        )}
       </div>
       <div className="w-full md:w-1/2 h-full flex flex-col justify-center items-center m-auto">
         <h1 className="font-bold text-2xl md:hidden mt-4 flex justify-start w-full px-5">
@@ -113,7 +114,7 @@ function Project() {
               <h2 className="font-medium text-base">{profileData.name}</h2>
               <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
               <h2
-                className="text-blue-500 text-base hover:bg-blue-500 hover:text-white md:p-1 rounded-md cursor-pointer"
+                className="text-blue-500 text-base hover:bg-blue-500 hover:text-white p-1 rounded-md cursor-pointer max-w-max"
                 onClick={() => setIsModal(true)}
               >
                 Hire Me
@@ -125,27 +126,27 @@ function Project() {
               <Icon icon="icon-park-outline:like" className="text-3xl" />
             </div>
             <div className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md">
-              <Icon icon="clarity:share-line" className="text-3xl" />
+              <Clipboard />
             </div>
           </div>
         </div>
         <div className="w-full flex flex-col justify-center items-center">
           <ImageSlider images={projectData.images} />
           <div className="flex md:hidden w-full">
-            <button className="bg-blue-500 w-1/2 p-3 font-bold text-lg text-white cursor-pointer">
-              {projectData.live_link != null && (
+            {projectData.live_link != "" && (
+              <button className="bg-blue-500 w-1/2 p-3 font-bold text-lg text-white cursor-pointer">
                 <a href={projectData.live_link} target="_blank">
                   View Live
                 </a>
-              )}
-            </button>
-            <button className="bg-zinc-200 w-1/2 p-3 font-bold text-lg text-slate-500 cursor-pointer">
-              {projectData.github_link != null && (
+              </button>
+            )}
+            {projectData.github_link != "" && (
+              <button className="bg-zinc-200 w-1/2 p-3 font-bold text-lg text-slate-500 cursor-pointer">
                 <a href={projectData.github_link} target="_blank">
                   View Code
                 </a>
-              )}
-            </button>
+              </button>
+            )}
           </div>
           <div className="m-3 flex flex-col md:m-0 items-center">
             <div className="flex justify-start p-1 md:p-1.5 flex-wrap font-medium">
