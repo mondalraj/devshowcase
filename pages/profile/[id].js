@@ -283,8 +283,8 @@ function profile() {
         </div>
         {projectsArray != 0 ? (
           <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
-            {projectsArray?.map((project_id, index) => {
-              return <ProjectItem id={project_id} key={index} />;
+            {projectsArray?.map((projects, index) => {
+              return <ProjectItem project={projects} key={index} />;
             })}
             {isLoggedIn ? (
               <a
