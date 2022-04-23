@@ -42,30 +42,11 @@ function Project() {
 
     const data = await res.json();
 
-    console.log(data);
-
     if (data.status == "fail") {
       router.push("/404");
     } else {
       setProjectData(data.project);
-    }
-
-    if (data.status != "fail") {
-      const profileRes = await fetch("/api/profile", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          profile_id: data.project.profile_id,
-        },
-      });
-
-      const profileData = await profileRes.json();
-
-      if (profileData.status == "fail") {
-        router.push("/404");
-      } else {
-        setProfileData(profileData.user);
-      }
+      setProfileData(data.project.profile_id);
     }
   }, [router.isReady]);
 
@@ -126,7 +107,7 @@ function Project() {
               <Icon icon="icon-park-outline:like" className="text-3xl" />
             </div>
             <div className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md">
-              <Clipboard />
+              <Clipboard router={router} />
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import connectDB from "../../middleware/mongodb";
 import User from "../../models/user";
 import Profile from "../../models/profile";
+import Project from "../../models/project";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
@@ -57,18 +58,18 @@ const handler = async (req, res) => {
     }
   } else {
     const { profile_id } = req.headers;
-    try {
-      const profile = await Profile.findOne({ _id: profile_id }).populate(
-        "projects"
-      );
-      if (profile != null)
-        res.status(201).json({ status: "success", user: profile });
-      else throw new Error("User Profile Not found");
-    } catch {
-      res
-        .status(404)
-        .json({ status: "fail", message: "User Profile Not found" });
-    }
+    const profile = Profile.findById(profile_id)
+      .populate({ path: "projects", model: Project })
+      .exec((err, result) => {
+        if (err)
+          res
+            .status(404)
+            .json({ status: "fail", message: "User Profile Not found" });
+        res.status(201).json({ status: "success", user: result });
+      });
+    // if (profile != null)
+    // res.status(201).json({ status: "success", user: profile });
+    // else throw new Error("User Profile Not found");
   }
 };
 
