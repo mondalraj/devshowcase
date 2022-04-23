@@ -43,51 +43,51 @@ const handler = async (req, res) => {
 
     // }
   } else if (req.method === "POST") {
-    const { project_id, content } = req.body;
-    const token = getCookie("devshowcase_jwt", { req, res });
+    const { profile_id, project_id, content } = req.body;
+    // const token = getCookie("devshowcase_jwt", { req, res });
 
-    if (token) {
-      try {
-        const user_id = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        const comment = new Comment({
-          user_id: user_id.id,
-          project_id,
-          content,
-        });
+    // if (token) {
+    try {
+      // const user_id = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const profile = await Profile.findById(profile_id);
+      const comment = new Comment({
+        profile_pic: profile.image,
+        profile_name: profile.name,
+        project_id,
+        content,
+      });
 
-        const projectComment = await comment.save();
-        const project = await Project.findByIdAndUpdate(
-          { _id: project_id },
-          {
-            $push: {
-              comments: projectComment._id,
-            },
+      const projectComment = await comment.save();
+      const project = await Project.findByIdAndUpdate(
+        { _id: project_id },
+        {
+          $push: {
+            comments: projectComment._id,
           },
-          {
-            new: true,
-            useFindAndModify: false,
-          }
-        );
+        },
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
 
-        res.status(201).json({
-          status: "success",
-          user_id: user_id.id,
-          project: project,
-          comment: projectComment,
-          message: "Comment Successfully added",
-        });
-      } catch (error) {
-        res.status(201).json({
-          status: "fail",
-          message: "User not Authorized",
-          error: error.message,
-        });
-      }
-    } else {
-      res
-        .status(201)
-        .json({ status: "fail", message: "User not Authenticated" });
+      res.status(201).json({
+        status: "success",
+        comment: projectComment,
+        message: "Comment Successfully added",
+      });
+    } catch (error) {
+      res.status(201).json({
+        status: "fail",
+        message: "User not Authorized",
+        error: error.message,
+      });
     }
+    // } else {
+    //   res
+    //     .status(201)
+    //     .json({ status: "fail", message: "User not Authenticated" });
+    // }
   }
 };
 
