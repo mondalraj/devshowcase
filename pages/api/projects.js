@@ -1,4 +1,5 @@
 import connectDB from "../../middleware/mongodb";
+import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 
@@ -52,12 +53,16 @@ const handler = async (req, res) => {
         path: "profile_id",
         model: Profile,
       })
+      .populate({
+        path: "comments",
+        model: Comment,
+      })
       .exec((err, result) => {
         if (err)
-          res
+          return res
             .status(404)
             .json({ status: "fail", message: "Project Not found" });
-        res.status(201).json({ status: "success", project: result });
+        return res.status(201).json({ status: "success", project: result });
       });
     // const project = await Project.findOne({ _id: project_id }).populate(
     //   "profile_id"

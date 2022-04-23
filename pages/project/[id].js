@@ -1,31 +1,20 @@
 import Head from "next/head";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
-import { Picker } from "emoji-mart";
-import "emoji-mart/css/emoji-mart.css";
 import Clipboard from "../../components/clipboard";
 import CommentImage from "../../components/commentImage";
 import ImageSlider from "../../components/imageSlider";
 import HireUsModal from "../../components/hireUsModal";
 import { useRouter } from "next/router";
+import CommentSection from "../../components/commentSection";
 
 function Project() {
-  const [text, setText] = useState("");
-  const [chosenEmoji, setChosenEmoji] = useState(null);
-  const [isEmojiPicker, setIsEmojiPicker] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [projectData, setProjectData] = useState({});
   const [profileData, setProfileData] = useState({});
+  const [comments, setComments] = useState({});
 
   const router = useRouter();
-
-  const onEmojiClick = (emojiObject) => {
-    setChosenEmoji(emojiObject);
-    if (chosenEmoji !== null) {
-      text += chosenEmoji.native;
-      setText(text);
-    }
-  };
 
   useEffect(async () => {
     if (!router.isReady) return;
@@ -129,7 +118,7 @@ function Project() {
               </button>
             )}
           </div>
-          <div className="m-3 flex flex-col md:m-0 items-center">
+          <div className="m-3 flex flex-col md:m-0 items-center md:w-2/3 w-full">
             <div className="flex justify-start p-1 md:p-1.5 flex-wrap font-medium">
               {tagsArray?.map((tag, id) => {
                 return (
@@ -146,47 +135,10 @@ function Project() {
               {projectData.description}
             </p>
             <div className="mb-20 w-full">
-              <h1 className="py-5 px-2 font-semibold text-2xl">
-                Comments (69)
-              </h1>
-              <div className="flex items-center w-full">
-                <CommentImage size="commentImage" image={profileData.image} />
-                <div className="relative flex flex-col w-full ml-3">
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      placeholder="Add a comment.."
-                      value={text}
-                      onInput={(e) => setText(e.target.value)}
-                      className="outline-none border-b-2 border-black/25 w-full p-2"
-                    />
-                    <Icon
-                      icon="akar-icons:send"
-                      className="text-2xl text-blue-500 cursor-pointer"
-                    />
-                  </div>
-                  {isEmojiPicker && (
-                    <div className="absolute top-24 left-6">
-                      <Picker onSelect={onEmojiClick} set="apple" />
-                    </div>
-                  )}
-                  <div className="flex justify-between items-center mt-4">
-                    <Icon
-                      icon="fluent:emoji-add-24-regular"
-                      className="hidden md:flex text-slate-400 text-3xl cursor-pointer"
-                      onClick={() => setIsEmojiPicker(!isEmojiPicker)}
-                    />
-                    <div className="flex">
-                      <button className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer">
-                        CANCEL
-                      </button>
-                      <button className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer">
-                        COMMENT
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <CommentSection
+                image={profileData.image}
+                projectId={router.query.id}
+              />
             </div>
           </div>
         </div>

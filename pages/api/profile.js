@@ -62,10 +62,10 @@ const handler = async (req, res) => {
       .populate({ path: "projects", model: Project })
       .exec((err, result) => {
         if (err)
-          res
+          return res
             .status(404)
             .json({ status: "fail", message: "User Profile Not found" });
-        res.status(201).json({ status: "success", user: result });
+        return res.status(201).json({ status: "success", user: result });
       });
     // if (profile != null)
     // res.status(201).json({ status: "success", user: profile });
