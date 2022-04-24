@@ -131,15 +131,36 @@ function profile() {
                   {userData.location}
                 </div>
                 <div className="flex gap-6 mt-2 md:hidden">
-                  <Icon
-                    icon="carbon:logo-linkedin"
-                    className="text-3xl cursor-pointer"
-                  />
-                  <Icon
-                    icon="entypo-social:instagram-with-circle"
-                    className="text-3xl cursor-pointer"
-                  />
-                  <Icon icon="fe:github" className="text-3xl cursor-pointer" />
+                  {userData?.linked_in ? (
+                    <a
+                      href={
+                        "https://www.linkedin.com/in/" + userData?.linked_in
+                      }
+                    >
+                      <Icon
+                        icon="carbon:logo-linkedin"
+                        className="text-3xl cursor-pointer"
+                      />
+                    </a>
+                  ) : null}
+                  {userData?.instagram ? (
+                    <a
+                      href={"https://www.instagram.com/" + userData?.instagram}
+                    >
+                      <Icon
+                        icon="entypo-social:instagram-with-circle"
+                        className="text-3xl cursor-pointer"
+                      />
+                    </a>
+                  ) : null}
+                  {userData?.github ? (
+                    <a href={"https://www.github.com/" + userData?.github}>
+                      <Icon
+                        icon="fe:github"
+                        className="text-3xl cursor-pointer"
+                      />
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -198,25 +219,58 @@ function profile() {
                     </div>
                   )}
                   <div className="flex justify-between items-center">
-                    <div className="flex gap-2 cursor-pointer">
-                      <Icon icon="mdi:web" className="text-2xl" />
-                      <h1 className="tracking-wider text-blue-700 font-semibold">
-                        www.abckuchbhi.com
-                      </h1>
-                    </div>
+                    {userData?.website ? (
+                      <div className="flex gap-2 cursor-pointer">
+                        <a
+                          href={userData?.website}
+                          target="no_blank"
+                          className="flex gap-2 cursor-pointer"
+                        >
+                          <Icon icon="mdi:web" className="text-2xl" />
+                          <h1 className="tracking-wider text-blue-700 font-semibold">
+                            {userData?.website}
+                          </h1>
+                        </a>
+                      </div>
+                    ) : null}
                     <div className="hidden gap-4 mt-2 md:flex">
-                      <Icon
-                        icon="carbon:logo-linkedin"
-                        className="text-3xl cursor-pointer"
-                      />
-                      <Icon
-                        icon="entypo-social:instagram-with-circle"
-                        className="text-3xl cursor-pointer"
-                      />
-                      <Icon
-                        icon="fe:github"
-                        className="text-3xl cursor-pointer"
-                      />
+                      {userData?.linked_in ? (
+                        <a
+                          href={
+                            "https://www.linkedin.com/in/" + userData?.linked_in
+                          }
+                          target="no_blank"
+                        >
+                          <Icon
+                            icon="carbon:logo-linkedin"
+                            className="text-3xl cursor-pointer"
+                          />
+                        </a>
+                      ) : null}
+                      {userData?.instagram ? (
+                        <a
+                          href={
+                            "https://www.instagram.com/" + userData?.instagram
+                          }
+                          target="no_blank"
+                        >
+                          <Icon
+                            icon="entypo-social:instagram-with-circle"
+                            className="text-3xl cursor-pointer"
+                          />
+                        </a>
+                      ) : null}
+                      {userData?.github ? (
+                        <a
+                          href={"https://www.github.com/" + userData?.github}
+                          target="no_blank"
+                        >
+                          <Icon
+                            icon="fe:github"
+                            className="text-3xl cursor-pointer"
+                          />
+                        </a>
+                      ) : null}
                     </div>
                   </div>
 

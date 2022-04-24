@@ -123,19 +123,22 @@ function CommentSection({ image, projectId, comments, setComments }) {
           comments.map((comment, index) => {
             return (
               <div
-                className="flex justify-center items-center mb-2"
+                className="flex  mb-2"
                 key={index}
               >
-                <div className="flex flex-col justify-center items-center w-1/4 mx-2">
+                <div className="flex flex-col">
                   <CommentImage
                     size="commentImage"
                     image={comment.profile_pic}
                   />
-                  <h3 className="font-medium text-center">
+                  
+                </div>
+                <div className="ml-3">
+                <h3 className="font-medium text-center">
                     {comment.profile_name}
                   </h3>
+                <p className="w-3/4">{comment.content}</p>
                 </div>
-                <p className="mx-5 w-3/4">{comment.content}</p>
               </div>
             );
           })}
