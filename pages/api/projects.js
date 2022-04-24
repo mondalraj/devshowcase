@@ -2,6 +2,7 @@ import connectDB from "../../middleware/mongodb";
 import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
+import User from "../../models/user";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
@@ -46,12 +47,16 @@ const handler = async (req, res) => {
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
-  } else {
+  } else if (req.method === "GET") {
     const { project_id } = req.headers;
     const project = Project.findById(project_id)
       .populate({
         path: "profile_id",
         model: Profile,
+        populate: {
+          path: "user_id",
+          model: User,
+        },
       })
       .populate({
         path: "comments",
@@ -64,12 +69,7 @@ const handler = async (req, res) => {
             .json({ status: "fail", message: "Project Not found" });
         return res.status(201).json({ status: "success", project: result });
       });
-    // const project = await Project.findOne({ _id: project_id }).populate(
-    //   "profile_id"
-    // );
-    // if (project != null)
-    //   res.status(201).json({ status: "success", project: project });
-    // else throw new Error("Project Not found");
+    return res.status(200);
   }
 };
 

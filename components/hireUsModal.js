@@ -1,24 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import MailTo from "./mailTo";
+import { useState } from "react";
 
-function HireUsModal({ setModal }) {
-  const modalRef = useRef();
+function HireUsModal({ setModal, fromEmail }) {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const closeModal = (e) => {
-      if (e.path[0] !== modalRef.current) {
-        setModal(false);
-      }
-    };
-
-    document.body.addEventListener("click", closeModal);
-
-    return () => document.body.removeEventListener("click", closeModal);
-  }, []);
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   setEmail("");
+  //   setMessage("");
+  // };
 
   return (
-    <div className="bg-black/30 flex fixed z-50 w-full h-full justify-center items-center">
+    <div
+      className="bg-black/30 flex fixed z-50 w-full h-full justify-center items-center"
+      onClick={() => setModal(false)}
+    >
       <div
-        ref={modalRef}
+        onClick={(e) => e.stopPropagation()}
         className="bg-blue-500 md:w-1/3 w-5/6 h-2/5 md:h-1/2 rounded-xl px-5 flex flex-col justify-center items-center"
       >
         <h1 className="font-bold text-3xl text-white pt-5 pb-2 tracking-wider">
@@ -41,6 +40,8 @@ function HireUsModal({ setModal }) {
               placeholder="Type your email..."
               required
               autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="pb-2 px-5">
@@ -52,14 +53,19 @@ function HireUsModal({ setModal }) {
               placeholder="Type in your message..."
               style={{ resize: "none" }}
               required
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             />
           </div>
           <div className="flex justify-center items-center mt-2">
-            <input
-              type="submit"
-              value="Send Message"
-              className=" bg-blue-500 shadow-lg max-w-sm shadow-blue-500/50 rounded-lg px-3 py-1 text-white font-medium cursor-pointer hover:scale-110 transform duration-200 text-sm mb-5"
-            />
+            <MailTo email={fromEmail} subject={email} body={message}>
+              <input
+                type="submit"
+                value="Send Message"
+                className=" bg-blue-500 shadow-lg max-w-sm shadow-blue-500/50 rounded-lg px-3 py-1 text-white font-medium cursor-pointer hover:scale-110 transform duration-200 text-sm mb-5"
+                // onClick={(e) => handleSubmit(e)}
+              />
+            </MailTo>
           </div>
         </div>
       </div>

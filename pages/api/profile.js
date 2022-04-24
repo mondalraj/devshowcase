@@ -56,7 +56,7 @@ const handler = async (req, res) => {
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
-  } else {
+  } else if (req.method === "GET") {
     const { profile_id } = req.headers;
     const profile = Profile.findById(profile_id)
       .populate({ path: "projects", model: Project })
@@ -67,9 +67,7 @@ const handler = async (req, res) => {
             .json({ status: "fail", message: "User Profile Not found" });
         return res.status(201).json({ status: "success", user: result });
       });
-    // if (profile != null)
-    // res.status(201).json({ status: "success", user: profile });
-    // else throw new Error("User Profile Not found");
+    return res.status(200);
   }
 };
 

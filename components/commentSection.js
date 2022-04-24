@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 
-function CommentSection({ image, projectId }) {
+function CommentSection({ image, projectId, comments, setComments }) {
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [profileId, setProfileId] = useState("");
   const [text, setText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
 
@@ -32,6 +33,7 @@ function CommentSection({ image, projectId }) {
       userData.user.profile_id &&
       userData.status == "success"
     ) {
+      setProfileId(userData.user.profile_id);
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -40,9 +42,11 @@ function CommentSection({ image, projectId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (text == "") return;
     const res = await fetch("/api/comment", {
       method: "POST",
       body: JSON.stringify({
+        profile_id: profileId,
         project_id: projectId,
         content: text,
       }),
@@ -56,13 +60,17 @@ function CommentSection({ image, projectId }) {
     if (data.error) {
       alert(data.error);
     } else {
+      setComments([...comments, data.comment]);
       setText("");
+      setIsEmojiPicker(false);
     }
   };
 
   return (
     <>
-      <h1 className="py-5 px-2 font-semibold text-2xl">Comments (69)</h1>
+      <h1 className="py-5 px-2 font-semibold text-2xl">
+        Comments ({comments.length})
+      </h1>
       {isLoggedIn && (
         <div className="flex items-center w-full">
           <CommentImage size="commentImage" image={image} />
@@ -111,37 +119,26 @@ function CommentSection({ image, projectId }) {
         </div>
       )}
       <div className="my-6">
-        <div className="flex justify-center items-center mb-2">
-          <div className="flex flex-col justify-center items-center w-1/4 mx-2">
-            <CommentImage size="commentImage" image={image} />
-            <h3 className="font-medium">Name</h3>
-          </div>
-          <p className="mx-5 w-3/4">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudant
-          </p>
-        </div>
-        <div className="flex justify-center items-center mb-2">
-          <div className="flex flex-col justify-center items-center w-1/4 mx-2">
-            <CommentImage size="commentImage" image={image} />
-            <h3 className="font-medium">Name</h3>
-          </div>
-          <p className="mx-5 w-3/4">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudant
-            dolor sit amet consectetur adipisicing elit. Laudant dolor sit amet
-            consectetur adipisicing elit. Laudant dolor sit amet consectetur
-            adipisicing elit. Laudant dolor sit amet consectetur adipisicing
-            elit. Laudant
-          </p>
-        </div>
-        <div className="flex justify-center items-center mb-2">
-          <div className="flex flex-col justify-center items-center w-1/4 mx-2">
-            <CommentImage size="commentImage" image={image} />
-            <h3 className="font-medium">Name</h3>
-          </div>
-          <p className="mx-5 w-3/4">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudant
-          </p>
-        </div>
+        {comments.length != undefined &&
+          comments.map((comment, index) => {
+            return (
+              <div
+                className="flex justify-center items-center mb-2"
+                key={index}
+              >
+                <div className="flex flex-col justify-center items-center w-1/4 mx-2">
+                  <CommentImage
+                    size="commentImage"
+                    image={comment.profile_pic}
+                  />
+                  <h3 className="font-medium text-center">
+                    {comment.profile_name}
+                  </h3>
+                </div>
+                <p className="mx-5 w-3/4">{comment.content}</p>
+              </div>
+            );
+          })}
       </div>
     </>
   );
