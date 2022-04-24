@@ -2,6 +2,7 @@ import connectDB from "../../middleware/mongodb";
 import User from "../../models/user";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
+import validator from "validator";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
@@ -18,6 +19,10 @@ const handler = async (req, res) => {
       tags,
       designation,
       images,
+      website,
+      linked_in,
+      instagram,
+      github,
     } = req.body;
     const profile = new Profile({
       image: images,
@@ -32,8 +37,16 @@ const handler = async (req, res) => {
       course_name: course,
       skills: tags,
       user_id: user_id,
+      linked_in: linked_in,
+      instagram: instagram,
+      github: github,
+      website: website,
     });
     try {
+      if (website && !validator.isURL(website, { require_protocol: true })) {
+        throw Error("Website is not a valid URL");
+      }
+
       const userProfile = await profile.save();
       const user = await User.findByIdAndUpdate(
         { _id: user_id },

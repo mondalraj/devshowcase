@@ -20,6 +20,10 @@ function ProfileForm() {
     school: "",
     course: "",
     skills: "",
+    website: "",
+    linked_in: "",
+    instagram: "",
+    github: "",
   });
   const router = useRouter();
 
@@ -71,6 +75,10 @@ function ProfileForm() {
         designation: data.designation,
         images: imagesArray[0],
         user_id: userId,
+        website: data.website,
+        linked_in: data.linked_in,
+        instagram: data.instagram,
+        github: data.github,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -280,7 +288,6 @@ function ProfileForm() {
                   id="school"
                   type="text"
                   placeholder="Your University/School"
-                  required
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
@@ -294,7 +301,67 @@ function ProfileForm() {
                   id="course"
                   type="text"
                   placeholder="Your Course"
-                  required
+                />
+              </div>
+              <div className="mt-8 text-blue-500 text-lg lg:text-2xl font-semibold mb-5">
+                Social Links
+              </div>
+              <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
+                <label className="block py-2 font-semibold " htmlFor="website">
+                  Website Link
+                </label>
+                <input
+                  onChange={(e) => handle(e)}
+                  value={data.website}
+                  className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
+                  id="website"
+                  type="text"
+                  placeholder="Your Website Link"
+                />
+              </div>
+              <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
+                <label
+                  className="block py-2 font-semibold "
+                  htmlFor="linked_in"
+                >
+                  LinkedIn Username
+                </label>
+                <input
+                  onChange={(e) => handle(e)}
+                  value={data.linked_in}
+                  className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
+                  id="linked_in"
+                  type="text"
+                  placeholder="Your LinkedIn Username"
+                />
+              </div>
+              <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
+                <label
+                  className="block py-2 font-semibold "
+                  htmlFor="instagram"
+                >
+                  Instagram Username
+                </label>
+                <input
+                  onChange={(e) => handle(e)}
+                  value={data.instagram}
+                  className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
+                  id="instagram"
+                  type="text"
+                  placeholder="Your Instagram Username"
+                />
+              </div>
+              <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
+                <label className="block py-2 font-semibold " htmlFor="github">
+                  Github Username
+                </label>
+                <input
+                  onChange={(e) => handle(e)}
+                  value={data.github}
+                  className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
+                  id="github"
+                  type="text"
+                  placeholder="Your Github Username"
                 />
               </div>
               <div className="mt-8 text-blue-500 text-lg lg:text-2xl font-semibold mb-5">

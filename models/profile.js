@@ -55,6 +55,17 @@ const profileSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
+    website: { type: String },
+
+    linked_in: {
+      type: String,
+    },
+    instagram: {
+      type: String,
+    },
+    github: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
