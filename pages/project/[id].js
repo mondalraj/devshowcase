@@ -12,7 +12,7 @@ function Project() {
   const [isModal, setIsModal] = useState(false);
   const [projectData, setProjectData] = useState({});
   const [profileData, setProfileData] = useState({});
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
 
   const router = useRouter();
 
@@ -36,6 +36,7 @@ function Project() {
     } else {
       setProjectData(data.project);
       setProfileData(data.project.profile_id);
+      setComments(data.project.comments);
     }
   }, [router.isReady]);
 
@@ -46,7 +47,12 @@ function Project() {
       <Head>
         <title>Project - {projectData.name}</title>
       </Head>
-      {isModal && <HireUsModal setModal={setIsModal} />}
+      {isModal && (
+        <HireUsModal
+          setModal={setIsModal}
+          fromEmail={profileData.user_id.email}
+        />
+      )}
       <div className="w-full bg-zinc-400/50 h-10 flex items-center justify-end">
         <Icon
           icon="entypo:cross"
@@ -54,7 +60,7 @@ function Project() {
           onClick={() => router.back()}
         />
       </div>
-      <div className="absolute top-1/3 -right-[8.4rem] rotate-90 hidden md:block">
+      <div className="absolute top-[25rem] -right-[8.4rem] rotate-90 hidden md:block">
         {projectData.live_link != "" && (
           <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
             <a href={projectData.live_link} target="_blank">
@@ -138,6 +144,8 @@ function Project() {
               <CommentSection
                 image={profileData.image}
                 projectId={router.query.id}
+                comments={comments}
+                setComments={setComments}
               />
             </div>
           </div>
