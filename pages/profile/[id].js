@@ -34,27 +34,27 @@ function profile() {
   }, [router.isReady]);
 
   useEffect(() => {
-    (async () => {
-      if (!router.isReady) return;
-      const { id } = router.query;
+    if (!router.isReady) return;
+    const { id } = router.query;
 
-      const res = await fetch("/api/profile", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          profile_id: id,
-        },
+    fetch("/api/profile", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        profile_id: id,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          router.push("/404");
+        } else {
+          setUserData(data.user);
+        }
+        if (data.status != "fail" && data.user.image) {
+          setImage(true);
+        }
       });
-      const data = await res.json();
-      if (data.status == "fail") {
-        router.push("/404");
-      } else {
-        setUserData(data.user);
-      }
-      if (data.status != "fail" && data.user.image) {
-        setImage(true);
-      }
-    })();
   }, [router.isReady]);
 
   var skillArray = userData.skills;
