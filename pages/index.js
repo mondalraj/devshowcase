@@ -1,81 +1,93 @@
+import { Icon } from "@iconify/react";
 import Head from "next/head";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          setIsLoggedIn(false);
+        } else {
+          setUser(data.user);
+          setIsLoggedIn(true);
+        }
+      });
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Devshowcase</title>
-      </Head>
-
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{" "}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{" "}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
+    <>
+      <nav className="profile_navbar absolute top-0 right-0 left-0 bg-white/60 w-screen h-16 flex justify-between items-center p-5 px-10 shadow-md z-10">
+        <a href="/">
+          <img
+            src="../images/logo.png"
+            alt=""
+            className=" logo w-44 flex justify-between items-center mt-5"
+          />
         </a>
-      </footer>
-    </div>
+        {isLoggedIn == true ? (
+          <Link href={`/profile/${user.profile_id}`}>
+            <div className="flex gap-2 items-end">
+              <button
+                className="hidden sm:block text-lg"
+                onClick={() => console.log("Clicked")}
+              >
+                {user.username}
+              </button>
+              <Icon
+                icon="ic:baseline-account-circle"
+                className="text-3xl text-[#094FFF]"
+              />
+            </div>
+          </Link>
+        ) : (
+          <div className="flex justify-center items-center gap-5">
+            <div className="cursor-pointer text-lg px-5 py-1">
+              <Link href="/login">Login</Link>
+            </div>
+            <div className="cursor-pointer text-white text-lg bg-[#1b5bff] py-1 rounded-lg px-5">
+              <Link href="/signup">Sign up</Link>
+            </div>
+          </div>
+        )}
+      </nav>
+      <header className="relative h-screen">
+        <video
+          className="object-cover h-full w-full absolute -z-10"
+          src="../video.mp4"
+          autoPlay
+          loop
+          muted
+        />
+        <div className="h-full w-full absolute -z-9 bg-gradient-to-l from-[#fff]/30 to-[#000]/40"></div>
+        <div className="text-white flex justify-center items-center h-full w-full flex-col z-10">
+          <h2 className="text-5xl font-semibold z-50">
+            &lt; Portfolio for Developers /&gt;
+          </h2>
+          <h4 className="text-center text-xl max-w-4xl text-[#e4ebff] py-8 z-50">
+            This is where people who code, can connect, can showcase their
+            development projects in front of whole coder's community.
+            <br />
+            Get hired by startups to build your developer expertise.
+          </h4>
+          <Link href="/signup">
+            <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-10 py-3 text-xl rounded-md mt-8 z-50 cursor-pointer">
+              {isLoggedIn === true ? "Go to Profile" : "Get Started"}
+            </div>
+          </Link>
+        </div>
+      </header>
+      <footer>Footer</footer>
+    </>
   );
 }
