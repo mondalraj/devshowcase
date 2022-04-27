@@ -105,9 +105,13 @@ function ProfileForm() {
   };
 
   return (
-    <div>
+    <div className="font-dm">
       <Head>
         <title>Profile Form</title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
 
       <div className="bg-gray-300 w-full h-full flex flex-col items-center justify-center">
@@ -171,7 +175,7 @@ function ProfileForm() {
             <input
               onChange={(e) => handle(e)}
               value={data.designation}
-              className="appearance-none text-center w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none font-semibold"
+              className="appearance-none text-center w-full py-2  text-gray-700 leading-tight focus:outline-none font-semibold"
               id="designation"
               type="text"
               placeholder="Add Designation"

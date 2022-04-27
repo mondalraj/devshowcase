@@ -43,9 +43,14 @@ function Project() {
   var tagsArray = projectData.tags;
 
   return (
-    <div className="relative">
+    <div className="relative font-dm">
       <Head>
         <title>Project - {projectData.name}</title>
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
       {isModal && (
         <HireUsModal

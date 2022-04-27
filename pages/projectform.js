@@ -83,9 +83,13 @@ export default function projectform() {
   };
 
   return (
-    <div>
+    <div className="font-dm">
       <Head>
         <title>Project Form</title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
       <div className="w-full bg-zinc-400/50 h-10 flex items-center justify-end">
         <Icon
