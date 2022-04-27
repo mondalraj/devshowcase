@@ -61,9 +61,13 @@ export default function Signup() {
       <div className="flex justify-center items-center overflow-hidden min-h-screen bg-gradient-to-l from-[#0ED2F7] to-[#094FFF]">
         <Head>
           <title>Signup Page</title>
+          <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
         </Head>
 
-        <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl">
+        <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl font-dm">
           <div className="md:flex flex-row md:justify-between ">
             <div className="hidden md:block w-3/5 ">
               <img

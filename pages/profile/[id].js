@@ -4,12 +4,14 @@ import { Icon } from "@iconify/react";
 import ProjectItem from "../../components/ProjectItem";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import HireUsModal from "../../components/hireUsModal";
 
 function profile() {
   const [isAbout, setIsAbout] = useState(true);
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModal, setIsModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -82,8 +84,15 @@ function profile() {
     <div className="profile">
       <Head>
         <title>Profile</title>
+       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"></link>
       </Head>
-      <div className="profile_container">
+      {isModal && (
+        <HireUsModal
+          setModal={setIsModal}
+          fromEmail={userData.user_id.email}
+        />
+      )}
+      <div className="profile_container font-dm">
         <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
           <a href="/">
             <img
@@ -287,16 +296,16 @@ function profile() {
                 </div>
               </div>
               <div className="profile_buttons flex justify-between items-center text-center gap-2 font-semibold ">
-                <a
-                  href=""
+                <button
                   className="w-1/2 md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1"
+                  onClick={() => setIsModal(true)}
                 >
                   <Icon icon="entypo:mail" className="text-2xl text-blue-500" />
                   Send Message
-                </a>
+                </button>
                 {isLoggedIn ? (
                   <a
-                    href=""
+                     href={`/projectform?referer=${userData._id}`}
                     className="md:hidden w-1/2 rounded-md bg-white p-2 flex items-center justify-center gap-1"
                   >
                     <Icon
