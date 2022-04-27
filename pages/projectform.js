@@ -39,11 +39,11 @@ export default function projectform() {
 
     console.log(data);
 
-    if (data.status != "fail") setProfileId(data.user.profile_id);
+    if (data.status != "fail") setProfileId(data.user.profile_id._id);
 
     if (data.status == "fail" || id == undefined) {
       router.push("/login");
-    } else if (id.toString() !== data.user.profile_id) {
+    } else if (id.toString() !== data.user.profile_id._id) {
       router.back();
     }
   }, [router.isReady]);

@@ -14,6 +14,10 @@ function profile() {
   const [isModal, setIsModal] = useState(false);
   const router = useRouter();
 
+  const getHostname = (url) => {
+    return new URL(url).hostname;
+  };
+
   useEffect(() => {
     if (!router.isReady) return;
     const { id } = router.query;
@@ -27,7 +31,7 @@ function profile() {
       .then((data) => {
         if (data.status == "fail") {
           setIsLoggedIn(false);
-        } else if (id === data.user.profile_id) {
+        } else if (id === data.user.profile_id._id) {
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
@@ -83,14 +87,14 @@ function profile() {
   return (
     <div className="profile">
       <Head>
-        <title>Profile</title>
-       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"></link>
+        <title>{userData.name}</title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
       {isModal && (
-        <HireUsModal
-          setModal={setIsModal}
-          fromEmail={userData.user_id.email}
-        />
+        <HireUsModal setModal={setIsModal} fromEmail={userData.user_id.email} />
       )}
       <div className="profile_container font-dm">
         <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
@@ -98,17 +102,15 @@ function profile() {
             <img
               src="../images/logo.png"
               alt=""
-              className=" logo w-44 flex justify-between items-center mt-5"
+              className=" logo w-44 flex justify-between items-center mt-5 hover:scale-125 transition-scale duration-200"
             />
           </a>
           {isLoggedIn == true ? (
-            <div className="flex gap-2 items-end">
-              <button
-                className="hidden sm:block text-lg"
-                onClick={() => logout()}
-              >
-                Logout
-              </button>
+            <div
+              className="flex gap-2 items-end cursor-pointer"
+              onClick={() => logout()}
+            >
+              <h3 className="hidden sm:block text-lg">Logout</h3>
               <Icon icon="icons8:shutdown" className="text-2xl" />
             </div>
           ) : null}
@@ -123,16 +125,16 @@ function profile() {
                     : "../images/avatar.png"
                 }
                 alt=""
-                className="rounded-full w-28 md:w-48"
+                className="rounded-full w-[11rem] h-[7rem] md:w-[10rem] md:h-[10rem] object-cover shadow-xl"
               />
               <div className="flex flex-col w-full">
                 <div className="text-xl font-semibold md:hidden">
                   {userData.name}
                 </div>
-                <div className="tracking-wide md:font-semibold">
+                <div className="tracking-wide md:font-semibold md:text-center">
                   {userData.designation}
                 </div>
-                <div className="hidden md:flex my-1 gap-1 items-center">
+                <div className="hidden md:flex my-1 gap-1 items-center justify-center">
                   <Icon
                     icon="majesticons:map-marker-area-line"
                     className="text-xl"
@@ -148,7 +150,7 @@ function profile() {
                     >
                       <Icon
                         icon="carbon:logo-linkedin"
-                        className="text-3xl cursor-pointer"
+                        className="text-3xl cursor-pointer text-blue-600"
                       />
                     </a>
                   ) : null}
@@ -157,8 +159,12 @@ function profile() {
                       href={"https://www.instagram.com/" + userData?.instagram}
                     >
                       <Icon
-                        icon="entypo-social:instagram-with-circle"
-                        className="text-3xl cursor-pointer"
+                        icon="cib:instagram"
+                        className="text-3xl cursor-pointer text-white rounded-lg"
+                        style={{
+                          background:
+                            "radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%)",
+                        }}
                       />
                     </a>
                   ) : null}
@@ -181,7 +187,7 @@ function profile() {
                 <div className="hidden md:flex justify-start items-center flex-wrap gap-1.5 my-3">
                   {skillArray?.map((skills, id) => (
                     <div
-                      className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider"
+                      className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider shadow-lg hover:shadow-blue-500 cursor-default"
                       key={id}
                     >
                       {skills}
@@ -212,32 +218,36 @@ function profile() {
                 <div className="mt-1 mb-3">
                   {isAbout ? (
                     <div>
-                      <p>{userData.bio}</p>
+                      <p className="text-lg my-2 md:my-0">{userData.bio}</p>
                     </div>
                   ) : (
                     <div>
                       <h1 className="hidden md:block font-medium text-xl">
                         Past Experience
                       </h1>
-                      <div className="md:ml-5">
-                        <h2 className="text-lg text-neutral-600 underline underline-offset-2">
+                      <div>
+                        <h2 className="text-lg text-neutral-600 underline underline-offset-2 font-bold">
                           {userData.company_name}
                         </h2>
-                        <p>{userData.work_description}</p>
+                        <p>
+                          {userData.work_description
+                            ? userData.work_description
+                            : "No work experience (Fresher)"}
+                        </p>
                       </div>
                     </div>
                   )}
                   <div className="flex justify-between items-center">
                     {userData?.website ? (
-                      <div className="flex gap-2 cursor-pointer">
+                      <div className="flex gap-2 cursor-pointer mb-2 md:mb-0">
                         <a
                           href={userData?.website}
                           target="no_blank"
                           className="flex gap-2 cursor-pointer"
                         >
                           <Icon icon="mdi:web" className="text-2xl" />
-                          <h1 className="tracking-wider text-blue-700 font-semibold">
-                            {userData?.website}
+                          <h1 className="tracking-wider text-blue-600 font-semibold hover:text-blue-800 hover:underline">
+                            {getHostname(userData?.website)}
                           </h1>
                         </a>
                       </div>
@@ -252,7 +262,7 @@ function profile() {
                         >
                           <Icon
                             icon="carbon:logo-linkedin"
-                            className="text-3xl cursor-pointer"
+                            className="text-3xl cursor-pointer hover:text-blue-600 hover:scale-110"
                           />
                         </a>
                       ) : null}
@@ -264,8 +274,8 @@ function profile() {
                           target="no_blank"
                         >
                           <Icon
-                            icon="entypo-social:instagram-with-circle"
-                            className="text-3xl cursor-pointer"
+                            icon="ci:instagram"
+                            className="text-3xl cursor-pointer hover:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-md hover:text-white"
                           />
                         </a>
                       ) : null}
@@ -276,14 +286,14 @@ function profile() {
                         >
                           <Icon
                             icon="fe:github"
-                            className="text-3xl cursor-pointer"
+                            className="text-3xl cursor-pointer hover:text-gray-700 hover:scale-110"
                           />
                         </a>
                       ) : null}
                     </div>
                   </div>
 
-                  <div className="flex md:hidden justify-start items-center flex-wrap gap-1 mt-4">
+                  <div className="flex md:hidden justify-start items-center flex-wrap gap-1">
                     {skillArray?.map((skills, id) => (
                       <div
                         className="bg-blue-600 rounded-xl px-3 py-1 text-white tracking-wider"
@@ -297,7 +307,9 @@ function profile() {
               </div>
               <div className="profile_buttons flex justify-between items-center text-center gap-2 font-semibold ">
                 <button
-                  className="w-1/2 md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1"
+                  className={`${
+                    isLoggedIn ? "w-1/2" : "w-full"
+                  } md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1 hover:scale-105 hover:shadow-lg`}
                   onClick={() => setIsModal(true)}
                 >
                   <Icon icon="entypo:mail" className="text-2xl text-blue-500" />
@@ -305,7 +317,7 @@ function profile() {
                 </button>
                 {isLoggedIn ? (
                   <a
-                     href={`/projectform?referer=${userData._id}`}
+                    href={`/projectform?referer=${userData._id}`}
                     className="md:hidden w-1/2 rounded-md bg-white p-2 flex items-center justify-center gap-1"
                   >
                     <Icon
@@ -344,8 +356,8 @@ function profile() {
             </div>
           </div>
         </div>
-        {projectsArray != 0 ? (
-          <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
+        {projectsArray?.length != 0 ? (
+          <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap">
             {projectsArray?.map((projects, index) => {
               return <ProjectItem project={projects} key={index} />;
             })}
@@ -363,19 +375,37 @@ function profile() {
             ) : null}
           </div>
         ) : (
-          <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 mt-3 px-5 justify-center flex-wrap">
+          <div className="profile_projectSection w-full h-fit max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap">
             {isLoggedIn ? (
-              <a
-                href={`/projectform?referer=${userData._id}`}
-                className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full h-72 mt-2.5 flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
-              >
-                <Icon
-                  icon="carbon:add"
-                  className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
-                />
-                New project
-              </a>
-            ) : null}
+              <>
+                <a
+                  href={`/projectform?referer=${userData._id}`}
+                  className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full h-72 mt-2.5 md:flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3 hidden"
+                >
+                  <Icon
+                    icon="carbon:add"
+                    className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
+                  />
+                  New project
+                </a>
+                <div className="w-full flex flex-col justify-center items-center md:hidden">
+                  <img
+                    src="../images/no_project.svg"
+                    className="mt-5 md:w-1/2"
+                  />
+                  <h2 className="text-slate-500 text-xl md:text-3xl mb-4">
+                    No Projects Found 😢
+                  </h2>
+                </div>
+              </>
+            ) : (
+              <div className="w-full flex flex-col justify-center items-center">
+                <img src="../images/no_project.svg" className="mt-5 md:w-1/2" />
+                <h2 className="text-slate-500 text-xl md:text-3xl mb-4">
+                  No Projects Found 😢
+                </h2>
+              </div>
+            )}
           </div>
         )}
       </div>

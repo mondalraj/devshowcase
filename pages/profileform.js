@@ -39,7 +39,7 @@ function ProfileForm() {
         if (data.status == "fail") {
           router.push("/login");
         } else if (data.user.profile_id) {
-          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
+          router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
         } else {
           setUserId(data.user._id);
         }
@@ -128,7 +128,7 @@ function ProfileForm() {
               }
               width={125}
               height={118}
-              className="rounded-full drop-shadow-lg cursor-pointer"
+              className="rounded-full drop-shadow-lg cursor-pointer object-cover"
             />
           </label>
           <input
@@ -162,7 +162,7 @@ function ProfileForm() {
                   }
                   width={125}
                   height={118}
-                  className="rounded-full drop-shadow-lg cursor-pointer ml-2"
+                  className="rounded-full drop-shadow-lg cursor-pointer ml-2 object-cover"
                 />
               </label>
               <input

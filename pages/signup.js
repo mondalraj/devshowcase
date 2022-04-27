@@ -23,7 +23,7 @@ export default function Signup() {
         if (data.status == "fail") {
           router.push("/signup");
         } else if (data.user.profile_id) {
-          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
+          router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
         } else {
           router.push("/profileform");
         }
@@ -62,9 +62,9 @@ export default function Signup() {
         <Head>
           <title>Signup Page</title>
           <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        ></link>
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+            rel="stylesheet"
+          ></link>
         </Head>
 
         <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl font-dm">

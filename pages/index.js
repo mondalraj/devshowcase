@@ -36,7 +36,7 @@ export default function Home() {
           />
         </a>
         {isLoggedIn == true ? (
-          <Link href={`/profile/${user.profile_id}`}>
+          <Link href={`/profile/${user.profile_id._id}`}>
             <div className="flex gap-2 items-end">
               <button
                 className="hidden sm:block text-lg"

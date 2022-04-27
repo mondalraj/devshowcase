@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 
-function CommentSection({ image, projectId, comments, setComments }) {
+function CommentSection({ projectId, comments, setComments }) {
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [profileId, setProfileId] = useState("");
+  const [profileData, setProfileData] = useState({});
   const [text, setText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
 
@@ -30,10 +30,10 @@ function CommentSection({ image, projectId, comments, setComments }) {
     const userData = await userResponse.json();
     if (
       userData.user != undefined &&
-      userData.user.profile_id &&
+      userData.user.profile_id._id &&
       userData.status == "success"
     ) {
-      setProfileId(userData.user.profile_id);
+      setProfileData(userData.user.profile_id);
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -46,7 +46,7 @@ function CommentSection({ image, projectId, comments, setComments }) {
     const res = await fetch("/api/comment", {
       method: "POST",
       body: JSON.stringify({
-        profile_id: profileId,
+        profile_id: profileData._id,
         project_id: projectId,
         content: text,
       }),
@@ -73,7 +73,7 @@ function CommentSection({ image, projectId, comments, setComments }) {
       </h1>
       {isLoggedIn && (
         <div className="flex items-center w-full">
-          <CommentImage size="commentImage" image={image} />
+          <CommentImage size="commentImage" image={profileData.image} />
           <div className="relative flex flex-col w-full ml-3">
             <div className="flex items-center">
               <input
@@ -83,10 +83,7 @@ function CommentSection({ image, projectId, comments, setComments }) {
                 onInput={(e) => setText(e.target.value)}
                 className="outline-none border-b-2 border-black/25 w-full p-2"
                 required
-              />
-              <Icon
-                icon="akar-icons:send"
-                className="text-2xl text-blue-500 cursor-pointer"
+                onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
               />
             </div>
             {isEmojiPicker && (
@@ -120,28 +117,25 @@ function CommentSection({ image, projectId, comments, setComments }) {
       )}
       <div className="my-6">
         {comments.length != undefined &&
-          comments.map((comment, index) => {
-            return (
-              <div
-                className="flex  mb-2"
-                key={index}
-              >
-                <div className="flex flex-col">
-                  <CommentImage
-                    size="commentImage"
-                    image={comment.profile_pic}
-                  />
-                  
+          comments
+            .slice(0)
+            .reverse()
+            .map((comment, index) => {
+              return (
+                <div className="flex  mb-2" key={index}>
+                  <div className="flex flex-col">
+                    <CommentImage
+                      size="commentImage"
+                      image={comment.profile_pic}
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="font-medium">{comment.profile_name}</h3>
+                    <p className="w-3/4">{comment.content}</p>
+                  </div>
                 </div>
-                <div className="ml-3">
-                <h3 className="font-medium text-center">
-                    {comment.profile_name}
-                  </h3>
-                <p className="w-3/4">{comment.content}</p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
       </div>
     </>
   );
