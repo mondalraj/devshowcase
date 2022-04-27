@@ -147,7 +147,6 @@ function Project() {
             </p>
             <div className="mb-20 w-full">
               <CommentSection
-                image={profileData.image}
                 projectId={router.query.id}
                 comments={comments}
                 setComments={setComments}

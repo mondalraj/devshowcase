@@ -3,6 +3,11 @@ import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 import User from "../../models/user";
+import validator from "validator";
+
+const getHostname = (url) => {
+  return new URL(url).hostname;
+};
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
@@ -15,16 +20,32 @@ const handler = async (req, res) => {
       live_link,
       profile_id,
     } = req.body;
-    const new_project = new Project({
-      name,
-      description,
-      images,
-      tags,
-      github_link,
-      live_link,
-      profile_id,
-    });
+
     try {
+      if (
+        live_link &&
+        !validator.isURL(live_link, { require_protocol: true })
+      ) {
+        throw Error("Live website link is not a valid URL");
+      }
+
+      if (
+        github_link &&
+        !validator.isURL(github_link, { require_protocol: true }) &&
+        getHostname(github_link) != "github.com"
+      ) {
+        throw Error("This is not a valid URL or github link");
+      }
+
+      const new_project = new Project({
+        name,
+        description,
+        images,
+        tags,
+        github_link,
+        live_link,
+        profile_id,
+      });
       const newProject = await new_project.save();
       const userProfile = await Profile.findByIdAndUpdate(
         { _id: profile_id },
@@ -45,7 +66,7 @@ const handler = async (req, res) => {
         userProfile: userProfile,
       });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: `Project ${error.message}` });
     }
   } else if (req.method === "GET") {
     const { project_id } = req.headers;

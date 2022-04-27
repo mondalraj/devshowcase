@@ -5,12 +5,6 @@ function HireUsModal({ setModal, fromEmail }) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   setEmail("");
-  //   setMessage("");
-  // };
-
   return (
     <div
       className="bg-black/30 flex fixed z-50 w-full h-full justify-center items-center"
@@ -18,16 +12,16 @@ function HireUsModal({ setModal, fromEmail }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-blue-500 md:w-1/3 w-5/6 h-2/5 md:h-1/2 rounded-xl px-5 flex flex-col justify-center items-center"
+        className="bg-blue-500 md:w-1/3 w-5/6 h-[30rem] md:h-1/2 rounded-xl px-5 flex flex-col justify-center items-center"
       >
         <h1 className="font-bold text-3xl text-white pt-5 pb-2 tracking-wider">
           Get in Touch!
         </h1>
-        <h3 className="text-lg text-white mb-1 md:tracking-wide">
+        <h3 className="text-base md:text-lg text-white mb-1 md:tracking-wide">
           Have an enquiry or feedback for me? <br />
           Fill out the form below to contact me
         </h3>
-        <div className="w-5/6 h-3/4 bg-slate-50 translate-y-5 rounded-md">
+        <div className="w-5/6 h-[18rem] bg-slate-50 translate-y-5 rounded-md">
           <div className="pb-5 px-5 pt-3">
             <label htmlFor="email" className="block mb-2 text-sm font-medium">
               Mail

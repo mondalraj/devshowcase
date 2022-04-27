@@ -1,27 +1,12 @@
 import Link from "next/link";
 
 function ProjectItem({ project }) {
-  // const [projectData, setProjectData] = useState({});
-  // useEffect(async () => {
-  //   const res = await fetch("/api/projects", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //       project_id: id,
-  //     },
-  //   });
-  //   const data = await res.json();
-
-  //   if (data) {
-  //     setProjectData(data.project);
-  //   }
-  // }, []);
   var projectImage = project.images || [];
 
   return (
     <Link href={`/project/${project._id}`}>
       <div
-        className="w-full sm:w-[22rem] my-2 h-72 bg-slate-200 rounded-md relative bg-cover bg-no-repeat cursor-pointer"
+        className="w-full sm:w-[22rem] my-2 h-72 bg-slate-200 rounded-md relative bg-cover bg-no-repeat cursor-pointer shadow-xl  hover:scale-105 transition-scale duration-300 overflow-hidden"
         style={{
           backgroundImage: `url(https://res.cloudinary.com/devshowcase/image/upload/${projectImage[0]})`,
         }}
