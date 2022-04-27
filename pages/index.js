@@ -62,26 +62,26 @@ export default function Home() {
         )}
       </nav>
       <header className="relative h-screen">
-        <video
+        {/* <video
           className="object-cover h-full w-full absolute -z-10"
           src="../video.mp4"
           autoPlay
           loop
           muted
-        />
-        <div className="h-full w-full absolute -z-9 bg-gradient-to-l from-[#fff]/30 to-[#000]/40"></div>
-        <div className="text-white flex justify-center items-center h-full w-full flex-col z-10">
-          <h2 className="text-5xl font-semibold z-50">
+        /> */}
+        <div className="h-full w-full absolute -z-9 bg-gradient-to-l"></div>
+        <div className="text-black  flex justify-center items-center h-full w-full flex-col z-10">
+          <h2 className="text-black text-5xl font-semibold z-50">
             &lt; Portfolio for Developers /&gt;
           </h2>
-          <h4 className="text-center text-xl max-w-4xl text-[#e4ebff] py-8 z-50">
+          <h4 className="text-black text-center text-xl max-w-4xl py-8 z-50">
             This is where people who code, can connect, can showcase their
             development projects in front of whole coder's community.
             <br />
             Get hired by startups to build your developer expertise.
           </h4>
           <Link href="/signup">
-            <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-10 py-3 text-xl rounded-md mt-8 z-50 cursor-pointer">
+            <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-10 py-3 text-xl rounded-md mt-8 z-50 cursor-pointer text-white">
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}
             </div>
           </Link>
