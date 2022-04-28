@@ -5,6 +5,8 @@ import ParticleBackground from "../components/particleBackground";
 import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
 import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ProfileForm() {
   const [acceptedFile, setAcceptedFile] = useState([]);
@@ -87,9 +89,8 @@ function ProfileForm() {
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
-          alert(data.error);
+          toast.error(data.error);
         } else {
-          alert(data.message);
           router.push(`/profile/${data.userProfile._id}`);
         }
       });
@@ -105,14 +106,11 @@ function ProfileForm() {
   };
 
   return (
-    <div className="font-dm">
+    <div>
       <Head>
         <title>Profile Form</title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        ></link>
       </Head>
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="bg-gray-300 w-full h-full flex flex-col items-center justify-center">
         <div className="md:h-24 h-10 w-full">
