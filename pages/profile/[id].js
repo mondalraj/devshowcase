@@ -74,13 +74,8 @@ function profile() {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          alert(data.message);
-          router.push("/login");
-        }
+      .then(() => {
+        router.push("/login");
       });
   }
 
@@ -88,10 +83,6 @@ function profile() {
     <div className="profile">
       <Head>
         <title>{userData.name}</title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        ></link>
       </Head>
       {isModal && (
         <HireUsModal setModal={setIsModal} fromEmail={userData.user_id.email} />

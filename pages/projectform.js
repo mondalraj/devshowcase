@@ -5,6 +5,8 @@ import ImageUpload from "../components/imageUpload";
 import ProjectTagsInput from "../components/projectTagsInput";
 import uploadImage from "../utils/Image";
 import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function projectform() {
   const [projectData, setProjectData] = useState({
@@ -76,20 +78,16 @@ export default function projectform() {
     const data = await res.json();
 
     if (data.error) {
-      alert(data.error);
+      toast.error(data.error);
     } else {
       router.push(`/project/${data.project._id}`);
     }
   };
 
   return (
-    <div className="font-dm">
+    <div>
       <Head>
         <title>Project Form</title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        ></link>
       </Head>
       <div className="w-full bg-zinc-400/50 h-10 flex items-center justify-end">
         <Icon
@@ -98,6 +96,7 @@ export default function projectform() {
           onClick={() => router.back()}
         />
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-4xl my-5 text-blue-500 font-bold">
           Add a new project

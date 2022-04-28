@@ -1,5 +1,7 @@
 import { Icon } from "@iconify/react";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ImageUpload({ SetFiles, filesArray }) {
   const handleImageChange = (e) => {
@@ -7,7 +9,7 @@ export default function ImageUpload({ SetFiles, filesArray }) {
 
     if (files) {
       if (files.length + filesArray.length > 4) {
-        alert("You are only allowed to upload a maximum of 4 files");
+        toast.warning("You are only allowed to upload a maximum of 4 files");
         return;
       }
 

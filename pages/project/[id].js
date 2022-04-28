@@ -7,12 +7,15 @@ import ImageSlider from "../../components/imageSlider";
 import HireUsModal from "../../components/hireUsModal";
 import { useRouter } from "next/router";
 import CommentSection from "../../components/commentSection";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Project() {
   const [isModal, setIsModal] = useState(false);
   const [projectData, setProjectData] = useState({});
   const [profileData, setProfileData] = useState({});
   const [comments, setComments] = useState([]);
+  const [like, setLike] = useState(false);
 
   const router = useRouter();
 
@@ -43,14 +46,9 @@ function Project() {
   var tagsArray = projectData.tags;
 
   return (
-    <div className="relative font-dm">
+    <div className="relative ">
       <Head>
         <title>Project - {projectData.name}</title>
-
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        ></link>
       </Head>
       {isModal && (
         <HireUsModal
@@ -104,10 +102,23 @@ function Project() {
           </div>
           <div className="flex items-center">
             <div className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md">
-              <Icon icon="icon-park-outline:like" className="text-3xl" />
+              {like ? (
+                <Icon
+                  icon="flat-color-icons:like"
+                  className="text-3xl"
+                  onClick={() => setLike(false)}
+                />
+              ) : (
+                <Icon
+                  icon="icon-park-outline:like"
+                  className="text-3xl"
+                  onClick={() => setLike(true)}
+                />
+              )}
             </div>
             <div className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md">
               <Clipboard router={router} />
+              <ToastContainer position="top-right" autoClose={3000} />
             </div>
           </div>
         </div>
@@ -129,7 +140,7 @@ function Project() {
               </button>
             )}
           </div>
-          <div className="m-3 flex flex-col md:m-0 items-center md:w-2/3 w-full">
+          <div className="m-3 flex flex-col md:m-0 items-center md:w-4/5 w-full">
             <div className="flex justify-start p-1 md:p-1.5 flex-wrap font-medium">
               {tagsArray?.map((tag, id) => {
                 return (
@@ -142,7 +153,7 @@ function Project() {
                 );
               })}
             </div>
-            <p className="flex justify-start px-1.5 pb-10 text-lg md:text-base border-b-2 border-b-slate-300">
+            <p className="flex justify-start px-4 pb-10 text-lg md:text-base border-b-2 border-b-slate-300">
               {projectData.description}
             </p>
             <div className="mb-20 w-full">

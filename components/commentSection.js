@@ -57,9 +57,7 @@ function CommentSection({ projectId, comments, setComments }) {
 
     const data = await res.json();
 
-    if (data.error) {
-      alert(data.error);
-    } else {
+    if (data.status == "success") {
       setComments([...comments, data.comment]);
       setText("");
       setIsEmojiPicker(false);
@@ -72,7 +70,7 @@ function CommentSection({ projectId, comments, setComments }) {
         Comments ({comments.length})
       </h1>
       {isLoggedIn && (
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full px-4 md:px-0">
           <CommentImage size="commentImage" image={profileData.image} />
           <div className="relative flex flex-col w-full ml-3">
             <div className="flex items-center">
@@ -115,7 +113,7 @@ function CommentSection({ projectId, comments, setComments }) {
           </div>
         </div>
       )}
-      <div className="my-6">
+      <div className="my-6 px-4 md:px-0">
         {comments.length != undefined &&
           comments
             .slice(0)
@@ -131,7 +129,7 @@ function CommentSection({ projectId, comments, setComments }) {
                   </div>
                   <div className="ml-3">
                     <h3 className="font-medium">{comment.profile_name}</h3>
-                    <p className="w-3/4">{comment.content}</p>
+                    <p className="w-full">{comment.content}</p>
                   </div>
                 </div>
               );
