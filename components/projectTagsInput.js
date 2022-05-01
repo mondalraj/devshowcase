@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ProjectTagsInput({ tags, setTags, profileFormTags }) {
   const [tagInput, setTagInput] = useState("");
@@ -13,11 +15,13 @@ function ProjectTagsInput({ tags, setTags, profileFormTags }) {
       !tags.includes(trimmedInput)
     ) {
       setTagInput("");
+      console.log("hello");
       if (tags.length > 6 && profileFormTags == false) {
-        alert("Don't allow to add more tags");
+        toast.warning("Don't allow to add more tags");
         return;
       } else if (tags.length > 4 && profileFormTags == true) {
-        alert("Don't allow to add more tags");
+        toast.warning("Don't allow to add more tags");
+        e.preventDefault();
         return;
       }
       e.preventDefault();
@@ -36,6 +40,7 @@ function ProjectTagsInput({ tags, setTags, profileFormTags }) {
           Add tags related to project
         </h2>
       ) : null}
+      <ToastContainer position="top-right" autoClose={3000} />
       {!profileFormTags ? (
         <div className="flex flex-col items-start md:items-center justify-center my-3 mx-5">
           <input

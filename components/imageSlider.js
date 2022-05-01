@@ -13,7 +13,7 @@ function ImageSlider({ images }) {
     stopOnHover: true,
   };
   return (
-    <div className="w-full flex items-center">
+    <div className="w-full flex items-center drop-shadow-2xl	 md:mb-3 rounded-lg">
       <Carousel {...settings}>
         {images?.map((image, id) => {
           return (

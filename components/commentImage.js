@@ -5,8 +5,8 @@ function CommentImage({ size, image }) {
     <div
       className={
         size == "headerImage"
-          ? "w-[7.5rem] md:w-[5rem]"
-          : "w-[5rem] md:w-[4rem]"
+          ? "w-[7.5rem] md:w-[5rem]  "
+          : "w-[3.5rem] md:w-[4rem]  "
       }
     >
       <Image
