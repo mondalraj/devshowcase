@@ -1,8 +1,18 @@
 import "tailwindcss/tailwind.css";
 import "../global.css";
+import NextNProgress from "nextjs-progressbar";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+const { AnimatePresence } = require("framer-motion");
+
+function App({ Component, pageProps, router }) {
+  return (
+    <>
+      <NextNProgress height={5} stopDelayMs={200} />
+      <AnimatePresence exitBeforeEnter>
+        <Component {...pageProps} key={router.route} />
+      </AnimatePresence>
+    </>
+  );
 }
 
-export default MyApp;
+export default App;

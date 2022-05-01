@@ -60,7 +60,6 @@ export default function Login() {
       <div className="flex justify-center items-center overflow-hidden min-h-screen bg-gradient-to-l from-[#0ED2F7] to-[#094FFF]">
         <Head>
           <title>Login Page</title>
-          
         </Head>
         <ToastContainer position="top-right" autoClose={3000} />
         <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl font-dm">

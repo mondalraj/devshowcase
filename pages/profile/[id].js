@@ -1,10 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Icon } from "@iconify/react";
 import ProjectItem from "../../components/ProjectItem";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import HireUsModal from "../../components/hireUsModal";
+const { motion } = require("framer-motion");
 
 function profile() {
   const [isAbout, setIsAbout] = useState(true);
@@ -66,6 +66,42 @@ function profile() {
   var skillArray = userData.skills;
   var projectsArray = userData.projects;
 
+  const variants = {
+    pageInitial: {
+      translateY: 50,
+      opacity: 0,
+    },
+    pageAnimate: {
+      translateY: 0,
+      opacity: 1,
+      transition: {
+        delay: `${projectsArray?.length + 2}`,
+        duration: 2,
+      },
+    },
+  };
+
+  const buttonVariants = {
+    pageInitial: {
+      opacity: 0,
+      transition: {
+        duration: 1,
+      },
+    },
+    pageAnimate: {
+      opacity: 1,
+      transition: {
+        duration: 1,
+      },
+    },
+    pageExit: {
+      opacity: 0,
+      transition: {
+        duration: 1,
+      },
+    },
+  };
+
   function logout() {
     fetch("/api/logout", {
       method: "GET",
@@ -107,9 +143,17 @@ function profile() {
           ) : null}
         </div>
         <div className="bg-gray-200 relative">
-          <div className="profile_mainSection max-w-screen-xl mx-auto w-full  h-auto p-5 md:py-10 md:flex justify-evenly items-start gap-8">
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            className="profile_mainSection max-w-screen-xl mx-auto w-full  h-auto p-5 md:py-10 md:flex justify-evenly items-start gap-8"
+          >
             <div className="profile_details flex justify-evenly items-center md:flex-col gap-2">
-              <img
+              <motion.img
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring" }}
                 src={
                   image
                     ? `https://res.cloudinary.com/devshowcase/image/upload/${userData.image}`
@@ -208,11 +252,19 @@ function profile() {
 
                 <div className="mt-1 mb-3">
                   {isAbout ? (
-                    <div>
+                    <motion.div
+                      animate={isAbout ? "pageAnimate" : "pageInitial"}
+                      exit="pageExit"
+                      variants={buttonVariants}
+                    >
                       <p className="text-lg my-2 md:my-0">{userData.bio}</p>
-                    </div>
+                    </motion.div>
                   ) : (
-                    <div>
+                    <motion.div
+                      animate={isAbout ? "pageInitial" : "pageAnimate"}
+                      exit="pageExit"
+                      variants={buttonVariants}
+                    >
                       <h1 className="hidden md:block font-medium text-xl">
                         Past Experience
                       </h1>
@@ -226,7 +278,7 @@ function profile() {
                             : "No work experience (Fresher)"}
                         </p>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
                   <div className="flex justify-between items-center">
                     {userData?.website ? (
@@ -320,7 +372,7 @@ function profile() {
                 ) : null}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           <div className="hidden absolute md:flex justify-evenly items-center -right-20 top-1/3 rotate-90 w-52 cursor-pointer">
             <div
@@ -350,10 +402,15 @@ function profile() {
         {projectsArray?.length != 0 ? (
           <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap">
             {projectsArray?.map((projects, index) => {
-              return <ProjectItem project={projects} key={index} />;
+              return (
+                <ProjectItem project={projects} key={index} listId={index} />
+              );
             })}
             {isLoggedIn ? (
-              <a
+              <motion.a
+                initial="pageInitial"
+                animate="pageAnimate"
+                variants={variants}
                 href={`/projectform?referer=${userData._id}`}
                 className="hidden hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-80 h-72 mt-2.5 md:flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-400 text-lg leading-6 text-slate-900 font-medium py-3"
               >
@@ -362,7 +419,7 @@ function profile() {
                   className="group-hover:text-blue-500 mb-1 text-slate-400 text-4xl"
                 />
                 New project
-              </a>
+              </motion.a>
             ) : null}
           </div>
         ) : (

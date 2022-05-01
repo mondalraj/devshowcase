@@ -128,6 +128,7 @@ export default function projectform() {
                 style={{ resize: "none" }}
                 value={projectData.desc}
                 onInput={(e) => handleChange(e)}
+                maxLength={500}
               />
             </div>
           </div>
