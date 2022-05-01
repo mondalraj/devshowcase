@@ -53,15 +53,10 @@ function ProfileForm() {
     newData[e.target.id] = e.target.value;
     setData(newData);
   }
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 
   async function submit(e) {
     e.preventDefault();
-    // console.log(acceptedFile);
     const imagesArray = await uploadImage(e, acceptedFile);
-    // await sleep(1000);
     await fetch("/api/profile", {
       method: "POST",
       body: JSON.stringify({
@@ -232,6 +227,7 @@ function ProfileForm() {
                   type="text"
                   placeholder="Tell us about yourself"
                   required
+                  maxLength={250}
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
@@ -274,6 +270,7 @@ function ProfileForm() {
                   className="bg-gray-100 w-full p-2 resize-none focus:outline-none"
                   id="work"
                   placeholder="Describe your Work"
+                  maxLength={500}
                 ></textarea>
               </div>
               <div className="mt-8 text-blue-500 text-lg lg:text-2xl font-semibold mb-5">
