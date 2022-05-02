@@ -6,11 +6,21 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GoogleLogin from "react-google-login";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  const handleLogin = (googleData) => {
+    console.log(googleData);
+    console.log(googleData.profileObj);
+  };
+
+  const handleFailure = (result) => {
+    console.log(result);
+  };
 
   useEffect(() => {
     fetch("/api/getUser", {
@@ -121,11 +131,19 @@ export default function Login() {
                 />
                 <p className="text-gray-400 mt-4">OR</p>
               </form>
-              <div className="flex justify-center items-center">
+              {/* <div className="flex justify-center items-center">
                 <button className="flex  space-x-2 mt-3 border-solid border border-[#DFD7D7] rounded-md p-2 mb-20 hover:bg-gray-100 justify-center w-3/5 items-center ">
                   <Icon icon="flat-color-icons:google" className="w-6 h-6" />
                   <p>Continue with Google</p>
                 </button>
+              </div> */}
+              <div className="flex justify-center items-center">
+                <GoogleLogin
+                  clientId="772672084858-k8ut6rdgldr401rt2joqsnt4q9uue83i.apps.googleusercontent.com"
+                  onSuccess={handleLogin}
+                  onFailure={handleFailure}
+                  // cookiePolicy={"single_host_origin"}
+                ></GoogleLogin>
               </div>
               <Link href="/signup">
                 <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold rounded-xl w-full md:w-full p-3">

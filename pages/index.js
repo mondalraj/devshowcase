@@ -51,7 +51,7 @@ export default function Home() {
         <title>Devshowcase</title>
       </Head>
       <ToastContainer position="bottom-right" autoClose={2000} />
-      <nav className="profile_navbar sticky top-0 right-0 left-0 bg-white w-screen h-16 flex justify-between items-center p-5 px-10 shadow-md z-10">
+      <nav className="profile_navbar sticky top-0 right-0 left-0 bg-white w-screen h-16 flex justify-between items-center p-5 px-4 md:px-10 shadow-md z-10">
         <a href="/">
           <img
             src="../images/logo.png"
@@ -61,7 +61,7 @@ export default function Home() {
         </a>
         {isLoggedIn == true ? (
           <div className="flex justify-center items-center gap-5">
-            <Link href={`/profile/${user.profile_id._id}`}>
+            <Link href={`/profile/${user.profile_id}`}>
               <div className="flex gap-2 items-end">
                 <button
                   className="hidden sm:block text-lg"
@@ -82,10 +82,10 @@ export default function Home() {
           </div>
         ) : (
           <div className="flex justify-center items-center gap-5">
-            <div className="cursor-pointer text-lg px-5 py-1">
+            <div className="cursor-pointer text-md md:text-xl px-2 md:px-5 py-1">
               <Link href="/login">Login</Link>
             </div>
-            <div className="cursor-pointer text-white text-lg bg-[#1b5bff] py-1 rounded-lg px-5">
+            <div className="cursor-pointer text-white text-md md:text-lg md:px-5 bg-[#1b5bff] py-1 rounded-lg px-2">
               <Link href="/signup">Sign up</Link>
             </div>
           </div>
