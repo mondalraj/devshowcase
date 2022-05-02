@@ -137,7 +137,7 @@ export default function Login() {
                   <p>Continue with Google</p>
                 </button>
               </div> */}
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center mb-20">
                 <GoogleLogin
                   clientId="772672084858-k8ut6rdgldr401rt2joqsnt4q9uue83i.apps.googleusercontent.com"
                   onSuccess={handleLogin}
