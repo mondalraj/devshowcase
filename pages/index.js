@@ -51,7 +51,7 @@ export default function Home() {
         <title>Devshowcase</title>
       </Head>
       <ToastContainer position="bottom-right" autoClose={2000} />
-      <nav className="profile_navbar absolute top-0 right-0 left-0 bg-white/60 w-screen h-16 flex justify-between items-center p-5 px-10 shadow-md z-10">
+      <nav className="profile_navbar sticky top-0 right-0 left-0 bg-white w-screen h-16 flex justify-between items-center p-5 px-10 shadow-md z-10">
         <a href="/">
           <img
             src="../images/logo.png"
@@ -91,16 +91,27 @@ export default function Home() {
           </div>
         )}
       </nav>
-      <header className="relative h-screen">
-        {/* <video
-          className="object-cover h-full w-full absolute -z-10"
-          src="../video.mp4"
-          autoPlay
-          loop
-          muted
-        /> */}
-        <div className="h-full w-full absolute -z-9 bg-gradient-to-l"></div>
-        <div className="text-black  flex justify-center items-center h-full w-full flex-col z-10">
+      <header className="flex justify-around items-center md:flex-row flex-col-reverse py-6">
+        <div className="md:w-1/2 w-full text-black space-y-10 px-6 xl:px-20">
+          <h2 className="text-3xl text-center md:text-left xl:text-5xl font-bold">
+            &lt; Developer Portfolio /&gt;
+          </h2>
+          <h4 className="text-center md:text-left text-lg md:text-xl">
+            This is where people who code, can connect, can showcase their
+            development projects in front of whole coder's community.
+            <br />
+            Get hired by startups to build your developer expertise.
+          </h4>
+          <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-8 py-2 text-md md:text-xl rounded-md mt-8 cursor-pointer text-white w-fit mx-auto md:mx-0">
+            <Link href="/signup">
+              {isLoggedIn === true ? "Go to Profile" : "Get Started"}
+            </Link>
+          </div>
+        </div>
+        <div className="w-2/3 md:w-1/2">
+          <img src="../images/hero-image.jpg" alt="Hero Image" className="" />
+        </div>
+        {/* <div className="text-black flex justify-center items-center h-full w-1/2 flex-col z-10">
           <h2 className="text-black text-5xl font-semibold z-50">
             &lt; Portfolio for Developers /&gt;
           </h2>
@@ -115,9 +126,17 @@ export default function Home() {
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}
             </div>
           </Link>
-        </div>
+        </div> */}
       </header>
-      <footer>Footer</footer>
+      <footer className="w-full border-t-2 shadow-lg py-5 px-10 flex flex-col-reverse md:flex-row gap-4 justify-between items-center bg-white mt-10 xl:mt-0">
+        <div>Devshowcase @ 2022</div>
+        <div className="flex justify-center items-center gap-4">
+          <Link href={`/`}>About</Link>
+          <Link href={`/`}>Team</Link>
+          <Link href={`/`}>Privacy</Link>
+          <Link href={`/`}>Careers</Link>
+        </div>
+      </footer>
     </>
   );
 }
