@@ -10,6 +10,7 @@ function CommentSection({ projectId, comments, setComments }) {
   const [profileData, setProfileData] = useState({});
   const [text, setText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [showButton, setShowButton] = useState(false);
 
   const onEmojiClick = (emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -75,6 +76,7 @@ function CommentSection({ projectId, comments, setComments }) {
           <div className="relative flex flex-col w-full ml-3">
             <div className="flex items-center">
               <input
+                onFocus={() => setShowButton(true)}
                 type="text"
                 placeholder="Add a comment.."
                 value={text}
@@ -84,32 +86,37 @@ function CommentSection({ projectId, comments, setComments }) {
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
               />
             </div>
+
             {isEmojiPicker && (
               <div className="absolute top-24 left-6">
                 <Picker onSelect={onEmojiClick} set="apple" />
               </div>
             )}
-            <div className="flex justify-between items-center mt-4">
-              <Icon
-                icon="fluent:emoji-add-24-regular"
-                className="hidden md:flex text-slate-400 text-3xl cursor-pointer"
-                onClick={() => setIsEmojiPicker(!isEmojiPicker)}
-              />
-              <div className="flex">
-                <button
-                  className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer"
-                  onClick={() => setText("")}
-                >
-                  CANCEL
-                </button>
-                <button
-                  className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer"
-                  onClick={(e) => handleSubmit(e)}
-                >
-                  COMMENT
-                </button>
+            {showButton && (
+              <div className="flex justify-between items-center mt-4">
+                <Icon
+                  icon="fluent:emoji-add-24-regular"
+                  className="hidden md:flex text-slate-400 text-3xl cursor-pointer"
+                  onClick={() => setIsEmojiPicker(!isEmojiPicker)}
+                />
+                <div className="flex">
+                  <button
+                    className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer"
+                    onClick={() => {
+                      setText(""), setShowButton(false);
+                    }}
+                  >
+                    CANCEL
+                  </button>
+                  <button
+                    className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer"
+                    onClick={(e) => handleSubmit(e)}
+                  >
+                    COMMENT
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

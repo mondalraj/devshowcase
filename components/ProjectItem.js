@@ -17,6 +17,13 @@ function ProjectItem({ project, listId }) {
         duration: 1,
       },
     },
+    pageExit: {
+      opacity: 0,
+      translateY: 50,
+      transition: {
+        duration: 1,
+      },
+    },
   };
 
   return (
@@ -24,6 +31,7 @@ function ProjectItem({ project, listId }) {
       <motion.div
         initial="pageInitial"
         animate="pageAnimate"
+        exit="pageExit"
         whileHover={{ scale: 1.05, duration: 0.2 }}
         variants={variants}
         // transition={{ duration: 1 }}

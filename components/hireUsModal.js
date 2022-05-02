@@ -7,12 +7,12 @@ function HireUsModal({ setModal, fromEmail }) {
 
   return (
     <div
-      className="bg-black/30 flex fixed z-50 w-full h-full justify-center items-center"
+      className="bg-black/30 flex  z-50 w-full h-full justify-center absolute"
       onClick={() => setModal(false)}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-blue-500 md:w-1/3 w-5/6 h-[30rem] md:h-1/2 rounded-xl px-5 flex flex-col justify-center items-center"
+        className="bg-blue-500 md:w-1/3 w-5/6 h-[30rem]  rounded-xl px-5 flex flex-col justify-center items-center top-[20vh] relative"
       >
         <h1 className="font-bold text-3xl text-white pt-5 pb-2 tracking-wider">
           Get in Touch!

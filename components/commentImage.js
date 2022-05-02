@@ -1,8 +1,12 @@
 import Image from "next/image";
+const { motion } = require("framer-motion");
 
 function CommentImage({ size, image }) {
   return (
-    <div
+    <motion.div
+    // initial = {{scale: 0}}
+      animate={{ scale: [0,1.4,1] }}
+      transition = {{type: 'spring', delay: 1}}
       className={
         size == "headerImage"
           ? "w-[7.5rem] md:w-[5rem]  "
@@ -19,7 +23,7 @@ function CommentImage({ size, image }) {
         height={100}
         className="rounded-full object-cover object-top"
       />
-    </div>
+    </motion.div>
   );
 }
 
