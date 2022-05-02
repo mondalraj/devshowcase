@@ -142,7 +142,7 @@ export default function Login() {
                   clientId="772672084858-k8ut6rdgldr401rt2joqsnt4q9uue83i.apps.googleusercontent.com"
                   onSuccess={handleLogin}
                   onFailure={handleFailure}
-                  // cookiePolicy={"single_host_origin"}
+                  cookiePolicy={"single_host_origin"}
                 ></GoogleLogin>
               </div>
               <Link href="/signup">

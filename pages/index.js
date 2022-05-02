@@ -46,7 +46,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="overflow-hidden">
       <Head>
         <title>Devshowcase</title>
       </Head>
@@ -121,6 +121,6 @@ export default function Home() {
           <Link href={`/`}>Careers</Link>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
