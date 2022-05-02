@@ -85,7 +85,7 @@ export default function Signup() {
                     className="w-3/5 md:w-4/5 mt-3"
                   />
                 </a>
-                <h1 className="font-bold text-2xl md:text-xl">
+                <h1 className="font-bold text-xl md:text-xl">
                   Create a new Account
                 </h1>
                 <div className="p-4 m-6 text-center space-y-5">
@@ -101,7 +101,7 @@ export default function Signup() {
                       onChange={(e) => setEmail(e.target.value)}
                       name="email"
                       placeholder="Your Email"
-                      className="md:ml-5 focus:outline-none"
+                      className="md:ml-5 focus:outline-none ml-8"
                     />
                   </div>
 
@@ -118,7 +118,7 @@ export default function Signup() {
                       name="username"
                       id="username"
                       placeholder="Your Username"
-                      className="md:ml-5 focus:outline-none"
+                      className="md:ml-5 focus:outline-none ml-8"
                     />
                   </div>
 
@@ -135,10 +135,10 @@ export default function Signup() {
                       name="password"
                       id="password"
                       placeholder="Create Password"
-                      className="md:ml-5 focus:outline-none"
+                      className="md:ml-5 focus:outline-none ml-8"
                     />
                   </div>
-                  <p className="text-[#8C8C8C] text-md md:text-xs md:font-semibold">
+                  <p className="text-[#8C8C8C] text-sm md:text-xs md:font-semibold">
                     By signing up, confirm that you’ve read and accepted our{" "}
                     <a className="text-[#3770FF]">User Notice</a> and{" "}
                     <a className="text-[#3770FF]">Privacy Policy</a>
@@ -156,12 +156,13 @@ export default function Signup() {
                   <Icon icon="flat-color-icons:google" className="w-6 h-6" />
                   <p>Continue with Google</p>
                 </button>
-              </div>
+                
               <Link href="/login">
-                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold rounded-xl w-full md:w-full p-3">
+                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold text-sm rounded-xl w-max md:w-full p-3 ">
                   Already having an account? Log In
                 </button>
               </Link>
+              </div>
             </div>
           </div>
         </div>

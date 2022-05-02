@@ -126,12 +126,13 @@ export default function Login() {
                   <Icon icon="flat-color-icons:google" className="w-6 h-6" />
                   <p>Continue with Google</p>
                 </button>
-              </div>
+             
               <Link href="/signup">
-                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold rounded-xl w-full md:w-full p-3">
+                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold text-sm rounded-xl w-max md:w-full p-3">
                   Not having an account? Sign Up
                 </button>
               </Link>
+            </div>
             </div>
             <div className="hidden md:block w-3/5 ">
               <img
