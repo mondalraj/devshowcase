@@ -79,6 +79,7 @@ function profile() {
         duration: 2,
       },
     },
+    
   };
 
   const buttonVariants = {

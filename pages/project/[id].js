@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import CommentSection from "../../components/commentSection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const { motion } = require("framer-motion");
 
 function Project() {
   const [isModal, setIsModal] = useState(false);
@@ -45,8 +46,38 @@ function Project() {
 
   var tagsArray = projectData.tags;
 
+  const variants = {
+    pageInitial: {
+      translateY: "-100vh",
+      opacity: 0,
+    },
+    pageAnimate: {
+      translateY: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeIn",
+      },
+    },
+    pageExit: {
+      translateY: "100vh",
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <div className="relative ">
+    <motion.div
+      variants={variants}
+      initial="pageInitial"
+      animate="pageAnimate"
+      exit="pageExit"
+      className="overflow-hidden relative"
+    >
+      <ToastContainer position="top-right" autoClose={3000} />
       <Head>
         <title>Project - {projectData.name}</title>
       </Head>
@@ -101,7 +132,10 @@ function Project() {
             </div>
           </div>
           <div className="flex items-center">
-            <div className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md">
+            <motion.div
+              whileTap={{ scale: 1.5 }}
+              className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md"
+            >
               {like ? (
                 <Icon
                   icon="flat-color-icons:like"
@@ -115,25 +149,22 @@ function Project() {
                   onClick={() => setLike(true)}
                 />
               )}
-            </div>
-            <div className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md">
-              <Clipboard router={router} />
-              <ToastContainer position="top-right" autoClose={3000} />
-            </div>
+            </motion.div>
+            <Clipboard router={router} />
           </div>
         </div>
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="w-full flex flex-col justify-center items-center ">
           <ImageSlider images={projectData.images} />
-          <div className="flex md:hidden w-full">
+          <div className="flex md:hidden w-full -mt-1.5">
             {projectData.live_link != "" && (
-              <button className="bg-blue-500 w-1/2 p-3 font-bold text-lg text-white cursor-pointer">
+              <button className="bg-blue-500 w-1/2 p-1.5 font-bold text-md text-white cursor-pointer">
                 <a href={projectData.live_link} target="_blank">
                   View Live
                 </a>
               </button>
             )}
             {projectData.github_link != "" && (
-              <button className="bg-zinc-200 w-1/2 p-3 font-bold text-lg text-slate-500 cursor-pointer">
+              <button className="bg-zinc-200 w-1/2  p-1.5 font-bold text-md text-slate-500 cursor-pointer">
                 <a href={projectData.github_link} target="_blank">
                   View Code
                 </a>
@@ -166,7 +197,7 @@ function Project() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
