@@ -53,7 +53,7 @@ export default function Signup() {
     if (data.status === "success") {
       router.push("/profileform");
     } else {
-      toast.error(data.message ? data.message : "Something went wrong")
+      toast.error(data.message ? data.message : "Something went wrong");
     }
   }
 
@@ -77,11 +77,13 @@ export default function Signup() {
               className="flex flex-col items-center w-full md:w-2/5 p-5 relative"
               onSubmit={registerUser}
             >
-              <img
-                src="/images/logo.png"
-                alt=""
-                className="w-3/5 md:w-4/5 mt-3"
-              />
+              <a href="/">
+                <img
+                  src="/images/logo.png"
+                  alt=""
+                  className="w-3/5 md:w-4/5 mt-3"
+                />
+              </a>
               <h1 className="font-bold text-2xl md:text-xl">
                 Create a new Account
               </h1>

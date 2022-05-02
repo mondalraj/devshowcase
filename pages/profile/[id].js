@@ -79,7 +79,6 @@ function profile() {
         duration: 2,
       },
     },
-    
   };
 
   const buttonVariants = {
@@ -112,7 +111,7 @@ function profile() {
     })
       .then((response) => response.json())
       .then(() => {
-        router.push("/login");
+        router.push("/");
       });
   }
 

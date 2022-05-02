@@ -68,11 +68,13 @@ export default function Login() {
               className="flex flex-col items-center w-full md:w-2/5 p-5 relative"
               onSubmit={loginUser}
             >
-              <img
-                src="/images/logo.png"
-                alt=""
-                className="w-3/5 md:w-4/5 mt-3"
-              />
+              <a href="/">
+                <img
+                  src="/images/logo.png"
+                  alt=""
+                  className="w-3/5 md:w-4/5 mt-3"
+                />
+              </a>
               <h1 className="font-bold text-2xl md:text-xl">
                 Login to your Account
               </h1>

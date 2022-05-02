@@ -1,11 +1,31 @@
 import { Icon } from "@iconify/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+
+  const router = useRouter();
+
+  function logout() {
+    fetch("/api/logout", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setIsLoggedIn(false);
+        // router.push("/");
+        toast.success("Successfully Logged Out");
+      });
+  }
 
   useEffect(() => {
     fetch("/api/getUser", {
@@ -27,6 +47,10 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>Devshowcase</title>
+      </Head>
+      <ToastContainer position="bottom-right" autoClose={2000} />
       <nav className="profile_navbar absolute top-0 right-0 left-0 bg-white/60 w-screen h-16 flex justify-between items-center p-5 px-10 shadow-md z-10">
         <a href="/">
           <img
@@ -36,20 +60,26 @@ export default function Home() {
           />
         </a>
         {isLoggedIn == true ? (
-          <Link href={`/profile/${user.profile_id._id}`}>
-            <div className="flex gap-2 items-end">
-              <button
-                className="hidden sm:block text-lg"
-                onClick={() => console.log("Clicked")}
-              >
-                {user.username}
-              </button>
-              <Icon
-                icon="ic:baseline-account-circle"
-                className="text-3xl text-[#094FFF]"
-              />
+          <div className="flex justify-center items-center gap-5">
+            <Link href={`/profile/${user.profile_id._id}`}>
+              <div className="flex gap-2 items-end">
+                <button
+                  className="hidden sm:block text-lg"
+                  onClick={() => console.log("Clicked")}
+                >
+                  {user.username}
+                </button>
+                <Icon
+                  icon="ic:baseline-account-circle"
+                  className="text-3xl text-[#094FFF]"
+                />
+              </div>
+            </Link>
+            <div className="tooltip cursor-pointer" onClick={() => logout()}>
+              <Icon icon="icons8:shutdown" className="text-2xl" />
+              <span className="tooltiptext">Logout</span>
             </div>
-          </Link>
+          </div>
         ) : (
           <div className="flex justify-center items-center gap-5">
             <div className="cursor-pointer text-lg px-5 py-1">
