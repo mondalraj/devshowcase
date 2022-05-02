@@ -111,22 +111,6 @@ export default function Home() {
         <div className="w-2/3 md:w-1/2">
           <img src="../images/hero-image.jpg" alt="Hero Image" className="" />
         </div>
-        {/* <div className="text-black flex justify-center items-center h-full w-1/2 flex-col z-10">
-          <h2 className="text-black text-5xl font-semibold z-50">
-            &lt; Portfolio for Developers /&gt;
-          </h2>
-          <h4 className="text-black text-center text-xl max-w-4xl py-8 z-50">
-            This is where people who code, can connect, can showcase their
-            development projects in front of whole coder's community.
-            <br />
-            Get hired by startups to build your developer expertise.
-          </h4>
-          <Link href="/signup">
-            <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-10 py-3 text-xl rounded-md mt-8 z-50 cursor-pointer text-white">
-              {isLoggedIn === true ? "Go to Profile" : "Get Started"}
-            </div>
-          </Link>
-        </div> */}
       </header>
       <footer className="w-full border-t-2 shadow-lg py-5 px-10 flex flex-col-reverse md:flex-row gap-4 justify-between items-center bg-white mt-10 xl:mt-0">
         <div>Devshowcase @ 2022</div>
