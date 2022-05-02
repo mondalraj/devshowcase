@@ -1,25 +1,25 @@
 /* ===== Scrollbar CSS ===== */
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
 /* Firefox */
-/* * {
+* {
   scrollbar-width: auto;
   scrollbar-color: #3b82f6 #e8e8e8;
-} */
+}
 
 /* Chrome, Edge, and Safari */
-/* *::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 14px;
-} */
+}
 
-/* *::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: #e8e8e8;
-} */
+}
 
-/* *::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: #3b82f6;
   border-radius: 7px;
   border: 1.5px solid #ffffff;
-} */
+}
 
 body {
   font-family: "DM Sans", sans-serif;
