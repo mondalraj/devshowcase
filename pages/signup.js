@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import GoogleLogin from "react-google-login";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Signup() {
@@ -12,6 +13,36 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  const handleLogin = async (googleData) => {
+    const response = await fetch("/api/googleLogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        email: googleData.profileObj.email,
+        password: "Continued with Google",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+      if (data.user.profile_id) {
+        router.push(`/profile/${data.user.profile_id}`);
+      } else {
+        router.push("/profileform");
+      }
+    } else {
+      toast.error(data.message);
+    }
+  };
+
+  const handleFailure = (result) => {
+    toast.error(result.error);
+  };
 
   useEffect(() => {
     fetch("/api/getUser", {
@@ -152,16 +183,24 @@ export default function Signup() {
                 <p className="text-gray-400 mt-4">OR</p>
               </form>
               <div className="flex justify-center items-center">
-                <button className="flex  space-x-2 border-solid border border-[#DFD7D7] rounded-md p-2 mb-20 hover:bg-gray-100 justify-center w-3/5 items-center ">
+                {/* <button className="flex  space-x-2 border-solid border border-[#DFD7D7] rounded-md p-2 mb-20 hover:bg-gray-100 justify-center w-3/5 items-center ">
                   <Icon icon="flat-color-icons:google" className="w-6 h-6" />
                   <p>Continue with Google</p>
-                </button>
-                
-              <Link href="/login">
-                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold text-sm rounded-xl w-max md:w-full p-3 ">
-                  Already having an account? Log In
-                </button>
-              </Link>
+                </button> */}
+                <div className="flex justify-center items-center mb-20">
+                  <GoogleLogin
+                    clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                    onSuccess={handleLogin}
+                    onFailure={handleFailure}
+                    cookiePolicy={"single_host_origin"}
+                  ></GoogleLogin>
+                </div>
+
+                <Link href="/login">
+                  <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold text-sm rounded-xl w-max md:w-full p-3 ">
+                    Already having an account? Log In
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

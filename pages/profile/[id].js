@@ -4,6 +4,7 @@ import ProjectItem from "../../components/ProjectItem";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import HireUsModal from "../../components/hireUsModal";
+import { removeCookies } from "cookies-next";
 const { motion } = require("framer-motion");
 
 function profile() {
@@ -103,16 +104,18 @@ function profile() {
   };
 
   function logout() {
-    fetch("/api/logout", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then(() => {
-        router.push("/");
-      });
+    removeCookies("devshowcase_jwt");
+    router.push("/");
+    // fetch("/api/logout", {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then(() => {
+    //     router.push("/");
+    //   });
   }
 
   return (

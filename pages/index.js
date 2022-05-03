@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { removeCookies } from "cookies-next";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,18 +14,21 @@ export default function Home() {
   const router = useRouter();
 
   function logout() {
-    fetch("/api/logout", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then(() => {
-        setIsLoggedIn(false);
-        // router.push("/");
-        toast.success("Successfully Logged Out");
-      });
+    removeCookies("devshowcase_jwt");
+    setIsLoggedIn(false);
+    router.push("/");
+    // fetch("/api/logout", {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then(() => {
+    //     setIsLoggedIn(false);
+    //     // router.push("/");
+    //     toast.success("Successfully Logged Out");
+    //   });
   }
 
   useEffect(() => {
