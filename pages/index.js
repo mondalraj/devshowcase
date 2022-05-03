@@ -97,20 +97,22 @@ export default function Home() {
         )}
       </nav>
       <header className="flex justify-around items-center md:flex-row flex-col-reverse py-6 h-full">
-        <div className="md:w-1/2 w-full text-black space-y-4 px-6 xl:px-20">
+        <div className="md:w-1/2 w-full text-black space-y-6 px-6 xl:px-20">
           <h2 className="text-3xl text-center xl:text-5xl font-bold w-fit">
             &lt; Developer Portfolio /&gt;
             <div className="text-xl mt-1 text-center italic text-slate-600">
               For the developers, by the developers
             </div>
           </h2>
-          <h4 className="text-center md:text-left text-lg md:text-xl">
+          <h4 className="text-center md:text-left text-md md:text-lg">
             This is where people who code, can connect, can showcase their
             development projects in front of whole coder's community.
             <br />
-            Get hired by startups to build your developer expertise.
+            <div className="py-4 text-[#094FFF] font-semibold text-md md:text-xl">
+              Get hired by startups to build your developer expertise.
+            </div>
           </h4>
-          <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-8 py-2 text-md md:text-xl rounded-md mt-8 cursor-pointer text-white w-fit mx-auto md:mx-0">
+          <div className="bg-gradient-to-l from-[#00badf] to-[#0062ff] px-8 py-2 text-md md:text-xl rounded-md mt-8 cursor-pointer text-white w-fit mx-auto md:mx-0">
             <Link
               href={
                 user.profile_id ? `/profile/${user.profile_id._id}` : "/signup"
