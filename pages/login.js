@@ -13,9 +13,30 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleLogin = (googleData) => {
-    console.log(googleData);
-    console.log(googleData.profileObj);
+  const handleLogin = async (googleData) => {
+    const response = await fetch("/api/googleLogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        email: googleData.profileObj.email,
+        password: "Continued with Google",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+      if (data.user.profile_id) {
+        router.push(`/profile/${data.user.profile_id}`);
+      } else {
+        router.push("/profileform");
+      }
+    } else {
+      toast.error(data.message);
+    }
   };
 
   const handleFailure = (result) => {
