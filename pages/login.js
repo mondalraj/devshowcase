@@ -40,7 +40,8 @@ export default function Login() {
   };
 
   const handleFailure = (result) => {
-    toast.error(result.error);
+    // toast.error(result.error);
+    console.log(result);
   };
 
   useEffect(() => {
