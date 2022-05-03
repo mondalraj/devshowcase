@@ -190,6 +190,7 @@ export default function Signup() {
                 <div className="flex justify-center items-center mb-20">
                   <GoogleLogin
                     clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                    buttonText="Continue With Google"
                     onSuccess={handleLogin}
                     onFailure={handleFailure}
                     cookiePolicy={"single_host_origin"}
