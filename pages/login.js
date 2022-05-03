@@ -95,7 +95,7 @@ export default function Login() {
         <ToastContainer position="top-right" autoClose={3000} />
         <div className="flex flex-row justify-center items-center bg-white w-11/12 lg:w-3/5 xl:h-1/2 shadow-2xl rounded-xl font-dm">
           <div className="md:flex flex-row md:justify-between ">
-            <div className="flex flex-col grow relative">
+            <div className="flex flex-col grow relative justify-between">
               <form
                 className="flex flex-col items-center w-full md:w-full p-5 relative"
                 onSubmit={loginUser}
@@ -151,6 +151,16 @@ export default function Login() {
                   className="bg-[#3770FF] w-3/4 text-white p-2 rounded-lg cursor-pointer hover:bg-[#2160ff]"
                 />
                 <p className="text-gray-400 mt-4">OR</p>
+                <div className="flex justify-center items-center mb-20">
+                  <GoogleLogin
+                    clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                    buttonText="Continue With Google"
+                    className="googleButton"
+                    onSuccess={handleLogin}
+                    onFailure={handleFailure}
+                    cookiePolicy={"single_host_origin"}
+                  ></GoogleLogin>
+                </div>
               </form>
               {/* <div className="flex justify-center items-center">
                 <button className="flex  space-x-2 mt-3 border-solid border border-[#DFD7D7] rounded-md p-2 mb-20 hover:bg-gray-100 justify-center w-3/5 items-center ">
@@ -158,16 +168,8 @@ export default function Login() {
                   <p>Continue with Google</p>
                 </button>
               </div> */}
-              <div className="flex justify-center items-center mb-20">
-                <GoogleLogin
-                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-                  onSuccess={handleLogin}
-                  onFailure={handleFailure}
-                  cookiePolicy={"single_host_origin"}
-                ></GoogleLogin>
-              </div>
               <Link href="/signup">
-                <button className="absolute bottom-0 bg-[#F6F6F6] text-[#3770FF] font-semibold rounded-xl w-full md:w-full p-3">
+                <button className="bg-[#F6F6F6] text-[#3770FF] font-semibold w-full p-3 rounded-md shadow-lg shadow-blue-500">
                   Not having an account? Sign Up
                 </button>
               </Link>
