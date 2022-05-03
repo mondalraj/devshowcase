@@ -119,7 +119,7 @@ function profile() {
   }
 
   return (
-    <div className="profile">
+    <div className="profile overflow-hidden relative">
       <Head>
         <title>{userData.name}</title>
       </Head>
