@@ -46,12 +46,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="overflow-hidden">
+    <div className="flex flex-col justify-between md:h-screen overflow-hidden">
       <Head>
         <title>Devshowcase</title>
       </Head>
       <ToastContainer position="bottom-right" autoClose={2000} />
-      <nav className="profile_navbar sticky top-0 right-0 left-0 bg-white w-screen h-16 flex justify-between items-center p-5 px-4 md:px-10 shadow-md z-10">
+      {/* <nav className="profile_navbar sticky top-0 right-0 left-0 bg-white w-screen h-16 flex justify-between items-center p-5 px-4 md:px-10 shadow-md z-10"> */}
+      <nav className="bg-white w-full flex justify-between items-center px-4 md:px-10 shadow-md">
         <a href="/">
           <img
             src="../images/logo.png"
@@ -61,7 +62,7 @@ export default function Home() {
         </a>
         {isLoggedIn == true ? (
           <div className="flex justify-center items-center gap-5">
-            <Link href= "/login">
+            <Link href="/login">
               <div className="flex gap-2 items-end">
                 <button
                   className="hidden sm:block text-lg"
@@ -91,10 +92,13 @@ export default function Home() {
           </div>
         )}
       </nav>
-      <header className="flex justify-around items-center md:flex-row flex-col-reverse py-6">
-        <div className="md:w-1/2 w-full text-black space-y-10 px-6 xl:px-20">
-          <h2 className="text-3xl text-center md:text-left xl:text-5xl font-bold">
+      <header className="flex justify-around items-center md:flex-row flex-col-reverse py-6 h-full">
+        <div className="md:w-1/2 w-full text-black space-y-4 px-6 xl:px-20">
+          <h2 className="text-3xl text-center xl:text-5xl font-bold w-fit">
             &lt; Developer Portfolio /&gt;
+            <h3 className="text-xl mt-1 text-center italic text-slate-600">
+              For the developers, by the developers
+            </h3>
           </h2>
           <h4 className="text-center md:text-left text-lg md:text-xl">
             This is where people who code, can connect, can showcase their
@@ -103,13 +107,17 @@ export default function Home() {
             Get hired by startups to build your developer expertise.
           </h4>
           <div className="bg-gradient-to-l from-[#00b7db] to-[#094FFF] px-8 py-2 text-md md:text-xl rounded-md mt-8 cursor-pointer text-white w-fit mx-auto md:mx-0">
-            <Link href="/signup">
+            <Link
+              href={
+                user.profile_id ? `/profile/${user.profile_id._id}` : "/signup"
+              }
+            >
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}
             </Link>
           </div>
         </div>
-        <div className="w-2/3 md:w-1/2">
-          <img src="../images/hero-image.jpg" alt="Hero Image" className="" />
+        <div className="w-2/3 md:w-1/3">
+          <img src="../images/hero-image.jpg" alt="Hero Image" />
         </div>
       </header>
       <footer className="w-full border-t-2 shadow-lg py-5 px-10 flex flex-col-reverse md:flex-row gap-4 justify-between items-center bg-white mt-10 xl:mt-0">
