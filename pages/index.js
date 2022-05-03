@@ -96,9 +96,9 @@ export default function Home() {
         <div className="md:w-1/2 w-full text-black space-y-4 px-6 xl:px-20">
           <h2 className="text-3xl text-center xl:text-5xl font-bold w-fit">
             &lt; Developer Portfolio /&gt;
-            <h3 className="text-xl mt-1 text-center italic text-slate-600">
+            <div className="text-xl mt-1 text-center italic text-slate-600">
               For the developers, by the developers
-            </h3>
+            </div>
           </h2>
           <h4 className="text-center md:text-left text-lg md:text-xl">
             This is where people who code, can connect, can showcase their

@@ -7,7 +7,7 @@ const handler = async (req, res) => {
       req,
       res,
       path: "/",
-      domain: "https://devshowcase-22.vercel.app",
+      domain: "devshowcase-22.vercel.app",
     });
 
     return res.status(200).json({
