@@ -139,7 +139,7 @@ export default function Login() {
               </div> */}
               <div className="flex justify-center items-center mb-20">
                 <GoogleLogin
-                  clientId="772672084858-k8ut6rdgldr401rt2joqsnt4q9uue83i.apps.googleusercontent.com"
+                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
                   onSuccess={handleLogin}
                   onFailure={handleFailure}
                   cookiePolicy={"single_host_origin"}
