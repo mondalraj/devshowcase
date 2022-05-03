@@ -62,6 +62,11 @@ body {
 .googleButton {
   padding: 0 1.5rem !important;
   border-radius: 0.5rem !important;
-  margin-top: 1.2rem !important;
   cursor: pointer;
+}
+
+@media screen and (max-width: 300px) {
+  .googleButton {
+    padding: 0 !important;
+  }
 }
