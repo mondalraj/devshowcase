@@ -97,7 +97,7 @@ export default function Login() {
         <div className="flex justify-center items-center bg-white w-11/12 lg:w-3/5 shadow-2xl rounded-xl font-dm h-5/6">
           <div className="flex flex-col grow justify-between w-2/5 h-full">
             <form
-              className="flex flex-col items-center w-full md:w-full p-5 mt-5 md:mt-0"
+              className="flex flex-col items-center w-full p-5 mt-5 md:mt-0"
               onSubmit={loginUser}
             >
               <a href="/" className="flex justify-center items-center">
@@ -174,7 +174,7 @@ export default function Login() {
               </button>
             </Link>
           </div>
-          <div className="hidden md:block w-3/5 bg-green-200 h-full rounded-br-xl rounded-tr-xl">
+          <div className="hidden md:block w-3/5 h-full rounded-br-xl rounded-tr-xl">
             <img
               src="/images/thumbnail.svg"
               className="h-full w-full object-cover rounded-br-xl rounded-tr-xl"
