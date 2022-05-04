@@ -120,7 +120,7 @@ export default function Signup() {
               <h1 className="font-bold text-lg md:text-xl">
                 Create a new Account
               </h1>
-              <div className="m-4 px-6 md:p-4 md:m-6 text-center space-y-5">
+              <div className="m-4 px-6 md:p-4 md:m-5 text-center space-y-5">
                 <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1">
                   <Icon
                     icon="cil:send"
@@ -133,7 +133,7 @@ export default function Signup() {
                     onChange={(e) => setEmail(e.target.value)}
                     name="email"
                     placeholder="Your Email"
-                    className="md:ml-5 focus:outline-none ml-8"
+                    className="md:ml-4 focus:outline-none ml-8"
                   />
                 </div>
 
@@ -150,7 +150,7 @@ export default function Signup() {
                     name="username"
                     id="username"
                     placeholder="Your Username"
-                    className="md:ml-5 focus:outline-none ml-8"
+                    className="md:ml-4 focus:outline-none ml-8"
                   />
                 </div>
 
@@ -167,7 +167,7 @@ export default function Signup() {
                     name="password"
                     id="password"
                     placeholder="Create Password"
-                    className="md:ml-5 focus:outline-none ml-8"
+                    className="md:ml-4 focus:outline-none ml-8"
                   />
                 </div>
                 <p className="text-[#8C8C8C] text-sm md:text-xs md:font-semibold">
@@ -182,7 +182,7 @@ export default function Signup() {
                   value="Register"
                   className="bg-[#3770FF] w-full text-white p-2 rounded-lg cursor-pointer hover:bg-[#2160ff]"
                 />
-                <p className="text-gray-400 m-1 md:m-4">OR</p>
+                <p className="text-gray-400 m-1 md:m-3">OR</p>
                 <GoogleLogin
                   clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
                   buttonText="Continue With Google"
