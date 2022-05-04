@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import HireUsModal from "../../components/hireUsModal";
 import { removeCookies } from "cookies-next";
+import Loader from "../../components/Loader";
 const { motion } = require("framer-motion");
 
 function profile() {
@@ -13,6 +14,7 @@ function profile() {
   const [image, setImage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const getHostname = (url) => {
@@ -61,6 +63,7 @@ function profile() {
         if (data.status != "fail" && data.user.image) {
           setImage(true);
         }
+        setIsLoading(false);
       });
   }, [router.isReady]);
 
@@ -117,6 +120,13 @@ function profile() {
     //     router.push("/");
     //   });
   }
+
+  if (isLoading)
+    return (
+      <div className="w-full h-screen">
+        <Loader></Loader>
+      </div>
+    );
 
   return (
     <div className="profile overflow-hidden relative">

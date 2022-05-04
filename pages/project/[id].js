@@ -7,6 +7,7 @@ import ImageSlider from "../../components/imageSlider";
 import HireUsModal from "../../components/hireUsModal";
 import { useRouter } from "next/router";
 import CommentSection from "../../components/commentSection";
+import Loader from "../../components/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const { motion } = require("framer-motion");
@@ -17,6 +18,7 @@ function Project() {
   const [profileData, setProfileData] = useState({});
   const [comments, setComments] = useState([]);
   const [like, setLike] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
@@ -42,6 +44,8 @@ function Project() {
       setProfileData(data.project.profile_id);
       setComments(data.project.comments);
     }
+
+    setIsLoading(false);
   }, [router.isReady]);
 
   var tagsArray = projectData.tags;
@@ -68,6 +72,13 @@ function Project() {
       },
     },
   };
+
+  if (isLoading)
+    return (
+      <div className="w-full h-screen">
+        <Loader></Loader>
+      </div>
+    );
 
   return (
     <motion.div

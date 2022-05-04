@@ -66,12 +66,15 @@ export default function Home() {
         </a>
         {isLoggedIn == true ? (
           <div className="flex justify-center items-center gap-5">
-            <Link href="/login">
+            <Link
+              href={
+                user.profile_id
+                  ? `/profile/${user.profile_id._id}`
+                  : "/profileform"
+              }
+            >
               <div className="flex gap-2 items-end">
-                <button
-                  className="hidden sm:block text-lg"
-                  onClick={() => console.log("Clicked")}
-                >
+                <button className="hidden sm:block text-lg">
                   {user.username}
                 </button>
                 <Icon
@@ -98,9 +101,9 @@ export default function Home() {
       </nav>
       <header className="flex justify-around items-center md:flex-row flex-col-reverse py-6 h-full">
         <div className="md:w-1/2 w-full text-black space-y-6 px-6 xl:px-20">
-          <h2 className="text-3xl text-center xl:text-5xl font-bold w-fit">
+          <h2 className="text-2xl text-center xl:text-5xl font-bold w-fit">
             &lt; Developer Portfolio /&gt;
-            <div className="text-xl mt-1 text-center italic text-slate-600">
+            <div className="text-lg md:text-xl mt-1 text-center italic text-slate-600">
               For the developers, by the developers
             </div>
           </h2>
@@ -115,7 +118,9 @@ export default function Home() {
           <div className="bg-gradient-to-l from-[#00badf] to-[#0062ff] px-8 py-2 text-md md:text-xl rounded-md mt-8 cursor-pointer text-white w-fit mx-auto md:mx-0">
             <Link
               href={
-                user.profile_id ? `/profile/${user.profile_id._id}` : "/signup"
+                user.profile_id
+                  ? `/profile/${user.profile_id._id}`
+                  : "/profileform"
               }
             >
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}

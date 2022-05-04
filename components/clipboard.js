@@ -8,8 +8,7 @@ export default function Clipboard({ router }) {
   const notify = () => toast.info("Copied to clipboard");
 
   return (
-    // Add domain in text for redirection
-    <CopyToClipboard text={router.asPath}>
+    <CopyToClipboard text={`https://devshowcase-22.vercel.app${router.asPath}`}>
       <motion.div
         whileTap={{ scale: 1.5 }}
         className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md"
