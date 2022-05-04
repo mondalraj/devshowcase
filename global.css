@@ -63,6 +63,8 @@ body {
   padding: 0 1.5rem !important;
   border-radius: 0.5rem !important;
   cursor: pointer;
+  opacity: 1 !important;
+  color: black !important;
 }
 
 @media screen and (max-width: 300px) {
