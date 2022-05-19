@@ -52,14 +52,16 @@ function HireUsModal({ setModal, fromEmail }) {
             />
           </div>
           <div className="flex justify-center items-center mt-2">
-            <MailTo email={fromEmail} subject={email} body={message}>
-              <input
-                type="submit"
-                value="Send Message"
-                className=" bg-blue-500 shadow-lg max-w-sm shadow-blue-500/50 rounded-lg px-3 py-1 text-white font-medium cursor-pointer hover:scale-110 transform duration-200 text-sm mb-5"
-                // onClick={(e) => handleSubmit(e)}
-              />
-            </MailTo>
+            {/* <MailTo email={fromEmail} subject={email} body={message}> */}
+            <input
+              type="submit"
+              value="Send Message"
+              className=" bg-blue-500 shadow-lg max-w-sm shadow-blue-500/50 rounded-lg px-3 py-1 text-white font-medium cursor-pointer hover:scale-110 transform duration-200 text-sm mb-5"
+              onClick={(e) =>
+                console.log("Email: " + email + ", Message:" + message)
+              }
+            />
+            {/* </MailTo> */}
           </div>
         </div>
       </div>
