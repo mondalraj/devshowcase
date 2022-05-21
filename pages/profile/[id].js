@@ -15,6 +15,7 @@ function profile() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [sameUser, setSameUser] = useState(false);
   const router = useRouter();
 
   const getHostname = (url) => {
@@ -36,6 +37,7 @@ function profile() {
           setIsLoggedIn(false);
         } else if (id === data.user.profile_id._id) {
           setIsLoggedIn(true);
+          setSameUser(true);
         } else {
           setIsLoggedIn(false);
         }
@@ -366,15 +368,21 @@ function profile() {
                 </div>
               </div>
               <div className="profile_buttons flex justify-between items-center text-center gap-2 font-semibold ">
-                <button
-                  className={`${
-                    isLoggedIn ? "w-1/2" : "w-full"
-                  } md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1 hover:scale-105 hover:shadow-lg`}
-                  onClick={() => setIsModal(true)}
-                >
-                  <Icon icon="entypo:mail" className="text-2xl text-blue-500" />
-                  Send Message
-                </button>
+                {sameUser == false && (
+                  <button
+                    className={`${
+                      isLoggedIn ? "w-1/2" : "w-full"
+                    } md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1 hover:scale-105 hover:shadow-lg`}
+                    onClick={() => setIsModal(true)}
+                  >
+                    <Icon
+                      icon="entypo:mail"
+                      className="text-2xl text-blue-500"
+                    />
+                    Send Message
+                  </button>
+                )}
+
                 {isLoggedIn ? (
                   <a
                     href={`/projectform?referer=${userData._id}`}
