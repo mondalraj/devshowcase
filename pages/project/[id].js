@@ -95,7 +95,8 @@ function Project() {
       {isModal && (
         <HireUsModal
           setModal={setIsModal}
-          fromEmail={profileData.user_id.email}
+          toEmail={profileData.user_id.email}
+          toName={profileData.name}
         />
       )}
       <div className="w-full bg-zinc-400/50 h-10 flex items-center justify-end">
