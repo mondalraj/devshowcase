@@ -24,6 +24,9 @@ function HireUsModal({ setModal, toEmail, toName }) {
       .then((data) => {
         setMessageSent(true);
         console.log(data);
+        setTimeout(function () {
+          setModal(false);
+        }, 2500);
       });
   };
 
