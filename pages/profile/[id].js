@@ -140,7 +140,7 @@ function profile() {
           toName={userData.name}
         />
       )}
-      <div className="profile_container font-dm">
+      <div className="profile_container min-h-screen font-dm">
         <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
           <a href="/">
             <img
