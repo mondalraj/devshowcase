@@ -1,9 +1,30 @@
 import MailTo from "./mailTo";
 import { useState } from "react";
 
-function HireUsModal({ setModal, fromEmail }) {
+function HireUsModal({ setModal, toEmail, toName }) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    fetch("/api/sendMessage", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({
+        email: email,
+        message: message,
+        toEmail,
+        toName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setModal(false);
+        console.log(data);
+      });
+  };
 
   return (
     <div
@@ -21,7 +42,10 @@ function HireUsModal({ setModal, fromEmail }) {
           Have an enquiry or feedback for me? <br />
           Fill out the form below to contact me
         </h3>
-        <div className="w-5/6 h-[18rem] bg-slate-50 translate-y-5 rounded-md">
+        <form
+          onSubmit={sendEmail}
+          className="w-5/6 h-[18rem] bg-slate-50 translate-y-5 rounded-md"
+        >
           <div className="pb-5 px-5 pt-3">
             <label htmlFor="email" className="block mb-2 text-sm font-medium">
               Mail
@@ -57,13 +81,10 @@ function HireUsModal({ setModal, fromEmail }) {
               type="submit"
               value="Send Message"
               className=" bg-blue-500 shadow-lg max-w-sm shadow-blue-500/50 rounded-lg px-3 py-1 text-white font-medium cursor-pointer hover:scale-110 transform duration-200 text-sm mb-5"
-              onClick={(e) =>
-                console.log("Email: " + email + ", Message:" + message)
-              }
             />
             {/* </MailTo> */}
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

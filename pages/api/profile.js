@@ -73,6 +73,10 @@ const handler = async (req, res) => {
     const { profile_id } = req.headers;
     const profile = Profile.findById(profile_id)
       .populate({ path: "projects", model: Project })
+      .populate({
+        path: "user_id",
+        model: User,
+      })
       .exec((err, result) => {
         if (err)
           return res
