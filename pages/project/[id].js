@@ -16,9 +16,12 @@ function Project() {
   const [isModal, setIsModal] = useState(false);
   const [projectData, setProjectData] = useState({});
   const [profileData, setProfileData] = useState({});
+  const [currentUserProfileID, setCurrentUserProfileID] = useState("");
   const [comments, setComments] = useState([]);
   const [like, setLike] = useState(false);
+  const [sameUser, setSameUser] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [nowCheck, setNowCheck] = useState(false);
 
   const router = useRouter();
 
@@ -26,6 +29,21 @@ function Project() {
     if (!router.isReady) return;
 
     const { id } = router.query;
+
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "success") {
+          setCurrentUserProfileID(data.user.profile_id._id);
+        } else {
+          return;
+        }
+      });
 
     const res = await fetch("/api/projects", {
       method: "GET",
@@ -43,8 +61,8 @@ function Project() {
       setProjectData(data.project);
       setProfileData(data.project.profile_id);
       setComments(data.project.comments);
+      setNowCheck(true);
     }
-
     setIsLoading(false);
   }, [router.isReady]);
 
@@ -72,6 +90,23 @@ function Project() {
       },
     },
   };
+
+  useEffect(() => {
+    checkSameUser();
+    return () => {
+      checkSameUser();
+    };
+  }, [nowCheck]);
+
+  function checkSameUser() {
+    if (profileData._id === currentUserProfileID) {
+      setSameUser(true);
+      console.log(sameUser);
+    } else {
+      setSameUser(false);
+      console.log(sameUser);
+    }
+  }
 
   if (isLoading)
     return (
@@ -135,12 +170,14 @@ function Project() {
             <div className="flex flex-col md:flex-row md:items-center">
               <h2 className="font-medium text-base">{profileData.name}</h2>
               <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
-              <h2
-                className="text-blue-500 text-base hover:bg-blue-500 hover:text-white p-1 rounded-md cursor-pointer max-w-max"
-                onClick={() => setIsModal(true)}
-              >
-                Hire Me
-              </h2>
+              {sameUser == false && (
+                <h2
+                  className="text-blue-500 text-base hover:bg-blue-500 hover:text-white p-1 rounded-md cursor-pointer max-w-max"
+                  onClick={() => setIsModal(true)}
+                >
+                  Hire Me
+                </h2>
+              )}
             </div>
           </div>
           <div className="flex items-center">
