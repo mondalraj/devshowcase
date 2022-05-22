@@ -1,6 +1,6 @@
 const mailjet = require("node-mailjet").connect(
-  "525c4977cc74bf83127da34e6e35ac29",
-  "f93e52697e6eb714c87517852d063294"
+  process.env.MAILJET_PUBLIC_KEY,
+  process.env.MAILJET_PRIVATE_KEY
 );
 
 const handler = async (req, res) => {
