@@ -40,8 +40,6 @@ export default function projectform() {
     const data = await response.json();
     const id = router.query.referer;
 
-    console.log(data);
-
     if (data.status != "fail") setProfileId(data.user.profile_id._id);
 
     if (data.status == "fail" || id == undefined) {
@@ -59,6 +57,12 @@ export default function projectform() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (acceptedFiles.length == 0) {
+      toast.error("Required: Image is required");
+      return;
+    }
+
     setLoading(true);
 
     const imagesArray = await uploadImage(e, acceptedFiles);

@@ -17,18 +17,6 @@ export default function Home() {
     removeCookies("devshowcase_jwt");
     setIsLoggedIn(false);
     router.push("/");
-    // fetch("/api/logout", {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-type": "application/json; charset=UTF-8",
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then(() => {
-    //     setIsLoggedIn(false);
-    //     // router.push("/");
-    //     toast.success("Successfully Logged Out");
-    //   });
   }
 
   useEffect(() => {
@@ -85,7 +73,7 @@ export default function Home() {
             </Link>
             <div className="tooltip cursor-pointer" onClick={() => logout()}>
               <Icon icon="icons8:shutdown" className="text-2xl" />
-              <span className="tooltiptext">Logout</span>
+              <span className="tooltiptext shadow-md">Logout</span>
             </div>
           </div>
         ) : (
@@ -120,7 +108,9 @@ export default function Home() {
               href={
                 user.profile_id
                   ? `/profile/${user.profile_id._id}`
-                  : "/profileform"
+                  : isLoggedIn
+                  ? "/profileform"
+                  : "/login"
               }
             >
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}

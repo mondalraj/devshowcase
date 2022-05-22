@@ -42,7 +42,7 @@ function ProfileForm() {
         if (data.status == "fail") {
           router.push("/login");
         } else if (data.user.profile_id) {
-          router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
+          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
         } else {
           setUserId(data.user._id);
         }
@@ -217,6 +217,8 @@ function ProfileForm() {
                   type="date"
                   placeholder="Your Birthday"
                   required
+                  min="1945-01-01"
+                  max={new Date().toISOString().split("T")[0]}
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">

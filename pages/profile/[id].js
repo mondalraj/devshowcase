@@ -71,6 +71,8 @@ function profile() {
 
   var skillArray = userData.skills;
   var projectsArray = userData.projects;
+  var len = projectsArray?.length;
+  len = (len * (len + 1)) / 2;
 
   const variants = {
     pageInitial: {
@@ -81,8 +83,8 @@ function profile() {
       translateY: 0,
       opacity: 1,
       transition: {
-        delay: `${projectsArray?.length + 2}`,
-        duration: 2,
+        delay: `${len - 0.5}`,
+        duration: 1,
       },
     },
   };
@@ -111,16 +113,6 @@ function profile() {
   function logout() {
     removeCookies("devshowcase_jwt");
     router.push("/");
-    // fetch("/api/logout", {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-type": "application/json; charset=UTF-8",
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then(() => {
-    //     router.push("/");
-    //   });
   }
 
   if (isLoading)
