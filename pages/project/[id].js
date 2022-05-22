@@ -101,10 +101,8 @@ function Project() {
   function checkSameUser() {
     if (profileData._id === currentUserProfileID) {
       setSameUser(true);
-      console.log(sameUser);
     } else {
       setSameUser(false);
-      console.log(sameUser);
     }
   }
 
@@ -138,19 +136,33 @@ function Project() {
         <Icon
           icon="entypo:cross"
           className="text-neutral-700 mr-3 text-2xl cursor-pointer"
-          onClick={() => router.back()}
+          onClick={() => router.push(`/profile/${profileData._id}`)}
         />
       </div>
-      <div className="absolute top-[25rem] -right-[8.4rem] rotate-90 hidden md:block">
+      <div
+        className={`absolute top-[25rem] ${
+          projectData.live_link != "" && projectData.github_link != ""
+            ? "-right-[8.4rem]"
+            : "-right-[5.4rem]"
+        } rotate-90 hidden md:block`}
+      >
         {projectData.live_link != "" && (
-          <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
+          <button
+            className={`bg-neutral-200 hover:bg-blue-500 py-2 ${
+              projectData.github_link != "" ? "px-10" : "px-16"
+            } font-bold text-base text-slate-500 hover:text-white cursor-pointer`}
+          >
             <a href={projectData.live_link} target="_blank">
               View Live
             </a>
           </button>
         )}
         {projectData.github_link != "" && (
-          <button className="bg-neutral-200 hover:bg-blue-500 py-2 px-10 font-bold text-base text-slate-500 hover:text-white cursor-pointer">
+          <button
+            className={`bg-neutral-200 hover:bg-blue-500 py-2 ${
+              projectData.live_link != "" ? "px-10" : "px-16"
+            } font-bold text-base text-slate-500 hover:text-white cursor-pointer`}
+          >
             <a href={projectData.github_link} target="_blank">
               View Code
             </a>
@@ -158,7 +170,7 @@ function Project() {
         )}
       </div>
       <div className="w-full md:w-1/2 h-full flex flex-col justify-center items-center m-auto">
-        <h1 className="font-bold text-2xl md:hidden mt-4 flex justify-start w-full px-5">
+        <h1 className="font-bold text-2xl md:hidden mt-4 flex justify-start w-full px-5 capitalize">
           {projectData.name}
         </h1>
         <div className="p-5 flex justify-between items-center w-full">
@@ -169,14 +181,16 @@ function Project() {
             </h1>
             <div className="flex flex-col md:flex-row md:items-center">
               <h2 className="font-medium text-base">{profileData.name}</h2>
-              <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
               {sameUser == false && (
-                <h2
-                  className="text-blue-500 text-base hover:bg-blue-500 hover:text-white p-1 rounded-md cursor-pointer max-w-max"
-                  onClick={() => setIsModal(true)}
-                >
-                  Hire Me
-                </h2>
+                <>
+                  <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
+                  <h2
+                    className="text-blue-500 text-base hover:bg-blue-500 hover:text-white p-1 rounded-md cursor-pointer max-w-max"
+                    onClick={() => setIsModal(true)}
+                  >
+                    Hire Me
+                  </h2>
+                </>
               )}
             </div>
           </div>
@@ -206,14 +220,22 @@ function Project() {
           <ImageSlider images={projectData.images} />
           <div className="flex md:hidden w-full -mt-1.5">
             {projectData.live_link != "" && (
-              <button className="bg-blue-500 w-1/2 p-1.5 font-bold text-md text-white cursor-pointer">
+              <button
+                className={`bg-blue-500 ${
+                  projectData.github_link != "" ? "w-1/2" : "w-full"
+                } p-1.5 font-bold text-md text-white cursor-pointer`}
+              >
                 <a href={projectData.live_link} target="_blank">
                   View Live
                 </a>
               </button>
             )}
             {projectData.github_link != "" && (
-              <button className="bg-zinc-200 w-1/2  p-1.5 font-bold text-md text-slate-500 cursor-pointer">
+              <button
+                className={`bg-zinc-200 ${
+                  projectData.live_link != "" ? "w-1/2" : "w-full"
+                }  p-1.5 font-bold text-md text-slate-500 cursor-pointer`}
+              >
                 <a href={projectData.github_link} target="_blank">
                   View Code
                 </a>

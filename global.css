@@ -33,17 +33,18 @@ body {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
-  /* background-color: rgb(221, 221, 221); */
+  width: 100px;
+  background-color: rgb(249, 249, 249);
   color: #3b82f6;
   text-align: center;
+  padding: 0.5rem 0;
   position: absolute;
   z-index: 1;
-  top: 170%;
-  left: 50%;
-  margin-left: -60px;
+  top: 105%;
+  margin-left: -65px;
   opacity: 0;
   transition: opacity 0.3s;
+  border-radius: 0.4rem;
 }
 
 .tooltip .tooltiptext::after {

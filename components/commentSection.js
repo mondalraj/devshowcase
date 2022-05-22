@@ -41,6 +41,12 @@ function CommentSection({ projectId, comments, setComments }) {
     }
   }, []);
 
+  const handleCancel = () => {
+    setText("");
+    setIsEmojiPicker(false);
+    setShowButton(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (text == "") return;
@@ -88,7 +94,7 @@ function CommentSection({ projectId, comments, setComments }) {
             </div>
 
             {isEmojiPicker && (
-              <div className="absolute top-24 left-6">
+              <div className="absolute -top-[20rem] -left-[22rem]">
                 <Picker onSelect={onEmojiClick} set="apple" />
               </div>
             )}
@@ -102,9 +108,7 @@ function CommentSection({ projectId, comments, setComments }) {
                 <div className="flex">
                   <button
                     className="text-base font-medium text-slate-400 hover:bg-blue-500 hover:text-white rounded-md py-3 px-4 cursor-pointer"
-                    onClick={() => {
-                      setText(""), setShowButton(false);
-                    }}
+                    onClick={handleCancel}
                   >
                     CANCEL
                   </button>

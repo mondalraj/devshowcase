@@ -9,7 +9,7 @@ export default function ImageUpload({ SetFiles, filesArray }) {
 
     if (files) {
       if (files.length + filesArray.length > 4) {
-        toast.warning("You are only allowed to upload a maximum of 4 files");
+        toast.warning("Maximum limit of 4 files only");
         return;
       }
 
@@ -68,7 +68,6 @@ export default function ImageUpload({ SetFiles, filesArray }) {
             accept="image/*"
             className="hidden"
             onChange={handleImageChange}
-            required
           />
         </label>
         <h3 className="mt-1 text-blue-700/75 text-sm">
