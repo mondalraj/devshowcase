@@ -14,11 +14,14 @@ function CommentSection({ projectId, comments, setComments }) {
 
   const onEmojiClick = (emojiObject) => {
     setChosenEmoji(emojiObject);
+  };
+
+  useEffect(() => {
     if (chosenEmoji !== null) {
       text += chosenEmoji.native;
       setText(text);
     }
-  };
+  }, [chosenEmoji]);
 
   useEffect(async () => {
     const userResponse = await fetch("/api/getUser", {
