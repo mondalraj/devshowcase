@@ -10,6 +10,7 @@ import CommentSection from "../../components/commentSection";
 import Loader from "../../components/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 const { motion } = require("framer-motion");
 
 function Project() {
@@ -180,7 +181,12 @@ function Project() {
               {projectData.name}
             </h1>
             <div className="flex flex-col md:flex-row md:items-center">
-              <h2 className="font-medium text-base">{profileData.name}</h2>
+              <Link href={`/profile/${profileData._id}`}>
+                <h2 className="font-medium text-base cursor-pointer hover:underline hover:text-blue-500">
+                  {profileData.name}
+                </h2>
+              </Link>
+              <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
               {sameUser == false && (
                 <>
                   <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
