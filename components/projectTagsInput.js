@@ -15,7 +15,6 @@ function ProjectTagsInput({ tags, setTags, profileFormTags }) {
       !tags.includes(trimmedInput)
     ) {
       setTagInput("");
-      console.log("hello");
       if (tags.length > 6 && profileFormTags == false) {
         toast.warning("Maximum tags limit reached");
         return;

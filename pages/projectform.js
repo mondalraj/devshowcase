@@ -3,7 +3,6 @@ import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import ImageUpload from "../components/imageUpload";
 import ProjectTagsInput from "../components/projectTagsInput";
-import uploadImage from "../utils/Image";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -55,6 +54,20 @@ export default function projectform() {
     setProjectData(newData);
   };
 
+  const getBase64 = async () => {
+    const promises = acceptedFiles.map((file) => {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+      });
+    });
+    const images = await Promise.all(promises);
+    return images;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -63,14 +76,14 @@ export default function projectform() {
       return;
     }
 
+    const imagesArray = await getBase64(acceptedFiles);
     setLoading(true);
 
-    const imagesArray = await uploadImage(e, acceptedFiles);
     const res = await fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify({
         name: projectData.projectName,
-        images: imagesArray,
+        imagesArray: imagesArray,
         description: projectData.desc,
         tags: tags,
         github_link: projectData.github,
@@ -137,6 +150,7 @@ export default function projectform() {
                 style={{ resize: "none" }}
                 value={projectData.desc}
                 onInput={(e) => handleChange(e)}
+                minLength={30}
                 maxLength={500}
                 required
               />
@@ -205,7 +219,7 @@ export default function projectform() {
               >
                 <svg
                   role="status"
-                  class="inline w-4 h-4 mr-3 text-white animate-spin"
+                  className="inline w-4 h-4 mr-3 text-white animate-spin"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

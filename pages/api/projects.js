@@ -3,6 +3,7 @@ import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 import User from "../../models/user";
+import uploadImage from "../../utils/Image";
 import validator from "validator";
 
 const getHostname = (url) => {
@@ -13,7 +14,7 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     const {
       name,
-      images,
+      imagesArray,
       description,
       tags,
       github_link,
@@ -36,6 +37,8 @@ const handler = async (req, res) => {
       ) {
         throw Error("This is not a valid URL or github link");
       }
+
+      const images = await uploadImage(imagesArray);
 
       const new_project = new Project({
         name,
@@ -70,27 +73,29 @@ const handler = async (req, res) => {
     }
   } else if (req.method === "GET") {
     const { project_id } = req.headers;
-    const project = Project.findById(project_id)
-      .populate({
-        path: "profile_id",
-        model: Profile,
-        populate: {
-          path: "user_id",
-          model: User,
-        },
-      })
-      .populate({
-        path: "comments",
-        model: Comment,
-      })
-      .exec((err, result) => {
-        if (err)
-          return res
-            .status(404)
-            .json({ status: "fail", message: "Project Not found" });
-        return res.status(201).json({ status: "success", project: result });
-      });
-    return res.status(200);
+    return new Promise((resolve, reject) => {
+      const project = Project.findById(project_id)
+        .populate({
+          path: "profile_id",
+          model: Profile,
+          populate: {
+            path: "user_id",
+            model: User,
+          },
+        })
+        .populate({
+          path: "comments",
+          model: Comment,
+        })
+        .exec((err, result) => {
+          if (err)
+            return res
+              .status(404)
+              .json({ status: "fail", message: "Project Not found" });
+          return res.status(201).json({ status: "success", project: result });
+        });
+      return res.status(200);
+    });
   }
 };
 

@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import ParticleBackground from "../components/particleBackground";
 import ProjectTagsInput from "../components/projectTagsInput";
-import uploadImage from "../utils/Image";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,6 +28,20 @@ function ProfileForm() {
   });
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
+
+  const getBase64 = async () => {
+    const promises = acceptedFile.map((file) => {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+      });
+    });
+    const images = await Promise.all(promises);
+    return images;
+  };
 
   useEffect(() => {
     fetch("/api/getUser", {
@@ -59,7 +72,8 @@ function ProfileForm() {
     e.preventDefault();
     setLoading(true);
 
-    const imagesArray = await uploadImage(e, acceptedFile);
+    const imagesArray = await getBase64(acceptedFile);
+
     await fetch("/api/profile", {
       method: "POST",
       body: JSON.stringify({
@@ -73,7 +87,7 @@ function ProfileForm() {
         course: data.course,
         tags: tags,
         designation: data.designation,
-        images: imagesArray[0],
+        images: imagesArray,
         user_id: userId,
         website: data.website,
         linked_in: data.linked_in,

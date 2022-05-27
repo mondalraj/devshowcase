@@ -3,6 +3,7 @@ import CommentImage from "../components/commentImage";
 import { useState, useEffect } from "react";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
+import { useRef } from "react";
 
 function CommentSection({ projectId, comments, setComments }) {
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
@@ -11,10 +12,25 @@ function CommentSection({ projectId, comments, setComments }) {
   const [text, setText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [showButton, setShowButton] = useState(false);
+  const commentInput = useRef(null);
 
   const onEmojiClick = (emojiObject) => {
     setChosenEmoji(emojiObject);
   };
+
+  const handleUserClick = (e) => {
+    if (commentInput.current && !commentInput.current.contains(e.target)) {
+      handleCancel();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleUserClick);
+
+    return () => {
+      window.removeEventListener("click", handleUserClick);
+    };
+  });
 
   useEffect(() => {
     if (chosenEmoji !== null) {
@@ -45,7 +61,6 @@ function CommentSection({ projectId, comments, setComments }) {
   }, []);
 
   const handleCancel = () => {
-    setText("");
     setIsEmojiPicker(false);
     setShowButton(false);
   };
@@ -80,7 +95,10 @@ function CommentSection({ projectId, comments, setComments }) {
         Comments ({comments.length})
       </h1>
       {isLoggedIn && (
-        <div className="flex items-center w-full px-4 md:px-0">
+        <div
+          className="flex items-center w-full px-4 md:px-0"
+          ref={commentInput}
+        >
           <CommentImage size="commentImage" image={profileData.image} />
           <div className="relative flex flex-col w-full ml-3">
             <div className="flex items-center">
@@ -97,7 +115,7 @@ function CommentSection({ projectId, comments, setComments }) {
             </div>
 
             {isEmojiPicker && (
-              <div className="absolute -top-[20rem] -left-[22rem]">
+              <div className="absolute -top-[26rem]">
                 <Picker onSelect={onEmojiClick} set="apple" />
               </div>
             )}
