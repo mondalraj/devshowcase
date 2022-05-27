@@ -69,7 +69,7 @@ const handler = async (req, res) => {
         userProfile: userProfile,
       });
     } catch (error) {
-      return res.status(500).json({ error: `Project ${error.message}` });
+      return res.status(400).json({ error: error.message });
     }
   } else if (req.method === "GET") {
     const { project_id } = req.headers;
