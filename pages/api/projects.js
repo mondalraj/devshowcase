@@ -3,6 +3,7 @@ import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 import User from "../../models/user";
+import uploadImage from "../../utils/Image";
 import validator from "validator";
 
 const getHostname = (url) => {
@@ -21,53 +22,56 @@ const handler = async (req, res) => {
       profile_id,
     } = req.body;
 
-    try {
-      if (
-        live_link &&
-        !validator.isURL(live_link, { require_protocol: true })
-      ) {
-        throw Error("Live website link is not a valid URL");
-      }
+    const imagesArray = await uploadImage(images);
+    console.log(imagesArray);
 
-      if (
-        github_link &&
-        !validator.isURL(github_link, { require_protocol: true }) &&
-        getHostname(github_link) != "github.com"
-      ) {
-        throw Error("This is not a valid URL or github link");
-      }
+    // try {
+    //   if (
+    //     live_link &&
+    //     !validator.isURL(live_link, { require_protocol: true })
+    //   ) {
+    //     throw Error("Live website link is not a valid URL");
+    //   }
 
-      const new_project = new Project({
-        name,
-        description,
-        images,
-        tags,
-        github_link,
-        live_link,
-        profile_id,
-      });
-      const newProject = await new_project.save();
-      const userProfile = await Profile.findByIdAndUpdate(
-        { _id: profile_id },
-        {
-          $push: {
-            projects: newProject._id,
-          },
-        },
-        {
-          new: true,
-          useFindAndModify: false,
-        }
-      );
-      return res.status(201).json({
-        status: "success",
-        message: "Project has successfully added",
-        project: newProject,
-        userProfile: userProfile,
-      });
-    } catch (error) {
-      return res.status(500).json({ error: `Project ${error.message}` });
-    }
+    //   if (
+    //     github_link &&
+    //     !validator.isURL(github_link, { require_protocol: true }) &&
+    //     getHostname(github_link) != "github.com"
+    //   ) {
+    //     throw Error("This is not a valid URL or github link");
+    //   }
+
+    //   const new_project = new Project({
+    //     name,
+    //     description,
+    //     images,
+    //     tags,
+    //     github_link,
+    //     live_link,
+    //     profile_id,
+    //   });
+    //   const newProject = await new_project.save();
+    //   const userProfile = await Profile.findByIdAndUpdate(
+    //     { _id: profile_id },
+    //     {
+    //       $push: {
+    //         projects: newProject._id,
+    //       },
+    //     },
+    //     {
+    //       new: true,
+    //       useFindAndModify: false,
+    //     }
+    //   );
+    //   return res.status(201).json({
+    //     status: "success",
+    //     message: "Project has successfully added",
+    //     project: newProject,
+    //     userProfile: userProfile,
+    //   });
+    // } catch (error) {
+    //   return res.status(500).json({ error: `Project ${error.message}` });
+    // }
   } else if (req.method === "GET") {
     const { project_id } = req.headers;
     const project = Project.findById(project_id)

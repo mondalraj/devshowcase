@@ -186,7 +186,6 @@ function Project() {
                   {profileData.name}
                 </h2>
               </Link>
-              <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
               {sameUser == false && (
                 <>
                   <h2 className="text-xl px-1 hidden md:block">&bull;</h2>

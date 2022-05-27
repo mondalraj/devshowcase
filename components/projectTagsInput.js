@@ -15,7 +15,6 @@ function ProjectTagsInput({ tags, setTags, profileFormTags }) {
       !tags.includes(trimmedInput)
     ) {
       setTagInput("");
-      console.log("hello");
       if (tags.length > 6 && profileFormTags == false) {
         toast.warning("Don't allow to add more tags");
         return;

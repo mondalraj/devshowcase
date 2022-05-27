@@ -3,7 +3,6 @@ import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import ImageUpload from "../components/imageUpload";
 import ProjectTagsInput from "../components/projectTagsInput";
-import uploadImage from "../utils/Image";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -55,6 +54,20 @@ export default function projectform() {
     setProjectData(newData);
   };
 
+  const getBase64 = async () => {
+    const promises = acceptedFiles.map((file) => {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+      });
+    });
+    const images = await Promise.all(promises);
+    return images;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -63,9 +76,22 @@ export default function projectform() {
       return;
     }
 
+    const imagesArray = await getBase64(acceptedFiles);
+
+    // const body = new FormData();
+    // body.append("name", projectData.projectName);
+    // acceptedFiles.map((image, index) => {
+    //   body.append(`file${index}`, image);
+    // });
+    // body.append("description", projectData.desc);
+    // body.append("tags", tags);
+    // body.append("github_link", projectData.github);
+    // body.append("live_link", projectData.live);
+    // body.append("profile_id", profileId);
+
     setLoading(true);
 
-    const imagesArray = await uploadImage(e, acceptedFiles);
+    // const imagesArray = await uploadImage(e, acceptedFiles);
     const res = await fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify({
@@ -84,12 +110,13 @@ export default function projectform() {
 
     const data = await res.json();
     setLoading(false);
+    console.log(data);
 
-    if (data.error) {
-      toast.error(data.error);
-    } else {
-      router.push(`/project/${data.project._id}`);
-    }
+    // if (data.error) {
+    //   toast.error(data.error);
+    // } else {
+    //   router.push(`/project/${data.project._id}`);
+    // }
   };
 
   return (
@@ -203,7 +230,7 @@ export default function projectform() {
               >
                 <svg
                   role="status"
-                  class="inline w-4 h-4 mr-3 text-white animate-spin"
+                  className="inline w-4 h-4 mr-3 text-white animate-spin"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
