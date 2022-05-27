@@ -26,7 +26,7 @@ const handler = async (req, res) => {
             res.status(201).json({ status: 'success', message: 'User has successfully Logged In', isLoggedIn: true, user: user });
         } catch (err) {
             if (err.message === 'incorrectPassword') {
-                res.status(400).json({ status: 'fail', error: 'passwordError', message: 'Your Password is incorrect', isLoggedIn: false })
+                res.status(400).json({ status: 'fail', error: 'passwordError', message: 'Your password is incorrect', isLoggedIn: false })
             } else {
                 res.status(400).json({ status: 'fail', error: 'error', message: `User cannot login. ${err.message}`, isLoggedIn: false })
             }

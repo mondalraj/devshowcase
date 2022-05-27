@@ -128,6 +128,7 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
                     className="ml-5 focus:outline-none"
+                    required
                   />
                 </div>
 

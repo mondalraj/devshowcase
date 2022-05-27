@@ -17,10 +17,10 @@ function ProjectTagsInput({ tags, setTags, profileFormTags }) {
       setTagInput("");
       console.log("hello");
       if (tags.length > 6 && profileFormTags == false) {
-        toast.warning("Don't allow to add more tags");
+        toast.warning("Maximum tags limit reached");
         return;
       } else if (tags.length > 4 && profileFormTags == true) {
-        toast.warning("Don't allow to add more tags");
+        toast.warning("Maximum tags limit reached");
         e.preventDefault();
         return;
       }

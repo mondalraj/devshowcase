@@ -137,6 +137,7 @@ export default function Signup() {
                     name="email"
                     placeholder="Your Email"
                     className="md:ml-4 focus:outline-none ml-8"
+                    required
                   />
                 </div>
 
@@ -154,6 +155,7 @@ export default function Signup() {
                     id="username"
                     placeholder="Your Username"
                     className="md:ml-4 focus:outline-none ml-8"
+                    required
                   />
                 </div>
 
@@ -170,7 +172,9 @@ export default function Signup() {
                     name="password"
                     id="password"
                     placeholder="Create Password"
+                    minLength={8}
                     className="md:ml-4 focus:outline-none ml-8"
+                    required
                   />
                 </div>
                 <p className="text-[#8C8C8C] text-sm md:text-xs md:font-semibold">
@@ -180,7 +184,7 @@ export default function Signup() {
                 </p>
               </div>
               <div className="flex flex-col justify-center items-center mb-5 md:mb-0">
-              {!isLoading && (
+                {!isLoading && (
                   <button
                     type="submit"
                     value="Register"

@@ -9,7 +9,7 @@ export default function ImageUpload({ SetFiles, filesArray }) {
 
     if (files) {
       if (files.length + filesArray.length > 4) {
-        toast.warning("Maximum limit of 4 files only");
+        toast.warning("Only four photos are allowed as a maximum.");
         return;
       }
 

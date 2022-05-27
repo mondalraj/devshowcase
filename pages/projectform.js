@@ -59,7 +59,7 @@ export default function projectform() {
     e.preventDefault();
 
     if (acceptedFiles.length == 0) {
-      toast.error("Required: Image is required");
+      toast.error("Image is required");
       return;
     }
 
@@ -121,6 +121,7 @@ export default function projectform() {
                 id="projectName"
                 value={projectData.projectName}
                 onInput={(e) => handleChange(e)}
+                required
               />
             </div>
           </div>
@@ -137,6 +138,7 @@ export default function projectform() {
                 value={projectData.desc}
                 onInput={(e) => handleChange(e)}
                 maxLength={500}
+                required
               />
             </div>
           </div>
