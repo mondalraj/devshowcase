@@ -14,7 +14,7 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     const {
       name,
-      images,
+      imagesArray,
       description,
       tags,
       github_link,
@@ -22,56 +22,55 @@ const handler = async (req, res) => {
       profile_id,
     } = req.body;
 
-    const imagesArray = await uploadImage(images);
-    console.log(imagesArray);
+    try {
+      if (
+        live_link &&
+        !validator.isURL(live_link, { require_protocol: true })
+      ) {
+        throw Error("Live website link is not a valid URL");
+      }
 
-    // try {
-    //   if (
-    //     live_link &&
-    //     !validator.isURL(live_link, { require_protocol: true })
-    //   ) {
-    //     throw Error("Live website link is not a valid URL");
-    //   }
+      if (
+        github_link &&
+        !validator.isURL(github_link, { require_protocol: true }) &&
+        getHostname(github_link) != "github.com"
+      ) {
+        throw Error("This is not a valid URL or github link");
+      }
 
-    //   if (
-    //     github_link &&
-    //     !validator.isURL(github_link, { require_protocol: true }) &&
-    //     getHostname(github_link) != "github.com"
-    //   ) {
-    //     throw Error("This is not a valid URL or github link");
-    //   }
+      const images = await uploadImage(imagesArray);
 
-    //   const new_project = new Project({
-    //     name,
-    //     description,
-    //     images,
-    //     tags,
-    //     github_link,
-    //     live_link,
-    //     profile_id,
-    //   });
-    //   const newProject = await new_project.save();
-    //   const userProfile = await Profile.findByIdAndUpdate(
-    //     { _id: profile_id },
-    //     {
-    //       $push: {
-    //         projects: newProject._id,
-    //       },
-    //     },
-    //     {
-    //       new: true,
-    //       useFindAndModify: false,
-    //     }
-    //   );
-    //   return res.status(201).json({
-    //     status: "success",
-    //     message: "Project has successfully added",
-    //     project: newProject,
-    //     userProfile: userProfile,
-    //   });
-    // } catch (error) {
-    //   return res.status(500).json({ error: `Project ${error.message}` });
-    // }
+      const new_project = new Project({
+        name,
+        description,
+        images,
+        tags,
+        github_link,
+        live_link,
+        profile_id,
+      });
+      const newProject = await new_project.save();
+      const userProfile = await Profile.findByIdAndUpdate(
+        { _id: profile_id },
+        {
+          $push: {
+            projects: newProject._id,
+          },
+        },
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+      return res.status(201).json({
+        status: "success",
+        message: "Project has successfully added",
+        project: newProject,
+        userProfile: userProfile,
+      });
+    } catch (error) {
+      return res.status(500).json({ error: `Project ${error.message}` });
+    }
   } else if (req.method === "GET") {
     const { project_id } = req.headers;
     return new Promise((resolve, reject) => {

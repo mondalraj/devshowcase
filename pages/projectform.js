@@ -77,26 +77,13 @@ export default function projectform() {
     }
 
     const imagesArray = await getBase64(acceptedFiles);
-
-    // const body = new FormData();
-    // body.append("name", projectData.projectName);
-    // acceptedFiles.map((image, index) => {
-    //   body.append(`file${index}`, image);
-    // });
-    // body.append("description", projectData.desc);
-    // body.append("tags", tags);
-    // body.append("github_link", projectData.github);
-    // body.append("live_link", projectData.live);
-    // body.append("profile_id", profileId);
-
     setLoading(true);
 
-    // const imagesArray = await uploadImage(e, acceptedFiles);
     const res = await fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify({
         name: projectData.projectName,
-        images: imagesArray,
+        imagesArray: imagesArray,
         description: projectData.desc,
         tags: tags,
         github_link: projectData.github,
@@ -110,13 +97,12 @@ export default function projectform() {
 
     const data = await res.json();
     setLoading(false);
-    console.log(data);
 
-    // if (data.error) {
-    //   toast.error(data.error);
-    // } else {
-    //   router.push(`/project/${data.project._id}`);
-    // }
+    if (data.error) {
+      toast.error(data.error);
+    } else {
+      router.push(`/project/${data.project._id}`);
+    }
   };
 
   return (
@@ -148,6 +134,7 @@ export default function projectform() {
                 id="projectName"
                 value={projectData.projectName}
                 onInput={(e) => handleChange(e)}
+                required
               />
             </div>
           </div>
@@ -163,7 +150,9 @@ export default function projectform() {
                 style={{ resize: "none" }}
                 value={projectData.desc}
                 onInput={(e) => handleChange(e)}
+                minLength={30}
                 maxLength={500}
+                required
               />
             </div>
           </div>

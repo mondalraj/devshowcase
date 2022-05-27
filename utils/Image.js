@@ -1,7 +1,13 @@
 const cloudinary = require("cloudinary").v2;
 
+const dev = process.env.NODE_ENV !== "production";
+
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
 const getSignature = async () => {
-  const response = await fetch("http://localhost:3000/api/signature");
+  const response = await fetch(`${server}/api/signature`);
   const data = await response.json();
   return data;
 };
