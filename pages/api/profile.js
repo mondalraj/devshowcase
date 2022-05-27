@@ -71,20 +71,22 @@ const handler = async (req, res) => {
     }
   } else if (req.method === "GET") {
     const { profile_id } = req.headers;
-    const profile = Profile.findById(profile_id)
-      .populate({ path: "projects", model: Project })
-      .populate({
-        path: "user_id",
-        model: User,
-      })
-      .exec((err, result) => {
-        if (err)
-          return res
-            .status(404)
-            .json({ status: "fail", message: "User Profile Not found" });
-        return res.status(201).json({ status: "success", user: result });
-      });
-    return res.status(200);
+    return new Promise((resolve, reject) => {
+      const profile = Profile.findById(profile_id)
+        .populate({ path: "projects", model: Project })
+        .populate({
+          path: "user_id",
+          model: User,
+        })
+        .exec((err, result) => {
+          if (err)
+            return res
+              .status(404)
+              .json({ status: "fail", message: "User Profile Not found" });
+          return res.status(201).json({ status: "success", user: result });
+        });
+      return res.status(200);
+    });
   }
 };
 
