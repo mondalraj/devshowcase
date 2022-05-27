@@ -72,7 +72,7 @@ export default function projectform() {
     e.preventDefault();
 
     if (acceptedFiles.length == 0) {
-      toast.error("Required: Image is required");
+      toast.error("Image is required");
       return;
     }
 

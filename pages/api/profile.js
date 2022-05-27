@@ -29,6 +29,9 @@ const handler = async (req, res) => {
       if (website && !validator.isURL(website, { require_protocol: true })) {
         throw Error("Website is not a valid URL");
       }
+      if(!designation){
+        throw Error("Designation is required")
+      }
 
       const image = await uploadImage(images);
 

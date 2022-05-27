@@ -232,7 +232,7 @@ function ProfileForm() {
                   placeholder="Your Birthday"
                   required
                   min="1945-01-01"
-                  max={new Date().toISOString().split("T")[0]}
+                  max="2010-12-31"
                 />
               </div>
               <div className="md:grid md:grid-cols-2  md:space-y-0 space-y-1 p-2 border-b">
