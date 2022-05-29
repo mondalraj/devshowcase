@@ -25,6 +25,24 @@ export async function getServerSideProps({ req }) {
 
   const data = await userRes.json();
 
+  if (data.status === "success") {
+    if (data.user.profile_id) {
+      return {
+        redirect: {
+          destination: `/profile/${data.user.profile_id._id}`,
+          permanent: false,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: `/profileform`,
+          permanent: false,
+        },
+      };
+    }
+  }
+
   return {
     props: {
       data,

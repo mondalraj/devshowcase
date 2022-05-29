@@ -10,9 +10,6 @@ import Link from "next/link";
 const { motion } = require("framer-motion");
 
 function profile({ userProfile, currentUser, id }) {
-  console.log(userProfile);
-  console.log(currentUser);
-
   const [isAbout, setIsAbout] = useState(true);
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(false);
@@ -87,8 +84,6 @@ function profile({ userProfile, currentUser, id }) {
       },
     },
   };
-
-  console.log(currentUser.user.profile_id._id);
 
   function logout() {
     removeCookies("devshowcase_jwt");
