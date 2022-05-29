@@ -58,4 +58,4 @@ const deleteImage = async (deleteFiles) => {
   const tempArray = await Promise.all(promises);
 };
 
-export default { uploadImage, deleteImage };
+export { uploadImage, deleteImage };
