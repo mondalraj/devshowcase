@@ -1,4 +1,3 @@
-import MailTo from "./mailTo";
 import { useState } from "react";
 
 function HireUsModal({ setModal, toEmail, toName }) {
@@ -84,7 +83,6 @@ function HireUsModal({ setModal, toEmail, toName }) {
               />
             </div>
             <div className="flex justify-center items-center mt-2">
-              {/* <MailTo email={fromEmail} subject={email} body={message}> */}
               <input
                 type="submit"
                 value={messageSent ? "Message Sent" : "Send Message"}
@@ -92,7 +90,6 @@ function HireUsModal({ setModal, toEmail, toName }) {
                   messageSent ? ` bg-green-600 ` : ` bg-blue-500 `
                 } shadow-xl max-w-sm rounded-lg px-3 py-1 text-white font-medium cursor-pointer hover:scale-110 transform duration-200 text-md mb-5`}
               />
-              {/* </MailTo> */}
             </div>
           </form>
         </div>

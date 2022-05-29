@@ -8,7 +8,31 @@ import { ToastContainer, toast } from "react-toastify";
 import GoogleLogin from "react-google-login";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function Signup() {
+const dev = process.env.NODE_ENV !== "production";
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
+export async function getServerSideProps({ req }) {
+  const userRes = await fetch(`${server}/api/getUser`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: req.headers.cookie,
+    },
+  });
+
+  const data = await userRes.json();
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
+
+export default function Signup({ data }) {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,22 +71,13 @@ export default function Signup() {
   };
 
   useEffect(() => {
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          router.push("/signup");
-        } else if (data.user.profile_id) {
-          router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
-        } else {
-          router.push("/profileform");
-        }
-      });
+    if (data.status == "fail") {
+      router.push("/signup");
+    } else if (data.user.profile_id) {
+      router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
+    } else {
+      router.push("/profileform");
+    }
   }, []);
 
   async function registerUser(event) {
