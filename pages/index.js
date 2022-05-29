@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeCookies } from "cookies-next";
 
-export default function Home() {
+export default function Home({ userData }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
 
@@ -20,21 +20,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          setIsLoggedIn(false);
-        } else {
-          setUser(data.user);
-          setIsLoggedIn(true);
-        }
-      });
+    if (userData.status == "fail") {
+      setIsLoggedIn(false);
+    } else {
+      setUser(userData.user);
+      setIsLoggedIn(true);
+    }
   }, []);
 
   return (
@@ -71,10 +62,14 @@ export default function Home() {
                 />
               </div>
             </Link>
-            <div className="tooltip cursor-pointer" onClick={() => logout()}>
+            <a
+              href="/"
+              className="tooltip cursor-pointer"
+              onClick={() => logout()}
+            >
               <Icon icon="icons8:shutdown" className="text-2xl" />
               <span className="tooltiptext shadow-md">Logout</span>
-            </div>
+            </a>
           </div>
         ) : (
           <div className="flex justify-center items-center gap-5">
@@ -110,7 +105,7 @@ export default function Home() {
                   ? `/profile/${user.profile_id._id}`
                   : isLoggedIn
                   ? "/profileform"
-                  : "/login"
+                  : "/signup"
               }
             >
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}
@@ -132,4 +127,29 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  // Fetch data from external API
+
+  const resCurrentUser = await fetch(
+    `${
+      process.env.NODE_ENV == "dev"
+        ? "http://localhost:3000"
+        : "https://devshowcase-22.vercel.app"
+    }/api/getUser`,
+    {
+      method: "GET",
+      withCredentials: true,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Cookie: context.req.headers.cookie,
+      },
+    }
+  );
+
+  const userData = await resCurrentUser.json();
+
+  // Pass data to the page via props
+  return { props: { userData } };
 }

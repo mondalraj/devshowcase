@@ -92,7 +92,9 @@ const handler = async (req, res) => {
               .json({ status: "fail", message: "User Profile Not found" });
           return res.status(201).json({ status: "success", user: result });
         });
-      return res.status(200);
+      return res
+        .status(400)
+        .json({ status: "fail", message: "User Profile not found" });
     });
   }
 };
