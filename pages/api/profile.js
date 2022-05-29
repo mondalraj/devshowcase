@@ -2,7 +2,7 @@ import connectDB from "../../middleware/mongodb";
 import User from "../../models/user";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
-import uploadImage from "../../utils/Image";
+import { uploadImage } from "../../utils/Image";
 import validator from "validator";
 
 const handler = async (req, res) => {
@@ -29,8 +29,8 @@ const handler = async (req, res) => {
       if (website && !validator.isURL(website, { require_protocol: true })) {
         throw Error("Website is not a valid URL");
       }
-      if(!designation){
-        throw Error("Designation is required")
+      if (!designation) {
+        throw Error("Designation is required");
       }
 
       const image = await uploadImage(images);

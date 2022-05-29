@@ -3,7 +3,7 @@ import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 import User from "../../models/user";
-import uploadImage from "../../utils/Image";
+import { uploadImage } from "../../utils/Image";
 import validator from "validator";
 
 const getHostname = (url) => {
