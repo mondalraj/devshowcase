@@ -74,7 +74,7 @@ const handler = async (req, res) => {
         userProfile: userProfile,
       });
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   } else if (req.method === "GET") {
     const { profile_id } = req.headers;
@@ -92,9 +92,7 @@ const handler = async (req, res) => {
               .json({ status: "fail", message: "User Profile Not found" });
           return res.status(201).json({ status: "success", user: result });
         });
-      return res
-        .status(400)
-        .json({ status: "fail", message: "User Profile not found" });
+      return res.status(200);
     });
   }
 };
