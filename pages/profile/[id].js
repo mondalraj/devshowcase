@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import HireUsModal from "../../components/hireUsModal";
 import { removeCookies } from "cookies-next";
 import Loader from "../../components/Loader";
+import Link from "next/link";
 const { motion } = require("framer-motion");
 
 function profile({ userProfile, currentUser, id }) {
@@ -32,7 +33,7 @@ function profile({ userProfile, currentUser, id }) {
       setIsLoggedIn(true);
       setSameUser(true);
     } else {
-      setIsLoggedIn(false);
+      setIsLoggedIn(true);
     }
 
     if (userProfile.status == "fail") {
@@ -87,6 +88,8 @@ function profile({ userProfile, currentUser, id }) {
     },
   };
 
+  console.log(currentUser.user.profile_id._id);
+
   function logout() {
     removeCookies("devshowcase_jwt");
     router.push("/");
@@ -112,7 +115,7 @@ function profile({ userProfile, currentUser, id }) {
         />
       )}
       <div className="profile_container min-h-screen font-dm">
-        <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
+        <nav className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
           <a href="/">
             <img
               src="../images/logo.png"
@@ -121,15 +124,31 @@ function profile({ userProfile, currentUser, id }) {
             />
           </a>
           {isLoggedIn == true ? (
-            <div
-              className="flex gap-2 items-end cursor-pointer"
-              onClick={() => logout()}
-            >
-              <h3 className="hidden sm:block text-lg">Logout</h3>
-              <Icon icon="icons8:shutdown" className="text-2xl" />
+            <div className="flex justify-center items-center gap-5">
+              <a
+                href={
+                  currentUser.user.profile_id
+                    ? `/profile/${currentUser.user.profile_id._id}`
+                    : "/profileform"
+                }
+              >
+                <div className="flex gap-2 items-end">
+                  <button className="hidden sm:block text-lg">
+                    {currentUser.user.username}
+                  </button>
+                  <Icon
+                    icon="ic:baseline-account-circle"
+                    className="text-3xl text-[#094FFF]"
+                  />
+                </div>
+              </a>
+              <div className="tooltip cursor-pointer" onClick={() => logout()}>
+                <Icon icon="icons8:shutdown" className="text-2xl" />
+                <span className="tooltiptext shadow-md">Logout</span>
+              </div>
             </div>
           ) : null}
-        </div>
+        </nav>
         <div className="bg-gray-200 relative">
           <motion.div
             initial={{ x: -100, opacity: 0 }}
@@ -221,7 +240,7 @@ function profile({ userProfile, currentUser, id }) {
                   <div
                     className={
                       (isAbout ? "bg-white text-blue-700" : "text-gray-600") +
-                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider"
+                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider cursor-pointer"
                     }
                     onClick={() => setIsAbout(true)}
                   >
@@ -230,7 +249,7 @@ function profile({ userProfile, currentUser, id }) {
                   <div
                     className={
                       (isAbout ? "text-gray-600" : "bg-white text-blue-700") +
-                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider"
+                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider cursor-pointer"
                     }
                     onClick={() => setIsAbout(false)}
                   >
