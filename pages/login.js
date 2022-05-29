@@ -87,16 +87,6 @@ export default function Login({ data }) {
     console.log(result);
   };
 
-  useEffect(() => {
-    if (data.status == "fail") {
-      router.push("/login");
-    } else if (data.user.profile_id) {
-      router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
-    } else {
-      router.push("/profileform");
-    }
-  }, []);
-
   async function loginUser(event) {
     event.preventDefault();
     setLoading(true);
