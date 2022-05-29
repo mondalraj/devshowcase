@@ -25,6 +25,24 @@ export async function getServerSideProps({ req }) {
 
   const data = await userRes.json();
 
+  if (data.status === "success") {
+    if (data.user.profile_id) {
+      return {
+        redirect: {
+          destination: `/profile/${data.user.profile_id._id}`,
+          permanent: false,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: `/profileform`,
+          permanent: false,
+        },
+      };
+    }
+  }
+
   return {
     props: {
       data,
@@ -69,16 +87,6 @@ export default function Signup({ data }) {
     // toast.error(result.error);
     console.log(result);
   };
-
-  useEffect(() => {
-    if (data.status == "fail") {
-      router.push("/signup");
-    } else if (data.user.profile_id) {
-      router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
-    } else {
-      router.push("/profileform");
-    }
-  }, []);
 
   async function registerUser(event) {
     event.preventDefault();

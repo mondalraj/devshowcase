@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeCookies } from "cookies-next";
 
-export default function Home() {
+export default function Home({ userData }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
 
@@ -20,21 +20,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          setIsLoggedIn(false);
-        } else {
-          setUser(data.user);
-          setIsLoggedIn(true);
-        }
-      });
+    if (userData.status == "fail") {
+      setIsLoggedIn(false);
+    } else {
+      setUser(userData.user);
+      setIsLoggedIn(true);
+    }
   }, []);
 
   return (
@@ -132,4 +123,29 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  // Fetch data from external API
+
+  const resCurrentUser = await fetch(
+    `${
+      process.env.NODE_ENV == "dev"
+        ? "http://localhost:3000"
+        : "https://devshowcase-22.vercel.app"
+    }/api/getUser`,
+    {
+      method: "GET",
+      withCredentials: true,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Cookie: context.req.headers.cookie,
+      },
+    }
+  );
+
+  const userData = await resCurrentUser.json();
+
+  // Pass data to the page via props
+  return { props: { userData } };
 }
