@@ -11,9 +11,10 @@ import Loader from "../../components/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+
 const { motion } = require("framer-motion");
 
-function Project() {
+function Project({ userData, data }) {
   const [isModal, setIsModal] = useState(false);
   const [projectData, setProjectData] = useState({});
   const [profileData, setProfileData] = useState({});
@@ -26,36 +27,10 @@ function Project() {
 
   const router = useRouter();
 
-  useEffect(async () => {
-    if (!router.isReady) return;
-
-    const { id } = router.query;
-
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "success") {
-          setCurrentUserProfileID(data.user.profile_id._id);
-        } else {
-          return;
-        }
-      });
-
-    const res = await fetch("/api/projects", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        project_id: id,
-      },
-    });
-
-    const data = await res.json();
-
+  useEffect(() => {
+    if (userData.status == "success") {
+      setCurrentUserProfileID(userData.user.profile_id._id);
+    }
     if (data.status == "fail") {
       router.push("/404");
     } else {
@@ -65,7 +40,7 @@ function Project() {
       setNowCheck(true);
     }
     setIsLoading(false);
-  }, [router.isReady]);
+  }, []);
 
   var tagsArray = projectData.tags;
 
@@ -275,6 +250,42 @@ function Project() {
       </div>
     </motion.div>
   );
+}
+
+const dev = process.env.NODE_ENV !== "production";
+
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
+export async function getServerSideProps({ params, req }) {
+  const userRes = await fetch(`${server}/api/getUser`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: req.headers.cookie,
+    },
+  });
+
+  const userData = await userRes.json();
+
+  const projectRes = await fetch(`${server}/api/projects`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      project_id: params.id,
+    },
+  });
+
+  const data = await projectRes.json();
+
+  return {
+    props: {
+      userData,
+      data,
+    },
+  };
 }
 
 export default Project;

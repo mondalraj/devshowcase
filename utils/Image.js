@@ -35,4 +35,27 @@ const uploadImage = async (acceptedFiles) => {
   return imgArray;
 };
 
-export default uploadImage;
+const deleteImage = async (deleteFiles) => {
+  const { timestamp, signature } = await getSignature();
+
+  const promises = deleteFiles.map(async (file) => {
+    const res = await cloudinary.uploader.destroy(
+      file,
+      {
+        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        signature: signature,
+        timestamp: timestamp,
+        api_key: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
+      },
+      (err, result) => {
+        if (err) return err;
+        return result;
+      }
+    );
+    return res;
+  });
+
+  const tempArray = await Promise.all(promises);
+};
+
+export default { uploadImage, deleteImage };
