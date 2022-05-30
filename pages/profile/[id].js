@@ -29,10 +29,12 @@ function profile({ data, profileData, id }) {
       setIsLoggedIn(true);
       setSameUser(true);
     } else {
-      setIsLoggedIn(false);
+      setIsLoggedIn(true);
     }
 
     if (profileData.status == "fail") {
+      router.push("/404");
+    } else if (!profileData.user) {
       router.push("/404");
     } else {
       setUserData(profileData.user);
@@ -109,7 +111,7 @@ function profile({ data, profileData, id }) {
         />
       )}
       <div className="profile_container min-h-screen font-dm">
-        <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
+        <nav className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
           <a href="/">
             <img
               src="../images/logo.png"
@@ -118,15 +120,31 @@ function profile({ data, profileData, id }) {
             />
           </a>
           {isLoggedIn == true ? (
-            <div
-              className="flex gap-2 items-end cursor-pointer"
-              onClick={() => logout()}
-            >
-              <h3 className="hidden sm:block text-lg">Logout</h3>
-              <Icon icon="icons8:shutdown" className="text-2xl" />
+            <div className="flex justify-center items-center gap-5">
+              <a
+                href={
+                  data.user.profile_id
+                    ? `/profile/${data.user.profile_id._id}`
+                    : "/profileform"
+                }
+              >
+                <div className="flex gap-2 items-end">
+                  <button className="hidden sm:block text-lg">
+                    {data.user.username}
+                  </button>
+                  <Icon
+                    icon="ic:baseline-account-circle"
+                    className="text-3xl text-[#094FFF]"
+                  />
+                </div>
+              </a>
+              <div className="tooltip cursor-pointer" onClick={() => logout()}>
+                <Icon icon="icons8:shutdown" className="text-2xl" />
+                <span className="tooltiptext shadow-md">Logout</span>
+              </div>
             </div>
           ) : null}
-        </div>
+        </nav>
         <div className="bg-gray-200 relative">
           <motion.div
             initial={{ x: -100, opacity: 0 }}
