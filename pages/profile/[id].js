@@ -8,7 +8,7 @@ import { removeCookies } from "cookies-next";
 import Loader from "../../components/Loader";
 const { motion } = require("framer-motion");
 
-function profile() {
+function profile({ data, profileData, id }) {
   const [isAbout, setIsAbout] = useState(true);
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(false);
@@ -23,51 +23,25 @@ function profile() {
   };
 
   useEffect(() => {
-    if (!router.isReady) return;
-    const { id } = router.query;
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          setIsLoggedIn(false);
-        } else if (id === data.user.profile_id._id) {
-          setIsLoggedIn(true);
-          setSameUser(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      });
-  }, [router.isReady]);
+    if (data.status == "fail") {
+      setIsLoggedIn(false);
+    } else if (id === data.user.profile_id._id) {
+      setIsLoggedIn(true);
+      setSameUser(true);
+    } else {
+      setIsLoggedIn(false);
+    }
 
-  useEffect(() => {
-    if (!router.isReady) return;
-    const { id } = router.query;
-
-    fetch("/api/profile", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        profile_id: id,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          router.push("/404");
-        } else {
-          setUserData(data.user);
-        }
-        if (data.status != "fail" && data.user.image) {
-          setImage(true);
-        }
-        setIsLoading(false);
-      });
-  }, [router.isReady]);
+    if (profileData.status == "fail") {
+      router.push("/404");
+    } else {
+      setUserData(profileData.user);
+    }
+    if (profileData.status != "fail" && profileData.user.image) {
+      setImage(true);
+    }
+    setIsLoading(false);
+  }, []);
 
   var skillArray = userData.skills;
   var projectsArray = userData.projects;
@@ -476,6 +450,45 @@ function profile() {
       </div>
     </div>
   );
+}
+
+const dev = process.env.NODE_ENV !== "production";
+
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
+export async function getServerSideProps({ params, req }) {
+  const userRes = await fetch(`${server}/api/getUser`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: req.headers.cookie,
+    },
+  });
+
+  const data = await userRes.json();
+
+  const id = params.id;
+
+  const profileRes = await fetch(`${server}/api/profile`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      profile_id: id,
+    },
+  });
+
+  const profileData = await profileRes.json();
+
+  return {
+    props: {
+      data,
+      profileData,
+      id,
+    },
+  };
 }
 
 export default profile;
