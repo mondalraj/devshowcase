@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeCookies } from "cookies-next";
 
-export default function Home() {
+export default function Home({ userData }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
 
@@ -16,25 +16,17 @@ export default function Home() {
   function logout() {
     removeCookies("devshowcase_jwt");
     setIsLoggedIn(false);
-    router.push("/");
+    // router.push("/");
+    router.reload();
   }
 
   useEffect(() => {
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          setIsLoggedIn(false);
-        } else {
-          setUser(data.user);
-          setIsLoggedIn(true);
-        }
-      });
+    if (userData.status == "fail") {
+      setIsLoggedIn(false);
+    } else {
+      setUser(userData.user);
+      setIsLoggedIn(true);
+    }
   }, []);
 
   return (
@@ -110,7 +102,7 @@ export default function Home() {
                   ? `/profile/${user.profile_id._id}`
                   : isLoggedIn
                   ? "/profileform"
-                  : "/login"
+                  : "/signup"
               }
             >
               {isLoggedIn === true ? "Go to Profile" : "Get Started"}
@@ -132,4 +124,29 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+const dev = process.env.NODE_ENV !== "production";
+
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
+export async function getServerSideProps({ req }) {
+  const userRes = await fetch(`${server}/api/getUser`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: req.headers.cookie,
+    },
+  });
+
+  const userData = await userRes.json();
+
+  return {
+    props: {
+      userData,
+    },
+  };
 }
