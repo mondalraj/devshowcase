@@ -8,13 +8,13 @@ import { removeCookies } from "cookies-next";
 import Loader from "../../components/Loader";
 const { motion } = require("framer-motion");
 
-function profile({ userProfile, currentUser, id }) {
+function profile() {
   const [isAbout, setIsAbout] = useState(true);
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [sameUser, setSameUser] = useState(false);
   const router = useRouter();
 
@@ -23,25 +23,51 @@ function profile({ userProfile, currentUser, id }) {
   };
 
   useEffect(() => {
-    if (currentUser.status == "fail") {
-      setIsLoggedIn(false);
-    } else if (id === currentUser.user.profile_id._id) {
-      setIsLoggedIn(true);
-      setSameUser(true);
-    } else {
-      setIsLoggedIn(true);
-    }
+    if (!router.isReady) return;
+    const { id } = router.query;
+    fetch("/api/getUser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          setIsLoggedIn(false);
+        } else if (id === data.user.profile_id._id) {
+          setIsLoggedIn(true);
+          setSameUser(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      });
+  }, [router.isReady]);
 
-    if (userProfile.status == "fail") {
-      router.push("/404");
-    } else {
-      setUserData(userProfile.user);
-    }
-    if (userProfile.status != "fail" && userProfile.user.image) {
-      setImage(true);
-    }
-    setIsLoading(false);
-  }, []);
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { id } = router.query;
+
+    fetch("/api/profile", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        profile_id: id,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "fail") {
+          router.push("/404");
+        } else {
+          setUserData(data.user);
+        }
+        if (data.status != "fail" && data.user.image) {
+          setImage(true);
+        }
+        setIsLoading(false);
+      });
+  }, [router.isReady]);
 
   var skillArray = userData.skills;
   var projectsArray = userData.projects;
@@ -109,7 +135,7 @@ function profile({ userProfile, currentUser, id }) {
         />
       )}
       <div className="profile_container min-h-screen font-dm">
-        <nav className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
+        <div className="profile_navbar max-w-screen-xl mx-auto w-full h-16 flex justify-between items-center p-5">
           <a href="/">
             <img
               src="../images/logo.png"
@@ -118,31 +144,15 @@ function profile({ userProfile, currentUser, id }) {
             />
           </a>
           {isLoggedIn == true ? (
-            <div className="flex justify-center items-center gap-5">
-              <a
-                href={
-                  currentUser.user.profile_id
-                    ? `/profile/${currentUser.user.profile_id._id}`
-                    : "/profileform"
-                }
-              >
-                <div className="flex gap-2 items-end">
-                  <button className="hidden sm:block text-lg">
-                    {currentUser.user.username}
-                  </button>
-                  <Icon
-                    icon="ic:baseline-account-circle"
-                    className="text-3xl text-[#094FFF]"
-                  />
-                </div>
-              </a>
-              <div className="tooltip cursor-pointer" onClick={() => logout()}>
-                <Icon icon="icons8:shutdown" className="text-2xl" />
-                <span className="tooltiptext shadow-md">Logout</span>
-              </div>
+            <div
+              className="flex gap-2 items-end cursor-pointer"
+              onClick={() => logout()}
+            >
+              <h3 className="hidden sm:block text-lg">Logout</h3>
+              <Icon icon="icons8:shutdown" className="text-2xl" />
             </div>
           ) : null}
-        </nav>
+        </div>
         <div className="bg-gray-200 relative">
           <motion.div
             initial={{ x: -100, opacity: 0 }}
@@ -234,7 +244,7 @@ function profile({ userProfile, currentUser, id }) {
                   <div
                     className={
                       (isAbout ? "bg-white text-blue-700" : "text-gray-600") +
-                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider cursor-pointer"
+                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider"
                     }
                     onClick={() => setIsAbout(true)}
                   >
@@ -243,7 +253,7 @@ function profile({ userProfile, currentUser, id }) {
                   <div
                     className={
                       (isAbout ? "text-gray-600" : "bg-white text-blue-700") +
-                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider cursor-pointer"
+                      " w-1/2 font-semibold text-center p-1 rounded-md tracking-wider"
                     }
                     onClick={() => setIsAbout(false)}
                   >
@@ -466,58 +476,6 @@ function profile({ userProfile, currentUser, id }) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context) {
-  // Fetch data from external API
-
-  const resCurrentUser = await fetch(
-    `${
-      process.env.NODE_ENV == "dev"
-        ? "http://localhost:3000"
-        : "https://devshowcase-22.vercel.app"
-    }/api/getUser`,
-    {
-      method: "GET",
-      withCredentials: true,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  );
-
-  const currentUser = await resCurrentUser.json();
-
-  const id = context.params.id;
-
-  const resProfile = await fetch(
-    `${
-      process.env.NODE_ENV == "dev"
-        ? "http://localhost:3000"
-        : "https://devshowcase-22.vercel.app"
-    }/api/profile`,
-    {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        profile_id: id,
-      },
-    }
-  );
-  const userProfile = await resProfile.json();
-
-  if (userProfile.status === "fail") {
-    return {
-      redirect: {
-        destination: "/404",
-        permanent: false,
-      },
-    };
-  }
-
-  // Pass data to the page via props
-  return { props: { userProfile, currentUser, id } };
 }
 
 export default profile;
