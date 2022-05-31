@@ -128,8 +128,8 @@ export default function Login({ data }) {
               <h1 className="font-bold text-xl md:text-xl">
                 Login to your Account
               </h1>
-              <div className="p-4 m-6 text-center space-y-5">
-                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 space-x-9">
+              <div className="py-4 px-2 m-6 text-center space-y-5">
+                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 pr-8">
                   <Icon
                     icon="cil:send"
                     color="#ccc"
@@ -142,12 +142,12 @@ export default function Login({ data }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
-                    className="ml-5 focus:outline-none"
+                    className="ml-8 focus:outline-none"
                     required
                   />
                 </div>
 
-                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 space-x-9">
+                <div className="relative border-solid border border-[#BCBCBC] rounded-md p-1 pr-8">
                   <Icon
                     icon="bx:lock-alt"
                     color="#ccc"
@@ -160,7 +160,7 @@ export default function Login({ data }) {
                     name="password"
                     id="password"
                     placeholder="Your Password"
-                    className="ml-5 focus:outline-none"
+                    className="ml-8 focus:outline-none"
                   />
                 </div>
               </div>
