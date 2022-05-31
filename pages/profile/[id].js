@@ -91,6 +91,10 @@ function profile({ data, profileData, id }) {
     router.push("/");
   }
 
+  const editProfilehandler = () => {
+    console.log("Edit Profile Button Clicked");
+  };
+
   if (isLoading)
     return (
       <div className="w-full h-screen">
@@ -354,9 +358,7 @@ function profile({ data, profileData, id }) {
               <div className="profile_buttons flex justify-between items-center text-center gap-2 font-semibold ">
                 {sameUser == false && (
                   <button
-                    className={`${
-                      isLoggedIn ? "w-1/2" : "w-full"
-                    } md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1 hover:scale-105 hover:shadow-lg`}
+                    className={`w-full md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1 hover:scale-105 hover:shadow-lg`}
                     onClick={() => setIsModal(true)}
                   >
                     <Icon
@@ -366,8 +368,20 @@ function profile({ data, profileData, id }) {
                     Send Message
                   </button>
                 )}
+                {sameUser == true && (
+                  <button
+                    className={`w-1/2 md:w-52 rounded-md bg-white p-2 flex items-center justify-center gap-1 hover:scale-105 hover:shadow-lg`}
+                    onClick={() => editProfilehandler()}
+                  >
+                    <Icon
+                      icon="entypo:pencil"
+                      className="text-2xl text-blue-500"
+                    />
+                    Edit Profile
+                  </button>
+                )}
 
-                {isLoggedIn ? (
+                {sameUser ? (
                   <a
                     href={`/projectform?referer=${userData._id}`}
                     className="md:hidden w-1/2 rounded-md bg-white p-2 flex items-center justify-center gap-1"
@@ -415,7 +429,7 @@ function profile({ data, profileData, id }) {
                 <ProjectItem project={projects} key={index} listId={index} />
               );
             })}
-            {isLoggedIn ? (
+            {sameUser ? (
               <motion.a
                 initial="pageInitial"
                 animate="pageAnimate"
@@ -433,7 +447,7 @@ function profile({ data, profileData, id }) {
           </div>
         ) : (
           <div className="profile_projectSection w-full h-fit max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap">
-            {isLoggedIn ? (
+            {sameUser ? (
               <>
                 <a
                   href={`/projectform?referer=${userData._id}`}
