@@ -25,6 +25,15 @@ export async function getServerSideProps({ req }) {
 
   const data = await userRes.json();
 
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/signup",
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       data,
@@ -151,7 +160,7 @@ export default function Signup({ data }) {
                     onChange={(e) => setEmail(e.target.value)}
                     name="email"
                     placeholder="Your Email"
-                    className="md:ml-4 focus:outline-none ml-8"
+                    className="md:ml-1 focus:outline-none ml-8"
                     required
                   />
                 </div>
@@ -169,7 +178,7 @@ export default function Signup({ data }) {
                     name="username"
                     id="username"
                     placeholder="Your Username"
-                    className="md:ml-4 focus:outline-none ml-8"
+                    className="md:ml-1 focus:outline-none ml-8"
                     required
                   />
                 </div>
@@ -188,7 +197,7 @@ export default function Signup({ data }) {
                     id="password"
                     placeholder="Create Password"
                     minLength={8}
-                    className="md:ml-4 focus:outline-none ml-8"
+                    className="md:ml-1 focus:outline-none ml-8"
                     required
                   />
                 </div>
@@ -251,7 +260,7 @@ export default function Signup({ data }) {
                 </button> */}
 
             <Link href="/login">
-              <button className="bg-[#F6F6F6] text-[#3770FF] font-semibold text-sm rounded-xl w-full p-3 ">
+              <button className="bg-[#F6F6F6] text-[#3770FF] font-semibold w-full p-3 text-sm md:text-base rounded-bl-xl rounded-br-xl shadow-lg shadow-blue-500">
                 Already have an account? Log In
               </button>
             </Link>
