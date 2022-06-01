@@ -6,9 +6,12 @@ import ProjectTagsInput from "../components/projectTagsInput";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Icon } from "@iconify/react";
 
 function ProfileForm() {
   const [acceptedFile, setAcceptedFile] = useState([]);
+  const [pic, setPic] = useState("/images/avatar.png");
+  const [profileID, setProfileID] = useState("");
   const [tags, setTags] = useState([]);
   const [userId, setUserId] = useState("");
   const [data, setData] = useState({
@@ -26,6 +29,7 @@ function ProfileForm() {
     instagram: "",
     github: "",
   });
+
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
 
@@ -43,23 +47,56 @@ function ProfileForm() {
     return images;
   };
 
-  useEffect(() => {
-    fetch("/api/getUser", {
+  const edit = router.query.edit ? true : false;
+
+  useEffect(async () => {
+    const res = await fetch("/api/getUser", {
       method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          router.push("/login");
-        } else if (data.user.profile_id) {
-          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
-        } else {
-          setUserId(data.user._id);
-        }
-      });
+    });
+
+    const data = await res.json();
+
+    if (data.status == "fail") {
+      router.push("/login");
+    } else if (data.user.profile_id && !edit) {
+      router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
+      setProfileID(data.user.profile_id._id);
+    } else {
+      setUserId(data.user._id);
+    }
+
+    const profileRes = await fetch("/api/profile", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        profile_id: data.user.profile_id._id,
+      },
+    });
+    const Data = await profileRes.json();
+    setData({
+      name: Data.user.name,
+      date: Data.user.date_of_birth,
+      bio: Data.user.bio,
+      location: Data.user.location,
+      company: Data.user.company_name,
+      work: Data.user.work_description,
+      school: Data.user.university_name,
+      course: Data.user.course_name,
+      skills: Data.user.skills,
+      website: Data.user.website,
+      linked_in: Data.user.linked_in,
+      instagram: Data.user.instagram,
+      github: Data.user.github,
+      designation: Data.user.designation,
+    });
+    setTags(Data.user.skills);
+    if (Data.user.image)
+      setPic(
+        `https://res.cloudinary.com/devshowcase/image/upload/${Data.user.image}`
+      );
   }, []);
 
   function handle(e) {
@@ -74,8 +111,8 @@ function ProfileForm() {
 
     const imagesArray = await getBase64(acceptedFile);
 
-    await fetch("/api/profile", {
-      method: "POST",
+    const res = await fetch("/api/profile", {
+      method: edit ? "PATCH" : "POST",
       body: JSON.stringify({
         name: data.name,
         date: data.date,
@@ -93,20 +130,20 @@ function ProfileForm() {
         linked_in: data.linked_in,
         instagram: data.instagram,
         github: data.github,
+        pic: pic,
+        id: profileID,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setLoading(false);
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          router.push(`/profile/${data.userProfile._id}`);
-        }
-      });
+    });
+    const Data = await res.json();
+    if (Data.error) {
+      toast.error(Data.error);
+    } else {
+      router.push(`/profile/${Data.userProfile._id || profileID}`);
+      setLoading(false);
+    }
   }
 
   const handleImageChange = (e) => {
@@ -131,16 +168,27 @@ function ProfileForm() {
         </div>
         <div className="md:invisible p-3 md:p-16 flex flex-col justify-center items-center">
           <label htmlFor="file-input">
-            <Image
-              src={
-                !acceptedFile.length
-                  ? "/images/avatar.png"
-                  : URL.createObjectURL(acceptedFile[0])
-              }
-              width={125}
-              height={118}
-              className="rounded-full drop-shadow-lg cursor-pointer object-cover"
-            />
+            <div className="relative">
+              <Image
+                src={
+                  !acceptedFile.length
+                    ? pic
+                    : URL.createObjectURL(acceptedFile[0])
+                }
+                width={125}
+                height={118}
+                className={`rounded-full drop-shadow-lg cursor-pointer object-cover ${
+                  (!acceptedFile.length || pic == "/images/avatar.jpg") &&
+                  "blur-[1.5px]"
+                }`}
+              />
+              {(!acceptedFile.length || pic == "/images/avatar.jpg") && (
+                <Icon
+                  icon="ant-design:camera-twotone"
+                  className="absolute text-4xl top-[35%] left-[35%] text-blue-500 cursor-pointer"
+                />
+              )}
+            </div>
           </label>
           <input
             id="file-input"
@@ -165,16 +213,27 @@ function ProfileForm() {
           <div className="hidden bg-white px-14 pt-28 pb-8 mb-4 md:block md:w-1/3 flex-col">
             <div className="flex justify-center">
               <label htmlFor="file-input">
-                <Image
-                  src={
-                    !acceptedFile.length
-                      ? "/images/avatar.png"
-                      : URL.createObjectURL(acceptedFile[0])
-                  }
-                  width={125}
-                  height={118}
-                  className="rounded-full drop-shadow-lg cursor-pointer ml-2 object-cover"
-                />
+                <div className="relative">
+                  <Image
+                    src={
+                      !acceptedFile.length
+                        ? pic
+                        : URL.createObjectURL(acceptedFile[0])
+                    }
+                    width={125}
+                    height={118}
+                    className={`rounded-full drop-shadow-lg cursor-pointer object-cover ${
+                      (!acceptedFile.length || pic == "/images/avatar.jpg") &&
+                      "blur-[1.5px]"
+                    }`}
+                  />
+                  {(!acceptedFile.length || pic == "/images/avatar.jpg") && (
+                    <Icon
+                      icon="ant-design:camera-twotone"
+                      className="absolute text-4xl top-[35%] left-[35%] text-blue-500 cursor-pointer"
+                    />
+                  )}
+                </div>
               </label>
               <input
                 id="file-input"

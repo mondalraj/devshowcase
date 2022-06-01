@@ -25,15 +25,6 @@ export async function getServerSideProps({ req }) {
 
   const data = await userRes.json();
 
-  if (!data) {
-    return {
-      redirect: {
-        destination: "/signup",
-        permanent: false,
-      },
-    };
-  }
-
   return {
     props: {
       data,
@@ -253,20 +244,13 @@ export default function Signup({ data }) {
                 ></GoogleLogin>
               </div>
             </form>
-            {/* <div className="flex justify-center items-center"> */}
-            {/* <button className="flex  space-x-2 border-solid border border-[#DFD7D7] rounded-md p-2 mb-20 hover:bg-gray-100 justify-center w-3/5 items-center ">
-                  <Icon icon="flat-color-icons:google" className="w-6 h-6" />
-                  <p>Continue with Google</p>
-                </button> */}
 
             <Link href="/login">
               <button className="bg-[#F6F6F6] text-[#3770FF] font-semibold w-full p-3 text-sm md:text-base rounded-bl-xl rounded-br-xl shadow-lg shadow-blue-500">
                 Already have an account? Log In
               </button>
             </Link>
-            {/* </div> */}
           </div>
-          {/* </div> */}
         </div>
       </div>
     </>
