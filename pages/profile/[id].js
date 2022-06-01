@@ -32,9 +32,7 @@ function profile({ data, profileData, id }) {
       setIsLoggedIn(true);
     }
 
-    if (profileData.status == "fail") {
-      router.push("/404");
-    } else if (!profileData.user) {
+    if (profileData.status == "fail" || !profileData.user) {
       router.push("/404");
     } else {
       setUserData(profileData.user);
@@ -92,7 +90,7 @@ function profile({ data, profileData, id }) {
   }
 
   const editProfilehandler = () => {
-    console.log("Edit Profile Button Clicked");
+    router.push("/profileform?edit=true");
   };
 
   if (isLoading)
