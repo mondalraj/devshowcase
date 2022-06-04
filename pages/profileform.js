@@ -7,10 +7,11 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
+import Avatar from "../public/images/avatar.png";
 
 function ProfileForm() {
   const [acceptedFile, setAcceptedFile] = useState([]);
-  const [pic, setPic] = useState("/images/avatar.png");
+  const [pic, setPic] = useState("");
   const [profileID, setProfileID] = useState("");
   const [tags, setTags] = useState([]);
   const [userId, setUserId] = useState("");
@@ -63,7 +64,6 @@ function ProfileForm() {
       router.push("/login");
     } else if (data.user.profile_id && !edit) {
       router.push(`/profile/${data.user.profile_id._id}`); //will change this after adding edit profile form route
-      setProfileID(data.user.profile_id._id);
     } else {
       setUserId(data.user._id);
     }
@@ -76,6 +76,7 @@ function ProfileForm() {
       },
     });
     const Data = await profileRes.json();
+
     setData({
       name: Data.user.name,
       date: Data.user.date_of_birth,
@@ -92,11 +93,10 @@ function ProfileForm() {
       github: Data.user.github,
       designation: Data.user.designation,
     });
+
+    setProfileID(Data.user._id);
     setTags(Data.user.skills);
-    if (Data.user.image)
-      setPic(
-        `https://res.cloudinary.com/devshowcase/image/upload/${Data.user.image}`
-      );
+    if (Data.user.image) setPic(Data.user.image);
   }, []);
 
   function handle(e) {
@@ -141,7 +141,7 @@ function ProfileForm() {
     if (Data.error) {
       toast.error(Data.error);
     } else {
-      router.push(`/profile/${Data.userProfile._id || profileID}`);
+      router.push(`/profile/${profileID || Data.userProfile._id}`);
       setLoading(false);
     }
   }
@@ -172,17 +172,18 @@ function ProfileForm() {
               <Image
                 src={
                   !acceptedFile.length
-                    ? pic
+                    ? pic != ""
+                      ? `https://res.cloudinary.com/devshowcase/image/upload/${pic}`
+                      : Avatar
                     : URL.createObjectURL(acceptedFile[0])
                 }
                 width={125}
                 height={118}
                 className={`rounded-full drop-shadow-lg cursor-pointer object-cover ${
-                  (!acceptedFile.length || pic == "/images/avatar.jpg") &&
-                  "blur-[1.5px]"
+                  acceptedFile.length == 0 && pic == "" && "blur-[1.5px]"
                 }`}
               />
-              {(!acceptedFile.length || pic == "/images/avatar.jpg") && (
+              {acceptedFile.length == 0 && pic == "" && (
                 <Icon
                   icon="ant-design:camera-twotone"
                   className="absolute text-4xl top-[35%] left-[35%] text-blue-500 cursor-pointer"
@@ -217,17 +218,18 @@ function ProfileForm() {
                   <Image
                     src={
                       !acceptedFile.length
-                        ? pic
+                        ? pic != ""
+                          ? `https://res.cloudinary.com/devshowcase/image/upload/${pic}`
+                          : Avatar
                         : URL.createObjectURL(acceptedFile[0])
                     }
                     width={125}
                     height={118}
                     className={`rounded-full drop-shadow-lg cursor-pointer object-cover ${
-                      (!acceptedFile.length || pic == "/images/avatar.jpg") &&
-                      "blur-[1.5px]"
+                      !acceptedFile.length && pic == "" && "blur-[1.5px]"
                     }`}
                   />
-                  {(!acceptedFile.length || pic == "/images/avatar.jpg") && (
+                  {!acceptedFile.length && pic == "" && (
                     <Icon
                       icon="ant-design:camera-twotone"
                       className="absolute text-4xl top-[35%] left-[35%] text-blue-500 cursor-pointer"
