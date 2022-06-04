@@ -128,8 +128,8 @@ const handler = async (req, res) => {
         throw Error("Designation is required");
       }
 
-      if (pic != "/images/avatar.png") {
-        await deleteImage([pic]);
+      if (images.length != 0 && pic != null) {
+        const res = await deleteImage([pic]);
       }
       if (images.length != 0) {
         image = await uploadImage(images);
@@ -154,16 +154,11 @@ const handler = async (req, res) => {
         website: website,
       };
 
-      const user = await Profile.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: updates,
-        },
-        {
-          new: true,
-          useFindAndModify: false,
-        }
-      );
+      const user = await Profile.findByIdAndUpdate({ _id: id }, updates, {
+        new: true,
+        useFindAndModify: false,
+      });
+
       return res.status(201).json({
         status: "success",
         message: "Profile Updated Successfully",
