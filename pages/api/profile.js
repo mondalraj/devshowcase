@@ -128,8 +128,8 @@ const handler = async (req, res) => {
         throw Error("Designation is required");
       }
 
-      if (images.length != 0 && pic != null) {
-        const res = await deleteImage([pic]);
+      if (images.length != 0 && pic != "") {
+        await deleteImage([pic]);
       }
       if (images.length != 0) {
         image = await uploadImage(images);

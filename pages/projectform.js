@@ -16,17 +16,20 @@ export default function projectform() {
   });
 
   const [acceptedFiles, setAcceptedFiles] = useState([]);
+  const [deleteFiles, setDeleteFiles] = useState([]);
   const [tags, setTags] = useState([]);
   const [profileId, setProfileId] = useState("");
+  const [projectID, setProjectID] = useState("");
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
+
+  const edit = router.query.edit ? true : false;
 
   useEffect(async () => {
     if (!router.isReady) return;
 
     if (router.query == undefined || router.query.referer == undefined) {
       router.push("/404");
-      return;
     }
 
     const response = await fetch("/api/getUser", {
@@ -46,6 +49,32 @@ export default function projectform() {
     } else if (id.toString() !== data.user.profile_id._id) {
       router.back();
     }
+
+    if (!edit) {
+      return;
+    }
+
+    const project_id = router.query.id;
+    setProjectID(project_id);
+
+    const projectRes = await fetch("/api/projects", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        project_id: project_id,
+      },
+    });
+
+    const Data = await projectRes.json();
+
+    setAcceptedFiles(Data.project.images);
+    setProjectData({
+      projectName: Data.project.name,
+      desc: Data.project.description,
+      github: Data.project.github_link,
+      live: Data.project.live_link,
+    });
+    setTags(Data.project.tags);
   }, [router.isReady]);
 
   const handleChange = (e) => {
@@ -56,6 +85,7 @@ export default function projectform() {
 
   const getBase64 = async () => {
     const promises = acceptedFiles.map((file) => {
+      if (typeof file == "string") return file;
       return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.readAsDataURL(file);
@@ -80,7 +110,7 @@ export default function projectform() {
     setLoading(true);
 
     const res = await fetch("/api/projects", {
-      method: "POST",
+      method: edit ? "PATCH" : "POST",
       body: JSON.stringify({
         name: projectData.projectName,
         imagesArray: imagesArray,
@@ -89,6 +119,8 @@ export default function projectform() {
         github_link: projectData.github,
         live_link: projectData.live,
         profile_id: profileId,
+        deleteFiles: deleteFiles,
+        project_id: projectID,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -101,7 +133,7 @@ export default function projectform() {
     if (data.error) {
       toast.error(data.error);
     } else {
-      router.push(`/project/${data.project._id}`);
+      router.push(`/project/${projectID || data.project._id}`);
     }
   };
 
@@ -123,7 +155,11 @@ export default function projectform() {
           Add a new project
         </h1>
         <form onSubmit={handleSubmit} className="w-5/6 md:w-1/2 flex flex-col">
-          <ImageUpload SetFiles={setAcceptedFiles} filesArray={acceptedFiles} />
+          <ImageUpload
+            SetFiles={setAcceptedFiles}
+            filesArray={acceptedFiles}
+            DeleteFiles={setDeleteFiles}
+          />
           <div className="mb-5 w-full">
             <h2 className="text-2xl font-medium px-3 mb-5">Project Name</h2>
             <div className="flex items-center justify-center my-3 mx-5">

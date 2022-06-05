@@ -277,7 +277,7 @@ function profile({ data, profileData, id }) {
                         <h2 className="text-lg text-neutral-600 underline underline-offset-2 font-bold">
                           {userData.company_name}
                         </h2>
-                        <p>
+                        <p className="md:my-1 my-5">
                           {userData.work_description
                             ? userData.work_description
                             : "No work experience (Fresher)"}
@@ -424,7 +424,13 @@ function profile({ data, profileData, id }) {
           <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap">
             {projectsArray?.map((projects, index) => {
               return (
-                <ProjectItem project={projects} key={index} listId={index} />
+                <ProjectItem
+                  project={projects}
+                  key={index}
+                  listId={index}
+                  isLogin={isLoggedIn && sameUser}
+                  profileId={id}
+                />
               );
             })}
             {sameUser ? (

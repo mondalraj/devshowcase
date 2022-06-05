@@ -1,7 +1,11 @@
 import Link from "next/link";
+import { Icon } from "@iconify/react";
+import { useRouter } from "next/router";
 const { motion } = require("framer-motion");
 
-function ProjectItem({ project, listId }) {
+function ProjectItem({ project, listId, isLogin, profileId }) {
+  const router = useRouter();
+
   var projectImage = project.images || [];
 
   const variants = {
@@ -27,24 +31,36 @@ function ProjectItem({ project, listId }) {
   };
 
   return (
-    <Link href={`/project/${project._id}`}>
-      <motion.div
-        initial="pageInitial"
-        animate="pageAnimate"
-        exit="pageExit"
-        whileHover={{ scale: 1.05, duration: 0.2 }}
-        variants={variants}
-        // transition={{ duration: 1 }}
-        className="w-full sm:w-[22rem] my-2 h-72 bg-slate-200 rounded-md relative bg-cover bg-no-repeat cursor-pointer shadow-xl overflow-hidden"
-        style={{
-          backgroundImage: `url(https://res.cloudinary.com/devshowcase/image/upload/${projectImage[0]})`,
-        }}
-      >
-        <div className="p-2 bg-zinc-900 absolute bottom-0 right-0 left-0 text-white font-semibold bg-opacity-70 rounded-md">
-          {project.name}
-        </div>
-      </motion.div>
-    </Link>
+    <motion.div
+      initial="pageInitial"
+      animate="pageAnimate"
+      exit="pageExit"
+      whileHover={{ scale: 1.05, duration: 0.2 }}
+      variants={variants}
+      className="w-full sm:w-[22rem] my-2 h-72 bg-slate-200 cursor-pointer shadow-xl flex flex-col justify-between rounded-md"
+    >
+      <Link href={`/project/${project._id}`}>
+        <img
+          src={`https://res.cloudinary.com/devshowcase/image/upload/${projectImage[0]}`}
+          className="w-full h-[85%]"
+        />
+      </Link>
+      <div className="p-2 bg-zinc-900 text-white font-semibold bg-opacity-70 rounded-bl-md rounded-br-md flex justify-between items-center h-[15%]">
+        <h1> {project.name}</h1>
+        {isLogin && (
+          <div
+            className="bg-blue-500 p-1.5 rounded-full"
+            onClick={() =>
+              router.push(
+                `/projectform?referer=${profileId}&edit=true&id=${project._id}`
+              )
+            }
+          >
+            <Icon icon="bxs:pencil" />
+          </div>
+        )}
+      </div>
+    </motion.div>
   );
 }
 
