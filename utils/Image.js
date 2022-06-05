@@ -21,8 +21,8 @@ const getSignature = async () => {
 
 const uploadImage = async (acceptedFiles) => {
   const { timestamp, signature } = await getSignature();
-
   const promises = acceptedFiles.map(async (file) => {
+    if (file.length != 0 && file.length < 30) return file;
     const res = await cloudinary.uploader.upload(
       file,
       {
@@ -36,14 +36,16 @@ const uploadImage = async (acceptedFiles) => {
   });
 
   const tempArray = await Promise.all(promises);
-  const imgArray = tempArray.map((image) => image.public_id);
+  const imgArray = tempArray.map((image) => {
+    if (typeof image == "object") return image.public_id;
+    return image;
+  });
 
   return imgArray;
 };
 
 const deleteImage = async (deleteFiles) => {
   const { timestamp, signature } = await getSignature();
-
   const promises = deleteFiles.map(async (file) => {
     const res = await cloudinary.uploader.destroy(
       file,
