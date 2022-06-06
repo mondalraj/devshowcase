@@ -3,7 +3,7 @@ import Comment from "../../models/comment";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 import User from "../../models/user";
-import { uploadImage } from "../../utils/Image";
+import { uploadImage, deleteImage } from "../../utils/Image";
 import validator from "validator";
 
 const getHostname = (url) => {
@@ -20,6 +20,8 @@ const handler = async (req, res) => {
       github_link,
       live_link,
       profile_id,
+      deleteImages,
+      project_id,
     } = req.body;
 
     try {
@@ -96,6 +98,71 @@ const handler = async (req, res) => {
         });
       return res.status(200);
     });
+  } else if (req.method === "PATCH") {
+    const {
+      name,
+      imagesArray,
+      description,
+      tags,
+      github_link,
+      live_link,
+      profile_id,
+      deleteFiles,
+      project_id,
+    } = req.body;
+
+    let images = [];
+
+    try {
+      if (
+        live_link &&
+        !validator.isURL(live_link, { require_protocol: true })
+      ) {
+        throw Error("Live website link is not a valid URL");
+      }
+
+      if (
+        github_link &&
+        !validator.isURL(github_link, { require_protocol: true }) &&
+        getHostname(github_link) != "github.com"
+      ) {
+        throw Error("This is not a valid URL or github link");
+      }
+
+      if (deleteFiles.length != 0) {
+        await deleteImage(deleteFiles);
+      }
+
+      if (imagesArray.length != 0) {
+        images = await uploadImage(imagesArray);
+      }
+
+      const updates = {
+        name,
+        description,
+        images,
+        tags,
+        github_link,
+        live_link,
+        profile_id,
+      };
+
+      const project = await Project.findByIdAndUpdate(
+        { _id: project_id },
+        updates,
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+      return res.status(201).json({
+        status: "success",
+        message: "Project has successfully added",
+        project: project,
+      });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   }
 };
 

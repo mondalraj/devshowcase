@@ -211,12 +211,6 @@ export default function Login({ data }) {
                 ></GoogleLogin>
               </div>
             </form>
-            {/* <div className="flex justify-center items-center">
-                <button className="flex  space-x-2 mt-3 border-solid border border-[#DFD7D7] rounded-md p-2 mb-20 hover:bg-gray-100 justify-center w-3/5 items-center ">
-                  <Icon icon="flat-color-icons:google" className="w-6 h-6" />
-                  <p>Continue with Google</p>
-                </button>
-              </div> */}
             <Link href="/signup">
               <button className="bg-[#F6F6F6] text-[#3770FF] font-semibold w-full p-3 text-sm md:text-base rounded-bl-xl rounded-br-xl shadow-lg shadow-blue-500">
                 Not having an account? Sign Up

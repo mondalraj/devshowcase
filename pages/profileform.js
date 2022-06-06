@@ -6,9 +6,47 @@ import ProjectTagsInput from "../components/projectTagsInput";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Icon } from "@iconify/react";
+import Avatar from "../public/images/avatar.png";
 
-function ProfileForm() {
+const dev = process.env.NODE_ENV !== "production";
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
+export async function getServerSideProps({ req }) {
+  const userRes = await fetch(`${server}/api/getUser`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: req.headers.cookie,
+    },
+  });
+
+  const userData = await userRes.json();
+
+  const profileRes = await fetch(`${server}/api/profile`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      profile_id: userData.user.profile_id._id,
+    },
+  });
+  const profileData = await profileRes.json();
+
+  return {
+    props: {
+      userData,
+      profileData,
+    },
+  };
+}
+
+function ProfileForm({ userData, profileData }) {
   const [acceptedFile, setAcceptedFile] = useState([]);
+  const [pic, setPic] = useState("");
+  const [profileID, setProfileID] = useState("");
   const [tags, setTags] = useState([]);
   const [userId, setUserId] = useState("");
   const [data, setData] = useState({
@@ -26,6 +64,7 @@ function ProfileForm() {
     instagram: "",
     github: "",
   });
+
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
 
@@ -43,23 +82,37 @@ function ProfileForm() {
     return images;
   };
 
+  const edit = router.query.edit ? true : false;
+
   useEffect(() => {
-    fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "fail") {
-          router.push("/login");
-        } else if (data.user.profile_id) {
-          router.push(`/profile/${data.user.profile_id}`); //will change this after adding edit profile form route
-        } else {
-          setUserId(data.user._id);
-        }
-      });
+    if (userData.status == "fail") {
+      router.push("/login");
+    } else if (userData.user.profile_id && !edit) {
+      router.push(`/profile/${userData.user.profile_id._id}`); //will change this after adding edit profile form route
+    } else {
+      setUserId(userData.user._id);
+    }
+
+    setData({
+      name: profileData.user.name,
+      date: profileData.user.date_of_birth,
+      bio: profileData.user.bio,
+      location: profileData.user.location,
+      company: profileData.user.company_name,
+      work: profileData.user.work_description,
+      school: profileData.user.university_name,
+      course: profileData.user.course_name,
+      skills: profileData.user.skills,
+      website: profileData.user.website,
+      linked_in: profileData.user.linked_in,
+      instagram: profileData.user.instagram,
+      github: profileData.user.github,
+      designation: profileData.user.designation,
+    });
+
+    setProfileID(profileData.user._id);
+    setTags(profileData.user.skills);
+    if (profileData.user.image) setPic(profileData.user.image);
   }, []);
 
   function handle(e) {
@@ -68,14 +121,19 @@ function ProfileForm() {
     setData(newData);
   }
 
+  const handleDelete = () => {
+    setPic("");
+    setAcceptedFile([]);
+  };
+
   async function submit(e) {
     e.preventDefault();
     setLoading(true);
 
     const imagesArray = await getBase64(acceptedFile);
 
-    await fetch("/api/profile", {
-      method: "POST",
+    const res = await fetch("/api/profile", {
+      method: edit ? "PATCH" : "POST",
       body: JSON.stringify({
         name: data.name,
         date: data.date,
@@ -93,20 +151,20 @@ function ProfileForm() {
         linked_in: data.linked_in,
         instagram: data.instagram,
         github: data.github,
+        pic: pic,
+        id: profileID,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setLoading(false);
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          router.push(`/profile/${data.userProfile._id}`);
-        }
-      });
+    });
+    const Data = await res.json();
+    if (Data.error) {
+      toast.error(Data.error);
+    } else {
+      router.push(`/profile/${profileID || Data.userProfile._id}`);
+      setLoading(false);
+    }
   }
 
   const handleImageChange = (e) => {
@@ -131,16 +189,36 @@ function ProfileForm() {
         </div>
         <div className="md:invisible p-3 md:p-16 flex flex-col justify-center items-center">
           <label htmlFor="file-input">
-            <Image
-              src={
-                !acceptedFile.length
-                  ? "/images/avatar.png"
-                  : URL.createObjectURL(acceptedFile[0])
-              }
-              width={125}
-              height={118}
-              className="rounded-full drop-shadow-lg cursor-pointer object-cover"
-            />
+            <div className="relative">
+              <Image
+                src={
+                  !acceptedFile.length
+                    ? pic != ""
+                      ? `https://res.cloudinary.com/devshowcase/image/upload/${pic}`
+                      : Avatar
+                    : URL.createObjectURL(acceptedFile[0])
+                }
+                width={125}
+                height={118}
+                priority
+                className={`rounded-full drop-shadow-lg cursor-pointer object-cover ${
+                  acceptedFile.length == 0 && pic == "" && "blur-[1.5px]"
+                }`}
+              />
+              {(pic != "" || acceptedFile.length != 0) && (
+                <Icon
+                  icon="fluent:delete-28-regular"
+                  className="absolute text-3xl top-0 -right-7 cursor-pointer hover:text-red-500 hover:scale-125 z-50"
+                  onClick={handleDelete}
+                />
+              )}
+              {acceptedFile.length == 0 && pic == "" && (
+                <Icon
+                  icon="ant-design:camera-twotone"
+                  className="absolute text-4xl top-[35%] left-[35%] text-blue-500 cursor-pointer"
+                />
+              )}
+            </div>
           </label>
           <input
             id="file-input"
@@ -151,7 +229,7 @@ function ProfileForm() {
           />
           <input
             onChange={(e) => handle(e)}
-            value={data.designation}
+            value={data?.designation}
             className="bg-inherit appearance-none w-full placeholder:text-white text-center	py-2 text-black leading-tight focus:outline-none border-none font-semibold"
             id="designation"
             type="text"
@@ -165,16 +243,36 @@ function ProfileForm() {
           <div className="hidden bg-white px-14 pt-28 pb-8 mb-4 md:block md:w-1/3 flex-col">
             <div className="flex justify-center">
               <label htmlFor="file-input">
-                <Image
-                  src={
-                    !acceptedFile.length
-                      ? "/images/avatar.png"
-                      : URL.createObjectURL(acceptedFile[0])
-                  }
-                  width={125}
-                  height={118}
-                  className="rounded-full drop-shadow-lg cursor-pointer ml-2 object-cover"
-                />
+                <div className="relative">
+                  <Image
+                    src={
+                      !acceptedFile.length
+                        ? pic != ""
+                          ? `https://res.cloudinary.com/devshowcase/image/upload/${pic}`
+                          : Avatar
+                        : URL.createObjectURL(acceptedFile[0])
+                    }
+                    width={125}
+                    height={118}
+                    priority
+                    className={`rounded-full drop-shadow-lg cursor-pointer object-cover ${
+                      !acceptedFile.length && pic == "" && "blur-[1.5px]"
+                    }`}
+                  />
+                  {(pic != "" || acceptedFile.length != 0) && (
+                    <Icon
+                      icon="fluent:delete-28-regular"
+                      className="absolute text-2xl top-0 -right-5 cursor-pointer hover:text-red-500 hover:scale-125 z-50"
+                      onClick={handleDelete}
+                    />
+                  )}
+                  {!acceptedFile.length && pic == "" && (
+                    <Icon
+                      icon="ant-design:camera-twotone"
+                      className="absolute text-4xl top-[35%] left-[35%] text-blue-500 cursor-pointer z-10"
+                    />
+                  )}
+                </div>
               </label>
               <input
                 id="file-input"
@@ -185,7 +283,7 @@ function ProfileForm() {
             </div>
             <input
               onChange={(e) => handle(e)}
-              value={data.designation}
+              value={data?.designation}
               className="appearance-none text-center w-full py-2  text-gray-700 leading-tight focus:outline-none font-semibold"
               id="designation"
               type="text"
@@ -211,7 +309,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.name}
+                  value={data?.name}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="name"
                   type="text"
@@ -225,7 +323,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.date}
+                  value={data?.date}
                   className="appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="date"
                   type="date"
@@ -241,7 +339,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.bio}
+                  value={data?.bio}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="bio"
                   type="text"
@@ -256,7 +354,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.location}
+                  value={data?.location}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="location"
                   type="text"
@@ -273,7 +371,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.company}
+                  value={data?.company}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="company"
                   type="text"
@@ -286,7 +384,7 @@ function ProfileForm() {
                 </label>
                 <textarea
                   onChange={(e) => handle(e)}
-                  value={data.work}
+                  value={data?.work}
                   className="bg-gray-100 w-full p-2 resize-none focus:outline-none"
                   id="work"
                   placeholder="Describe your Work"
@@ -302,7 +400,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.school}
+                  value={data?.school}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="school"
                   type="text"
@@ -315,7 +413,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.course}
+                  value={data?.course}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="course"
                   type="text"
@@ -331,7 +429,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.website}
+                  value={data?.website}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="website"
                   type="text"
@@ -347,7 +445,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.linked_in}
+                  value={data?.linked_in}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="linked_in"
                   type="text"
@@ -363,7 +461,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.instagram}
+                  value={data?.instagram}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="instagram"
                   type="text"
@@ -376,7 +474,7 @@ function ProfileForm() {
                 </label>
                 <input
                   onChange={(e) => handle(e)}
-                  value={data.github}
+                  value={data?.github}
                   className=" appearance-none w-full py-2 text-gray-700 leading-tight focus:outline-none"
                   id="github"
                   type="text"
@@ -416,7 +514,7 @@ function ProfileForm() {
                 >
                   <svg
                     role="status"
-                    class="inline w-4 h-4 mr-3 text-white animate-spin"
+                    className="inline w-4 h-4 mr-3 text-white animate-spin"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

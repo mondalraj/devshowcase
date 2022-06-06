@@ -1,5 +1,12 @@
 const cloudinary = require("cloudinary").v2;
 
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+  secure: true,
+});
+
 const dev = process.env.NODE_ENV !== "production";
 
 const server = dev
@@ -14,15 +21,14 @@ const getSignature = async () => {
 
 const uploadImage = async (acceptedFiles) => {
   const { timestamp, signature } = await getSignature();
-
   const promises = acceptedFiles.map(async (file) => {
+    if (file.length != 0 && file.length < 30) return file;
     const res = await cloudinary.uploader.upload(
       file,
       {
-        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
         signature: signature,
         timestamp: timestamp,
-        api_key: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
       },
       (err, result) => result
     );
@@ -30,23 +36,20 @@ const uploadImage = async (acceptedFiles) => {
   });
 
   const tempArray = await Promise.all(promises);
-  const imgArray = tempArray.map((image) => image.public_id);
+  const imgArray = tempArray.map((image) => {
+    if (typeof image == "object") return image.public_id;
+    return image;
+  });
 
   return imgArray;
 };
 
 const deleteImage = async (deleteFiles) => {
   const { timestamp, signature } = await getSignature();
-
   const promises = deleteFiles.map(async (file) => {
     const res = await cloudinary.uploader.destroy(
       file,
-      {
-        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        signature: signature,
-        timestamp: timestamp,
-        api_key: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
-      },
+      signature,
       (err, result) => {
         if (err) return err;
         return result;
@@ -55,7 +58,8 @@ const deleteImage = async (deleteFiles) => {
     return res;
   });
 
-  const tempArray = await Promise.all(promises);
+  const temp = await Promise.all(promises);
+  return temp;
 };
 
 export { uploadImage, deleteImage };

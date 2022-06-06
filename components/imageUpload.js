@@ -3,7 +3,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function ImageUpload({ SetFiles, filesArray }) {
+export default function ImageUpload({ SetFiles, filesArray, DeleteFiles }) {
   const handleImageChange = (e) => {
     const files = e.target.files;
 
@@ -18,6 +18,9 @@ export default function ImageUpload({ SetFiles, filesArray }) {
   };
 
   const removePics = (index) => {
+    if (typeof filesArray[index] == "string") {
+      DeleteFiles((prevPics) => prevPics.concat(filesArray[index]));
+    }
     SetFiles(filesArray.filter((element, i) => i !== index));
   };
 
@@ -26,8 +29,12 @@ export default function ImageUpload({ SetFiles, filesArray }) {
       return (
         <div className="relative flex justify-center" key={index}>
           <img
-            src={URL.createObjectURL(photo)}
-            alt=""
+            src={
+              typeof photo == "object"
+                ? URL.createObjectURL(photo)
+                : `https://res.cloudinary.com/devshowcase/image/upload/${photo}`
+            }
+            alt={`projectImage-${index}`}
             className="w-44 h-36 md:w-56 md:h-44 p-2"
           />
           <Icon

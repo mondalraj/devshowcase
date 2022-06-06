@@ -2,7 +2,7 @@ import connectDB from "../../middleware/mongodb";
 import User from "../../models/user";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
-import { uploadImage } from "../../utils/Image";
+import { uploadImage, deleteImage } from "../../utils/Image";
 import validator from "validator";
 
 const handler = async (req, res) => {
@@ -24,6 +24,8 @@ const handler = async (req, res) => {
       linked_in,
       instagram,
       github,
+      pic,
+      id,
     } = req.body;
     try {
       if (website && !validator.isURL(website, { require_protocol: true })) {
@@ -94,6 +96,77 @@ const handler = async (req, res) => {
         });
       return res.status(200);
     });
+  } else if (req.method === "PATCH") {
+    const {
+      user_id,
+      name,
+      date,
+      bio,
+      location,
+      company,
+      work,
+      school,
+      course,
+      tags,
+      designation,
+      images,
+      website,
+      linked_in,
+      instagram,
+      github,
+      pic,
+      id,
+    } = req.body;
+
+    let image = [];
+
+    try {
+      if (website && !validator.isURL(website, { require_protocol: true })) {
+        throw Error("Website is not a valid URL");
+      }
+      if (!designation) {
+        throw Error("Designation is required");
+      }
+
+      if (images.length != 0 && pic != "") {
+        await deleteImage([pic]);
+      }
+      if (images.length != 0) {
+        image = await uploadImage(images);
+      }
+
+      const updates = {
+        image: image[0],
+        name: name,
+        designation: designation,
+        date_of_birth: date,
+        bio: bio,
+        location: location,
+        company_name: company,
+        work_description: work,
+        university_name: school,
+        course_name: course,
+        skills: tags,
+        user_id: user_id,
+        linked_in: linked_in,
+        instagram: instagram,
+        github: github,
+        website: website,
+      };
+
+      const user = await Profile.findByIdAndUpdate({ _id: id }, updates, {
+        new: true,
+        useFindAndModify: false,
+      });
+
+      return res.status(201).json({
+        status: "success",
+        message: "Profile Updated Successfully",
+        user: user,
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
   }
 };
 
