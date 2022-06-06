@@ -161,7 +161,7 @@ function Project({ userData, data }) {
                   {profileData.name}
                 </h2>
               </Link>
-              {sameUser == false && (
+              {sameUser == false ? (
                 <>
                   <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
                   <h2
@@ -169,6 +169,22 @@ function Project({ userData, data }) {
                     onClick={() => setIsModal(true)}
                   >
                     Hire Me
+                  </h2>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-xl px-1 hidden md:block">&bull;</h2>
+
+                  <h2
+                    className="text-blue-500 text-base hover:bg-blue-500 hover:text-white p-1 rounded-md cursor-pointer max-w-max flex justify-center items-center space-x-1 md:space-x-2"
+                    onClick={() =>
+                      router.push(
+                        `/projectform?referer=${profileData._id}&edit=true&id=${projectData._id}`
+                      )
+                    }
+                  >
+                    <Icon icon="bxs:pencil" />
+                    <h3>Edit Project</h3>
                   </h2>
                 </>
               )}

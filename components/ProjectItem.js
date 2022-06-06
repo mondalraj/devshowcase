@@ -47,18 +47,6 @@ function ProjectItem({ project, listId, isLogin, profileId }) {
       </Link>
       <div className="p-2 bg-zinc-900 text-white font-semibold bg-opacity-70 rounded-bl-md rounded-br-md flex justify-between items-center h-[15%]">
         <h1> {project.name}</h1>
-        {isLogin && (
-          <div
-            className="bg-blue-500 p-1.5 rounded-full"
-            onClick={() =>
-              router.push(
-                `/projectform?referer=${profileId}&edit=true&id=${project._id}`
-              )
-            }
-          >
-            <Icon icon="bxs:pencil" />
-          </div>
-        )}
       </div>
     </motion.div>
   );
