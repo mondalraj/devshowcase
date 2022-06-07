@@ -1,16 +1,16 @@
-import Head from "next/head";
-import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { Icon } from "@iconify/react";
 import Clipboard from "../../components/clipboard";
 import CommentImage from "../../components/commentImage";
 import ImageSlider from "../../components/imageSlider";
 import HireUsModal from "../../components/hireUsModal";
-import { useRouter } from "next/router";
 import CommentSection from "../../components/commentSection";
 import Loader from "../../components/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 
 const { motion } = require("framer-motion");
 

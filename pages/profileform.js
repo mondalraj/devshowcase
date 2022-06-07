@@ -1,13 +1,13 @@
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Icon } from "@iconify/react";
 import ParticleBackground from "../components/particleBackground";
 import ProjectTagsInput from "../components/projectTagsInput";
-import { useRouter } from "next/router";
+import Avatar from "../public/images/avatar.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Icon } from "@iconify/react";
-import Avatar from "../public/images/avatar.png";
 
 const dev = process.env.NODE_ENV !== "production";
 const server = dev
