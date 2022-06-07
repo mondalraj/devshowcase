@@ -168,19 +168,23 @@ const handler = async (req, res) => {
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
-  }else if(req.method == "DELETE"){
+  } else if (req.method == "DELETE") {
     const { profile_id } = req.headers;
-    try{
-      const profile = await Profile.findByIdAndDelete({_id : profile_id});
-      if(profile.projects.length != 0){
+    try {
+      const profile = await Profile.findByIdAndDelete({ _id: profile_id });
+      if (profile.projects.length != 0) {
         profile.projects.map(async (project_id) => {
           await deleteProject(project_id);
-        })
+        });
       }
       const user = await User.deleteOne({ _id: profile.user_id });
-      return res.status(200).json(status : "success", message: "User deleted Successfully");
-    }catch(error){
-      return res.status(404).json({ status: "fail", message: "Profile Not found" });
+      return res
+        .status(200)
+        .json({ status: "success", message: "User deleted Successfully" });
+    } catch (error) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Profile Not found" });
     }
   }
 };
