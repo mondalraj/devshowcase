@@ -101,6 +101,7 @@ export default function Login({ data }) {
     if (data.status === "success") {
       router.push(`/profile/${data.user.profile_id}`);
     } else {
+      setPassword("");
       toast.error(data.message);
     }
   }

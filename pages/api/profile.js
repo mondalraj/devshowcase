@@ -177,6 +177,9 @@ const handler = async (req, res) => {
           await deleteProject(project_id);
         });
       }
+
+      if (profile.image) await deleteImage([profile.image]);
+
       const user = await User.deleteOne({ _id: profile.user_id });
       return res
         .status(200)

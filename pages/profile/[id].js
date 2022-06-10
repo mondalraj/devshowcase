@@ -1,11 +1,12 @@
 import Head from "next/head";
 import { Icon } from "@iconify/react";
 import ProjectItem from "../../components/ProjectItem";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import HireUsModal from "../../components/hireUsModal";
 import { removeCookies } from "cookies-next";
 import Loader from "../../components/Loader";
+import deleteUser from "../../utils/deleteAccount";
 const { motion } = require("framer-motion");
 
 function profile({ data, profileData, id }) {
@@ -16,7 +17,12 @@ function profile({ data, profileData, id }) {
   const [isModal, setIsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sameUser, setSameUser] = useState(false);
+  const [isOpen, setisOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const router = useRouter();
+
+  const removeBtn = useRef();
+  const projectRef = useRef();
 
   const getHostname = (url) => {
     return new URL(url).hostname;
@@ -42,6 +48,25 @@ function profile({ data, profileData, id }) {
     }
     setIsLoading(false);
   }, []);
+
+  const handleUserClick = (e) => {
+    if (
+      projectRef.current &&
+      removeBtn.current &&
+      !projectRef.current.contains(e.target) &&
+      !removeBtn.current.contains(e.target)
+    ) {
+      setIsDelete(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleUserClick);
+
+    return () => {
+      window.removeEventListener("click", handleUserClick);
+    };
+  });
 
   var skillArray = userData.skills;
   var projectsArray = userData.projects;
@@ -93,6 +118,16 @@ function profile({ data, profileData, id }) {
     router.push("/profileform?edit=true");
   };
 
+  const handleDeleteClick = () => {
+    const ans = window.confirm(
+      "Do you really want to deactivate your account ?"
+    );
+    if (ans) {
+      deleteUser(userData._id);
+      logout();
+    }
+  };
+
   if (isLoading)
     return (
       <div className="w-full h-screen">
@@ -140,9 +175,42 @@ function profile({ data, profileData, id }) {
                   />
                 </div>
               </a>
-              <div className="tooltip cursor-pointer" onClick={() => logout()}>
-                <Icon icon="icons8:shutdown" className="text-2xl" />
-                <span className="tooltiptext shadow-md">Logout</span>
+              <div
+                className="relative cursor-pointer text-black"
+                onMouseEnter={() => setisOpen(true)}
+                onMouseLeave={() => setisOpen(false)}
+              >
+                <Icon
+                  icon="entypo:dots-three-vertical"
+                  className="text-2xl text-slate-600"
+                />
+                <ul
+                  className={`w-[12rem] text-center font-medium absolute z-50 bg-slate-100 shadow-md p-5 top-8 right-2 ${
+                    isOpen ? "h-fit opacity-100" : "h-0 opacity-0"
+                  } transition-all duration-125 ease text-lg rounded-sm overflow-hidden`}
+                >
+                  <li
+                    className="hover:bg-red-600 hover:text-slate-50 p-1 rounded-lg"
+                    onClick={handleDeleteClick}
+                  >
+                    Delete Account
+                  </li>
+                  {projectsArray?.length != 0 && (
+                    <li
+                      className="hover:bg-red-500 hover:text-slate-50 p-1 rounded-lg"
+                      onClick={() => setIsDelete(true)}
+                      ref={removeBtn}
+                    >
+                      Remove Project
+                    </li>
+                  )}
+                  <li
+                    className="hover:bg-blue-500 hover:text-slate-50 p-1 rounded-lg"
+                    onClick={() => logout()}
+                  >
+                    Logout
+                  </li>
+                </ul>
               </div>
             </div>
           ) : null}
@@ -421,15 +489,17 @@ function profile({ data, profileData, id }) {
           </div>
         </div>
         {projectsArray?.length != 0 ? (
-          <div className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap">
+          <div
+            className="profile_projectSection w-full max-w-screen-xl mx-auto flex flex-col sm:flex-row gap-5 my-3 px-5 justify-center flex-wrap"
+            ref={projectRef}
+          >
             {projectsArray?.map((projects, index) => {
               return (
                 <ProjectItem
                   project={projects}
                   key={index}
                   listId={index}
-                  isLogin={isLoggedIn && sameUser}
-                  profileId={id}
+                  isDelete={isDelete}
                 />
               );
             })}

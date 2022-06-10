@@ -1,12 +1,32 @@
 import Link from "next/link";
-import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
+import { Icon } from "@iconify/react";
+import { toast } from "react-toastify";
 const { motion } = require("framer-motion");
 
-function ProjectItem({ project, listId, isLogin, profileId }) {
+function ProjectItem({ project, listId, isDelete }) {
+  var projectImage = project.images || [];
+
   const router = useRouter();
 
-  var projectImage = project.images || [];
+  const handleClick = async () => {
+    const ans = window.confirm("Do you really want to delete ?");
+
+    if (!ans) return;
+
+    const response = await fetch(`/api/projects`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        project_id: project._id,
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.status == "fail") toast.error(data.message);
+    else router.reload();
+  };
 
   const variants = {
     pageInitial: {
@@ -37,8 +57,15 @@ function ProjectItem({ project, listId, isLogin, profileId }) {
       exit="pageExit"
       whileHover={{ scale: 1.05, duration: 0.2 }}
       variants={variants}
-      className="w-full sm:w-[22rem] my-2 h-72 bg-slate-200 cursor-pointer shadow-xl flex flex-col justify-between rounded-md"
+      className="relative w-full sm:w-[22rem] my-2 h-72 bg-slate-200 cursor-pointer shadow-xl flex flex-col justify-between rounded-md"
     >
+      {isDelete && (
+        <Icon
+          icon="gridicons:cross-circle"
+          className="text-red-700 absolute z-50 -right-2 -top-3 text-2xl"
+          onClick={handleClick}
+        />
+      )}
       <Link href={`/project/${project._id}`}>
         <img
           src={`https://res.cloudinary.com/devshowcase/image/upload/${projectImage[0]}`}

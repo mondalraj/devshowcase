@@ -75,58 +75,6 @@ export default function projectform(props) {
 
   const edit = router.query.edit ? true : false;
 
-  // useEffect(async () => {
-  //   if (!router.isReady) return;
-
-  //   if (router.query == undefined || router.query.referer == undefined) {
-  //     router.push("/404");
-  //   }
-
-  //   const response = await fetch("/api/getUser", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //     },
-  //   });
-
-  //   const data = await response.json();
-  //   const id = router.query.referer;
-
-  //   if (data.status != "fail") setProfileId(data.user.profile_id._id);
-
-  //   if (data.status == "fail" || id == undefined) {
-  //     router.push("/login");
-  //   } else if (id.toString() !== data.user.profile_id._id) {
-  //     router.back();
-  //   }
-
-  //   if (!edit) {
-  //     return;
-  //   }
-
-  //   const project_id = router.query.id;
-  //   setProjectID(project_id);
-
-  //   const projectRes = await fetch("/api/projects", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //       project_id: project_id,
-  //     },
-  //   });
-
-  //   const Data = await projectRes.json();
-
-  //   setAcceptedFiles(Data.project.images);
-  //   setProjectData({
-  //     projectName: Data.project.name,
-  //     desc: Data.project.description,
-  //     github: Data.project.github_link,
-  //     live: Data.project.live_link,
-  //   });
-  //   setTags(Data.project.tags);
-  // }, [router.isReady]);
-
   useEffect(() => {
     if (props.userData.status == "fail") {
       router.push("/login");
