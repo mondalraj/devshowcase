@@ -167,6 +167,7 @@ const handler = async (req, res) => {
     const { project_id } = req.headers;
     try {
       const project = await Project.findByIdAndDelete({ _id: project_id });
+      await deleteImage(project.images);
       const comments = await Comment.deleteMany({
         _id: { $in: project.comments },
       });

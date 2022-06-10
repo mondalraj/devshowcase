@@ -14,7 +14,7 @@ const server = dev
   ? "http://localhost:3000"
   : "https://devshowcase-22.vercel.app";
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ query, req }) {
   const userRes = await fetch(`${server}/api/getUser`, {
     method: "GET",
     withCredentials: true,
@@ -25,6 +25,14 @@ export async function getServerSideProps({ req }) {
   });
 
   const userData = await userRes.json();
+
+  if (!query.edit) {
+    return {
+      props: {
+        userData,
+      },
+    };
+  }
 
   const profileRes = await fetch(`${server}/api/profile`, {
     method: "GET",
@@ -43,7 +51,7 @@ export async function getServerSideProps({ req }) {
   };
 }
 
-function ProfileForm({ userData, profileData }) {
+function ProfileForm(props) {
   const [acceptedFile, setAcceptedFile] = useState([]);
   const [pic, setPic] = useState("");
   const [profileID, setProfileID] = useState("");
@@ -85,34 +93,36 @@ function ProfileForm({ userData, profileData }) {
   const edit = router.query.edit ? true : false;
 
   useEffect(() => {
-    if (userData.status == "fail") {
+    if (props.userData.status == "fail") {
       router.push("/login");
-    } else if (userData.user.profile_id && !edit) {
-      router.push(`/profile/${userData.user.profile_id._id}`); //will change this after adding edit profile form route
+    } else if (props.userData.user.profile_id && !edit) {
+      router.push(`/profile/${props.userData.user.profile_id._id}`); //will change this after adding edit profile form route
     } else {
-      setUserId(userData.user._id);
+      setUserId(props.userData.user._id);
     }
 
+    if (!edit) return;
+
     setData({
-      name: profileData.user.name,
-      date: profileData.user.date_of_birth,
-      bio: profileData.user.bio,
-      location: profileData.user.location,
-      company: profileData.user.company_name,
-      work: profileData.user.work_description,
-      school: profileData.user.university_name,
-      course: profileData.user.course_name,
-      skills: profileData.user.skills,
-      website: profileData.user.website,
-      linked_in: profileData.user.linked_in,
-      instagram: profileData.user.instagram,
-      github: profileData.user.github,
-      designation: profileData.user.designation,
+      name: props.profileData.user.name,
+      date: props.profileData.user.date_of_birth,
+      bio: props.profileData.user.bio,
+      location: props.profileData.user.location,
+      company: props.profileData.user.company_name,
+      work: props.profileData.user.work_description,
+      school: props.profileData.user.university_name,
+      course: props.profileData.user.course_name,
+      skills: props.profileData.user.skills,
+      website: props.profileData.user.website,
+      linked_in: props.profileData.user.linked_in,
+      instagram: props.profileData.user.instagram,
+      github: props.profileData.user.github,
+      designation: props.profileData.user.designation,
     });
 
-    setProfileID(profileData.user._id);
-    setTags(profileData.user.skills);
-    if (profileData.user.image) setPic(profileData.user.image);
+    setProfileID(props.profileData.user._id);
+    setTags(props.profileData.user.skills);
+    if (props.profileData.user.image) setPic(props.profileData.user.image);
   }, []);
 
   function handle(e) {

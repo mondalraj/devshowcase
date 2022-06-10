@@ -184,7 +184,7 @@ function Project({ userData, data }) {
                     }
                   >
                     <Icon icon="bxs:pencil" />
-                    <h3>Edit Project</h3>
+                    <span>Edit Project</span>
                   </h2>
                 </>
               )}
