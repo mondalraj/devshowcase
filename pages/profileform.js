@@ -191,7 +191,7 @@ function ProfileForm(props) {
       <Head>
         <title>Profile Form</title>
       </Head>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="bg-gray-300 w-full h-full flex flex-col items-center justify-center">
         <div className="md:h-24 h-10 w-full">

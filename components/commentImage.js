@@ -4,9 +4,8 @@ const { motion } = require("framer-motion");
 function CommentImage({ size, image }) {
   return (
     <motion.div
-    // initial = {{scale: 0}}
-      animate={{ scale: [0,1.4,1] }}
-      transition = {{type: 'spring', delay: 1}}
+      animate={{ scale: [0, 1.4, 1] }}
+      transition={{ type: "spring", delay: 1 }}
       className={
         size == "headerImage"
           ? "w-[7.5rem] md:w-[5rem]  "

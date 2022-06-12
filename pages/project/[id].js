@@ -97,7 +97,7 @@ function Project({ userData, data }) {
       exit="pageExit"
       className="overflow-hidden relative"
     >
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={2000} />
       <Head>
         <title>Project - {projectData.name}</title>
       </Head>

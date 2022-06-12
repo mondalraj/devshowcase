@@ -171,7 +171,7 @@ export default function projectform(props) {
           onClick={() => router.back()}
         />
       </div>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={2000} />
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-4xl my-5 text-blue-500 font-bold">
           Add a new project

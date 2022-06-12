@@ -39,7 +39,7 @@ function ProjectTagsInput({ tags, setTags, profileFormTags }) {
           Add tags related to project
         </h2>
       ) : null}
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={2000} />
       {!profileFormTags ? (
         <div className="flex flex-col items-start md:items-center justify-center my-3 mx-5">
           <input
