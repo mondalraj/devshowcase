@@ -113,7 +113,7 @@ export default function Signup({ data }) {
         <Head>
           <title>Signup Page</title>
         </Head>
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={2000} />
         <div className="flex justify-center items-center bg-white w-11/12 lg:w-3/5 h-5/6 shadow-2xl rounded-xl font-dm">
           {/* <div className="md:flex flex-row md:justify-between "> */}
           <div className="hidden md:block w-3/5 h-full rounded-bl-xl rounded-tl-xl">

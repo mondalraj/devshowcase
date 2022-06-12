@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 const { motion } = require("framer-motion");
 
 export default function Clipboard({ router }) {
-  const notify = () => toast.info("Copied to clipboard");
+  const notify = () => toast.info("Copied to clipboard", { toastId: "copied" });
 
   return (
     <CopyToClipboard text={`https://devshowcase-22.vercel.app${router.asPath}`}>
@@ -14,7 +14,10 @@ export default function Clipboard({ router }) {
         className="bg-zinc-200 w-10 h-10 rounded-sm mx-2 flex justify-center items-center cursor-pointer shadow-md"
         onClick={notify}
       >
-        <Icon icon="clarity:share-line" className="text-3xl" />
+        <Icon
+          icon="clarity:share-line"
+          className="text-3xl hover:text-blue-800"
+        />
       </motion.div>
     </CopyToClipboard>
   );
