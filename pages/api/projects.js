@@ -163,6 +163,31 @@ const handler = async (req, res) => {
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
+  } else if (req.method == "DELETE") {
+    const { project_id } = req.headers;
+    try {
+      const project = await Project.findByIdAndDelete({ _id: project_id });
+      await deleteImage(project.images);
+      const comments = await Comment.deleteMany({
+        _id: { $in: project.comments },
+      });
+      const userProfile = await Profile.findByIdAndUpdate(
+        { _id: project.profile_id },
+        {
+          $pull: {
+            projects: project_id,
+          },
+        },
+        { useFindAndModify: false }
+      );
+      return res
+        .status(200)
+        .json({ status: "success", message: "Project deleted Successfully" });
+    } catch (error) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Project Not found" });
+    }
   }
 };
 

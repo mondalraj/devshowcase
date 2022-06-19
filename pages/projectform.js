@@ -7,7 +7,57 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function projectform() {
+const dev = process.env.NODE_ENV !== "production";
+const server = dev
+  ? "http://localhost:3000"
+  : "https://devshowcase-22.vercel.app";
+
+export async function getServerSideProps({ query, req }) {
+  if (query == undefined || query.referer == undefined) {
+    return {
+      notFound: true,
+    };
+  }
+  const userRes = await fetch(`${server}/api/getUser`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Cookie: req.headers.cookie,
+    },
+  });
+
+  const userData = await userRes.json();
+
+  if (!query.edit) {
+    return {
+      props: {
+        userData,
+        query,
+      },
+    };
+  }
+
+  const projectRes = await fetch(`${server}/api/projects`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      project_id: query.id,
+    },
+  });
+
+  const Data = await projectRes.json();
+
+  return {
+    props: {
+      userData,
+      Data,
+      query,
+    },
+  };
+}
+
+export default function projectform(props) {
   const [projectData, setProjectData] = useState({
     projectName: "",
     desc: "",
@@ -25,57 +75,29 @@ export default function projectform() {
 
   const edit = router.query.edit ? true : false;
 
-  useEffect(async () => {
-    if (!router.isReady) return;
-
-    if (router.query == undefined || router.query.referer == undefined) {
-      router.push("/404");
-    }
-
-    const response = await fetch("/api/getUser", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-
-    const data = await response.json();
-    const id = router.query.referer;
-
-    if (data.status != "fail") setProfileId(data.user.profile_id._id);
-
-    if (data.status == "fail" || id == undefined) {
+  useEffect(() => {
+    if (props.userData.status == "fail") {
       router.push("/login");
-    } else if (id.toString() !== data.user.profile_id._id) {
+    } else if (
+      props.query.referer.toString() !== props.userData.user.profile_id._id
+    ) {
       router.back();
     }
+    setProfileId(props.userData.user.profile_id._id);
 
-    if (!edit) {
+    if (!props.query.edit) {
       return;
     }
-
-    const project_id = router.query.id;
-    setProjectID(project_id);
-
-    const projectRes = await fetch("/api/projects", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        project_id: project_id,
-      },
-    });
-
-    const Data = await projectRes.json();
-
-    setAcceptedFiles(Data.project.images);
+    setProjectID(props.query.id);
+    setAcceptedFiles(props.Data.project.images);
     setProjectData({
-      projectName: Data.project.name,
-      desc: Data.project.description,
-      github: Data.project.github_link,
-      live: Data.project.live_link,
+      projectName: props.Data.project.name,
+      desc: props.Data.project.description,
+      github: props.Data.project.github_link,
+      live: props.Data.project.live_link,
     });
-    setTags(Data.project.tags);
-  }, [router.isReady]);
+    setTags(props.Data.project.tags);
+  }, []);
 
   const handleChange = (e) => {
     const newData = { ...projectData };
@@ -149,7 +171,7 @@ export default function projectform() {
           onClick={() => router.back()}
         />
       </div>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={2000} />
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-4xl my-5 text-blue-500 font-bold">
           Add a new project

@@ -101,6 +101,7 @@ export default function Login({ data }) {
     if (data.status === "success") {
       router.push(`/profile/${data.user.profile_id}`);
     } else {
+      setPassword("");
       toast.error(data.message);
     }
   }
@@ -111,7 +112,7 @@ export default function Login({ data }) {
         <Head>
           <title>Login Page</title>
         </Head>
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={2000} />
         <div className="flex justify-center items-center bg-white w-11/12 lg:w-3/5 shadow-2xl rounded-xl font-dm h-5/6">
           <div className="flex flex-col grow justify-between w-2/5 h-full">
             <form

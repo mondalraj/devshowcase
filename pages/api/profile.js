@@ -3,6 +3,7 @@ import User from "../../models/user";
 import Profile from "../../models/profile";
 import Project from "../../models/project";
 import { uploadImage, deleteImage } from "../../utils/Image";
+import deleteProject from "../../utils/deleteProject";
 import validator from "validator";
 
 const handler = async (req, res) => {
@@ -166,6 +167,27 @@ const handler = async (req, res) => {
       });
     } catch (error) {
       return res.status(500).json({ error: error.message });
+    }
+  } else if (req.method == "DELETE") {
+    const { profile_id } = req.headers;
+    try {
+      const profile = await Profile.findByIdAndDelete({ _id: profile_id });
+      if (profile.projects.length != 0) {
+        profile.projects.map(async (project_id) => {
+          await deleteProject(project_id);
+        });
+      }
+
+      if (profile.image) await deleteImage([profile.image]);
+
+      const user = await User.deleteOne({ _id: profile.user_id });
+      return res
+        .status(200)
+        .json({ status: "success", message: "User deleted Successfully" });
+    } catch (error) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Profile Not found" });
     }
   }
 };
