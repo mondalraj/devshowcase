@@ -1,7 +1,13 @@
 
 # Devshowcase
 
-This is where people who code, can connect, can showcase their development projects in front of whole coder's community. Get hired by startups to build their developer expertise.
+This is where programmers can connect and showcase their work to the broader programming community. Even better, they can find jobs with startups to gain expertise as developers.  
+Developers can create a profile by including details about their schooling, projects they have worked on, and prior employment experience.  
+For coders who are too busy writing code and don't have time to build their portfolio in addition to the resume/CV, their profile serves as a developer portfolio.  
+They can also send the recruiters the URLs to their profiles.  
+Developers can examine each other's profiles for ideas and communicate with their projects by leaving comments on each other's work.  
+People can also write the developer directly with a message that is posted to the developer's email.  
+This is a one-stop shop for developers to advertise their abilities and current projects.
 
 [Feartures (Included and to be included in the later days)](https://docs.google.com/document/d/1vdRhU8_GdUo2eJItNpvOnjtkwQYZ3NKtkj-UScJ0wqs/edit#)
 
